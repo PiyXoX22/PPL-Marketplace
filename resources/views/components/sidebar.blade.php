@@ -37,10 +37,19 @@
 
         <!-- Nav Item - Produk -->
     <li class="nav-item">
-        <a class="nav-link collapsed" href="{{ route('produk.index')}}"
+        <a class="nav-link collapsed" href="{{ route('kategori.index')}}"
             aria-expanded="true" aria-controls="collapseTwo">
             <i class="fas fa-fw fa-cog"></i>
             <span>Kategori</span>
+        </a>
+    </li>
+
+        <!-- Nav Item - Produk -->
+    <li class="nav-item">
+        <a class="nav-link collapsed" href="{{ route('qty.index')}}"
+            aria-expanded="true" aria-controls="collapseTwo">
+            <i class="fas fa-fw fa-cog"></i>
+            <span>Qty</span>
         </a>
     </li>
 
