@@ -1,12 +1,14 @@
-<?php
+<<?php
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\ProdukController;
+use App\Http\Controllers\QtyController;
+use App\Http\Controllers\KategoriController;
 use App\Http\Controllers\RegisterController;
-use App\Http\Controllers\GambarController;
 use App\Http\Controllers\HargaController;
+use App\Http\Controllers\GambarController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -23,8 +25,8 @@ Route::get('/logout', [LoginController::class, 'logout'])->name('logout');
 Route::get('/register', [RegisterController::class, 'showRegisterForm'])->name('register.form');
 Route::post('/register', [RegisterController::class, 'register'])->name('register');
 
+Route::resource('qty', QtyController::class);
 
-Route::resource('gambar', GambarController::class);
+Route::resource('kategori', KategoriController::class);
 Route::resource('harga', HargaController::class);
-
-
+Route::resource('gambar', GambarController::class);
