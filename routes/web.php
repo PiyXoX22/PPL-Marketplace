@@ -10,6 +10,7 @@ use App\Http\Controllers\GambarController;
 use App\Http\Controllers\ProdukController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\KategoriController;
+use App\Http\Controllers\RegisterController;
 
 // Tampilan User
 Route::get('/', function () {
@@ -51,6 +52,18 @@ Route::resource('upui', UpuiController::class);
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [AuthController::class, 'login'])->name('login.process');
 Route::get('/register', [AuthController::class, 'showRegisterForm'])->name('register');
-Route::post('/register', [AuthController::class, 'register'])->name('register.process');
+Route::get('/register', [RegisterController::class, 'showRegisterForm'])->name('register');
+Route::post('/register/process', [RegisterController::class, 'register'])->name('register.process');
 Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
+Route::middleware(['admin'])->group(function () {
+    Route::get('/dashboard', function () {
+        return view('admin.dashboard');
+    });
+});
+Route::middleware(['user'])->group(function () {
+    Route::get('/home', action: function () {
+        return view('site.index');
+    });
+});
+
 

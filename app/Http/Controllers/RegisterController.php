@@ -7,6 +7,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
+use App\Models\Login;
+
+
 
 class RegisterController extends Controller
 {
@@ -19,26 +22,26 @@ class RegisterController extends Controller
     {
         // Validasi input
         $validatedData = $request->validate([
-            'first_name' => 'required|string|max:50',
-            'last_name' => 'required|string|max:50',
-            'username' => 'required|string|max:50|unique:users',
-            'email' => 'required|email|unique:users',
-            'password' => 'required|string|min:6|confirmed',
+            'first_name' => 'required|string|max:30',
+            'last_name'  => 'required|string|max:30',
+            'username'   => 'required|string|max:30|unique:login',
+            'email'      => 'required|email|unique:login',
+            'phone'      => 'required|numeric',
+            'password'   => 'required|string|min:6|confirmed'
         ]);
 
-        // Simpan user baru ke database
-        $user = User::create([
-            'first_name' => $validatedData['first_name'],
-            'last_name' => $validatedData['last_name'],
-            'username' => $validatedData['username'],
-            'email' => $validatedData['email'],
-            'password' => Hash::make($validatedData['password']),
-        ]);
+        // Simpan ke database
+        Login::create([
+        'first_name' => $validatedData['first_name'],
+        'last_name'  => $validatedData['last_name'],
+        'username'   => $validatedData['username'],
+        'email'      => $validatedData['email'],
+        'phone'      => $validatedData['phone'],
+        'password'   => Hash::make($validatedData['password']),
+        'role_id'    => 3  // default user
+    ]);
 
-        // Login otomatis setelah register (opsional)
-        Auth::login($user);
-
-        // Arahkan ke dashboard
-        return redirect('/dashboard')->with('success', 'Registrasi berhasil, selamat datang!');
+        // Redirect ke halaman login
+        return redirect()->route('login')->with('success', 'Registrasi berhasil! Silakan login.');
     }
 }
