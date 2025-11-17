@@ -55,4 +55,3 @@ Route::post('/login', [AuthController::class, 'login'])->name('login.process');
 Route::get('/register', [AuthController::class, 'showRegisterForm'])->name('register');
 Route::post('/register', [AuthController::class, 'register'])->name('register.process');
 Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
-
