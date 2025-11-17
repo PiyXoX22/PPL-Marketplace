@@ -12,8 +12,8 @@ use App\Http\Controllers\UpuiController;
 
 // Tampilan User
 Route::get('/', function () {
-    return view('welcome');
-});
+    return view('site.index');
+})->name('home');
 
 // Tampilan & CRUD Admin
 Route::get('/dashboard', function () {
