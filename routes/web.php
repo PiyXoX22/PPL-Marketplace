@@ -36,7 +36,12 @@
         return view('checkout.index');
     })->name('checkout.index');
 
-
+//Harga
+Route::get('/harga', [HargaController::class, 'index'])->name('harga.index');
+Route::post('/harga', [HargaController::class, 'store'])->name('harga.store');
+Route::delete('/harga/{id}', [HargaController::class, 'destroy'])->name('harga.destroy');
+Route::get('/harga/{id}/edit', [HargaController::class, 'edit'])->name('harga.edit');
+Route::put('/harga/{id}', [HargaController::class, 'update'])->name('harga.update');
 
 
     // Tampilan & CRUD Admin

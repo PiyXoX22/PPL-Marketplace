@@ -19,15 +19,21 @@ class Produk extends Model
         'deskripsi'
     ];
 
-    // Relasi ke tabel qty
+    // Relasi ke tabel qty (1 produk punya 1 stok)
     public function stok()
     {
-        return $this->hasOne(Qty::class, 'id_prod');
+        return $this->hasOne(Qty::class, 'id_prod', 'id');
     }
 
-    // Relasi ke tabel kategori
+    // Relasi ke tabel kategori (1 produk punya 1 kategori)
     public function kategori()
     {
-        return $this->hasOne(Kategori::class, 'id_prod');
+        return $this->hasOne(Kategori::class, 'id_prod', 'id');
+    }
+
+    // Relasi ke tabel harga (1 produk punya 1 harga)
+    public function harga()
+    {
+        return $this->hasOne(Harga::class, 'id_prod', 'id');
     }
 }

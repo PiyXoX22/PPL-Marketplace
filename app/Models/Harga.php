@@ -15,4 +15,10 @@ class Harga extends Model
         'id_prod',
         'harga',
     ];
+    // RELASI → Harga milik satu produk
+    public function produk()
+    {
+        return $this->belongsTo(Produk::class, 'id_prod', 'id');
+    }
 }
+

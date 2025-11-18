@@ -4,26 +4,47 @@
 <div class="container">
     <h2 class="mb-4 text-center">📦 Daftar Harga Produk</h2>
 
+    {{-- Pesan sukses --}}
+    @if (session('success'))
+        <div class="alert alert-success">{{ session('success') }}</div>
+    @endif
+
+    {{-- Pesan error validasi --}}
+    @if ($errors->any())
+        <div class="alert alert-danger">
+            <ul class="mb-0">
+                @foreach ($errors->all() as $err)
+                    <li>{{ $err }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
+
+    {{-- Form Tambah Harga --}}
     <div class="card mb-4">
-        <div class="card-header">Tambah / Update Harga</div>
+        <div class="card-header">Tambah Harga Baru</div>
         <div class="card-body">
-            <form id="formHarga">
+            <form action="{{ route('harga.store') }}" method="POST">
                 @csrf
+
                 <div class="mb-3">
-                    <label for="id_prod" class="form-label">ID Produk</label>
-                    <input type="number" class="form-control" id="id_prod" name="id_prod" required>
+                    <label class="form-label">ID Produk</label>
+                    <input type="number" class="form-control" name="id_prod" required>
                 </div>
+
                 <div class="mb-3">
-                    <label for="harga" class="form-label">Harga</label>
-                    <input type="number" step="0.01" class="form-control" id="harga" name="harga" required>
+                    <label class="form-label">Harga</label>
+                    <input type="number" step="0.01" class="form-control" name="harga" required>
                 </div>
+
                 <button type="submit" class="btn btn-primary">Simpan</button>
             </form>
         </div>
     </div>
 
+    {{-- Tabel Harga --}}
     <div class="card">
-        <div class="card-header">Daftar Harga</div>
+        <div class="card-header">Daftar Harga Produk</div>
         <div class="card-body">
             <table class="table table-bordered table-striped">
                 <thead>
@@ -33,55 +54,35 @@
                         <th>Aksi</th>
                     </tr>
                 </thead>
-                <tbody id="tabelHarga">
-                    <!-- Data akan dimuat dengan JavaScript -->
+               <tbody>
+                @forelse ($data as $row)
+                    <tr>
+                        <td>{{ $row->id_prod }}</td>
+                        <td>{{ $row->harga }}</td>
+                        <td>
+                            <a href="{{ route('harga.edit', $row->id_prod) }}" class="btn btn-warning btn-sm">
+                                Edit
+                            </a>
+
+                            <form action="{{ route('harga.destroy', $row->id_prod) }}" method="POST" class="d-inline">
+                                @csrf
+                                @method('DELETE')
+
+                                <button type="submit" class="btn btn-danger btn-sm"
+                                        onclick="return confirm('Yakin ingin menghapus?')">
+                                    Hapus
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                @empty
+                    <tr>
+                        <td colspan="3" class="text-center">Belum ada data harga.</td>
+                    </tr>
+                @endforelse
                 </tbody>
             </table>
         </div>
     </div>
 </div>
-
-<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-<script>
-    const apiURL = '/api/harga';
-    const table = document.getElementById('tabelHarga');
-    const form = document.getElementById('formHarga');
-
-    async function loadHarga() {
-        const res = await axios.get(apiURL);
-        table.innerHTML = res.data.map(h => `
-            <tr>
-                <td>${h.id_prod}</td>
-                <td>${h.harga}</td>
-                <td>
-                    <button class="btn btn-sm btn-danger" onclick="hapusHarga(${h.id_prod})">Hapus</button>
-                </td>
-            </tr>
-        `).join('');
-    }
-
-    form.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const id_prod = form.id_prod.value;
-        const harga = form.harga.value;
-
-        try {
-            await axios.put(`${apiURL}/${id_prod}`, { harga });
-        } catch {
-            await axios.post(apiURL, { id_prod, harga });
-        }
-
-        form.reset();
-        loadHarga();
-    });
-
-    async function hapusHarga(id) {
-        if (confirm('Yakin ingin menghapus data ini?')) {
-            await axios.delete(`${apiURL}/${id}`);
-            loadHarga();
-        }
-    }
-
-    loadHarga();
-</script>
 @endsection

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Produk;
+use App\Models\Harga;
 use Illuminate\Http\Request;
 
 class ProdukController extends Controller
@@ -29,15 +30,25 @@ class ProdukController extends Controller
     // ============================================================
     public function store(Request $request)
     {
+
         $request->validate([
             'nama_produk' => 'required|string|max:150',
-            'deskripsi'   => 'required|string'
+            'deskripsi'   => 'required|string',
+            'harga'       => 'required|numeric',
         ]);
 
-        Produk::create([
+        // Simpan produk dan ambil ID-nya
+        $produk = Produk::create([
             // id sudah auto increment di DB kamu
-            'nama_produk' => $request->nama_produk,
-            'deskripsi'   => $request->deskripsi
+        'nama_produk' => $request->nama_produk,
+        'deskripsi'   => $request->deskripsi,
+        ]);
+
+        // SIMPAN HARGA BERDASARKAN ID PRODUK
+        Harga::create([
+            'id_prod' => $produk->id,
+            'harga'   => $request->harga,
+
         ]);
 
         return redirect()->route('produk.index')
@@ -86,3 +97,7 @@ class ProdukController extends Controller
                          ->with('success', 'Produk berhasil dihapus!');
     }
 }
+
+
+
+

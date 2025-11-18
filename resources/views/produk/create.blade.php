@@ -27,6 +27,11 @@
                     @enderror
                 </div>
 
+                <div class="form-group">
+                    <label>Harga Produk</label>
+                    <input type="number" name="harga" class="form-control" required>
+                </div>
+
                 <button type="submit" class="btn btn-primary">Simpan</button>
                 <a href="{{ route('produk.index') }}" class="btn btn-secondary">Kembali</a>
 
