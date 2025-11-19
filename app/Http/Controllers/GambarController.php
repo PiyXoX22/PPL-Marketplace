@@ -3,34 +3,41 @@
 namespace App\Http\Controllers;
 
 use App\Models\Gambar;
+use App\Models\Produk;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 
 class GambarController extends Controller
 {
     public function index()
     {
-        $gambar = Gambar::all();
+        $gambar = Gambar::with('produk')->get();
         return view('gambar.index', compact('gambar'));
     }
 
     public function create()
     {
-        return view('gambar.create');
+        $produk = Produk::all();
+        return view('gambar.create', compact('produk'));
     }
 
     public function store(Request $request)
     {
         $request->validate([
-            'id_prod' => 'required|integer',
-            'gambar' => 'required|image|mimes:jpg,jpeg,png|max:2048',
+            'id_prod' => 'required|integer|exists:produk,id',
+            'gambar'  => 'required|image|mimes:jpg,jpeg,png|max:2048',
         ]);
 
-        $path = $request->file('gambar')->store('uploads', 'public');
+        // ====== SIMPAN KE PUBLIC/UPLOADS ======
+        $file     = $request->file('gambar');
+        $namaFile = time() . '_' . $file->getClientOriginalName();
+        $file->move(public_path('uploads'), $namaFile);
+
+        // Simpan path untuk database
+        $path = 'uploads/' . $namaFile;
 
         Gambar::create([
             'id_prod' => $request->id_prod,
-            'gambar' => 'storage/' . $path,
+            'gambar'  => $path,
         ]);
 
         return redirect()->route('gambar.index')->with('success', 'Gambar berhasil ditambahkan.');
@@ -39,7 +46,9 @@ class GambarController extends Controller
     public function edit($id)
     {
         $gambar = Gambar::where('id_prod', $id)->firstOrFail();
-        return view('gambar.edit', compact('gambar'));
+        $produk = Produk::all();
+
+        return view('gambar.edit', compact('gambar', 'produk'));
     }
 
     public function update(Request $request, $id)
@@ -47,10 +56,26 @@ class GambarController extends Controller
         $gambar = Gambar::where('id_prod', $id)->firstOrFail();
 
         if ($request->hasFile('gambar')) {
-            $request->validate(['gambar' => 'image|mimes:jpg,jpeg,png|max:2048']);
-            Storage::disk('public')->delete(str_replace('storage/', '', $gambar->gambar));
-            $path = $request->file('gambar')->store('uploads', 'public');
-            $gambar->update(['gambar' => 'storage/' . $path]);
+
+            $request->validate([
+                'gambar' => 'image|mimes:jpg,jpeg,png|max:2048',
+            ]);
+
+            // Hapus file lama di public/uploads
+            if (file_exists(public_path($gambar->gambar))) {
+                unlink(public_path($gambar->gambar));
+            }
+
+            // Upload file baru
+            $file     = $request->file('gambar');
+            $namaFile = time() . '_' . $file->getClientOriginalName();
+            $file->move(public_path('uploads'), $namaFile);
+
+            $pathBaru = 'uploads/' . $namaFile;
+
+            $gambar->update([
+                'gambar' => $pathBaru,
+            ]);
         }
 
         return redirect()->route('gambar.index')->with('success', 'Gambar berhasil diperbarui.');
@@ -59,7 +84,12 @@ class GambarController extends Controller
     public function destroy($id)
     {
         $gambar = Gambar::where('id_prod', $id)->firstOrFail();
-        Storage::disk('public')->delete(str_replace('storage/', '', $gambar->gambar));
+
+        // Hapus file dari public/uploads
+        if (file_exists(public_path($gambar->gambar))) {
+            unlink(public_path($gambar->gambar));
+        }
+
         $gambar->delete();
 
         return redirect()->route('gambar.index')->with('success', 'Gambar berhasil dihapus.');

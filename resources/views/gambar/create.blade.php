@@ -3,12 +3,20 @@
 @section('content')
 <div class="container mt-4">
   <h2>Tambah Gambar Produk</h2>
+
   <form action="{{ route('gambar.store') }}" method="POST" enctype="multipart/form-data">
     @csrf
 
     <div class="mb-3">
-      <label>ID Produk</label>
-      <input type="number" name="id_prod" class="form-control" required>
+      <label>Pilih Produk</label>
+      <select name="id_prod" class="form-control" required>
+        <option value="" disabled selected>-- Pilih Produk --</option>
+        @foreach ($produk as $p)
+          <option value="{{ $p->id }}">
+            {{ $p->nama_produk }} (ID: {{ $p->id }})
+          </option>
+        @endforeach
+      </select>
     </div>
 
     <div class="mb-3">

@@ -2,14 +2,22 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Gambar extends Model
 {
-    use HasFactory;
-
     protected $table = 'gambar';
-    protected $fillable = ['id_prod', 'gambar'];
+    protected $primaryKey = 'id_prod';
     public $timestamps = false;
+
+    protected $fillable = [
+        'id_prod',
+        'gambar',
+    ];
+
+    public function produk()
+    {
+        return $this->belongsTo(Produk::class, 'id_prod', 'id');
+    }
 }
+

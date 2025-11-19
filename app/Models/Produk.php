@@ -36,4 +36,10 @@ class Produk extends Model
     {
         return $this->hasOne(Harga::class, 'id_prod', 'id');
     }
+
+    // Relasi ke tabel gambar (1 produk punya 1 gambar)
+    public function gambar()
+    {
+        return $this->hasOne(Gambar::class, 'id_prod', 'id');
+    }
 }
