@@ -205,11 +205,11 @@ setInterval(nextSlide, 4000);
 <div>
     <h3 class="font-semibold text-lg mb-2">Metode Pembayaran</h3>
     <div class="flex justify-center gap-4">
-      <img src="https://www.vectorlogo.zone/logos/visa/visa-icon.svg" alt="Visa" class="h-6">
-      <img src="https://www.vectorlogo.zone/logos/mastercard/mastercard-icon.svg" alt="MasterCard" class="h-6">
+      <img src="https://1000logos.net/wp-content/uploads/2017/06/VISA-Logo-2006.png" alt="Visa" class="h-8">
+      <img src="https://w7.pngwing.com/pngs/169/96/png-transparent-logo-mastercard-graphics-font-visa-mastercard-text-label-logo.png" alt="MasterCard" class="h-8">
       <img src="https://www.vectorlogo.zone/logos/paypal/paypal-icon.svg" alt="PayPal" class="h-6">
-      <img src="https://seeklogo.com/images/D/dana-logo-33C9D7C056-seeklogo.com.png" alt="DANA" class="h-6">
-      <img src="https://seeklogo.com/images/O/ovo-logo-14D4D3B6E7-seeklogo.com.png" alt="OVO" class="h-6">
+      <img src="https://i.pinimg.com/474x/06/bd/ea/06bdea70eb048176056881cad078453a.jpg" alt="DANA" class="h-8">
+      <img src="https://i.pinimg.com/1200x/02/2e/98/022e9877180fdc3ef50f973e7620547d.jpg" alt="OVO" class="h-8">
     </div>
   </div>
 
@@ -217,11 +217,11 @@ setInterval(nextSlide, 4000);
   <div>
     <h3 class="font-semibold text-lg mb-2">Jasa Pengiriman</h3>
     <div class="flex justify-center gap-4">
-      <img src="https://upload.wikimedia.org/wikipedia/id/1/1e/JNE_logo.png" alt="JNE" class="h-8">
-      <img src="https://upload.wikimedia.org/wikipedia/commons/0/0d/Pos_Indonesia_logo.svg" alt="POS Indonesia" class="h-8">
-      <img src="https://1000logos.net/wp-content/uploads/2021/04/JT-Express-logo.png" alt="J&T" class="h-8">
-      <img src="https://seeklogo.com/images/S/si-cepat-ekspres-logo-0C74E0D0F6-seeklogo.com.png" alt="SiCepat" class="h-8">
-      <img src="https://seeklogo.com/images/G/gosend-logo-6C9411F245-seeklogo.com.png" alt="GoSend" class="h-8">
+      <img src="https://p7.hiclipart.com/preview/963/726/406/jne-margonda-jalur-nugraha-ekakurir-business-jne-bale-endah-courier-business.jpg" alt="JNE" class="h-8">
+      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSUde2rd0WVTmwMAf-PJk-BrxsOdz-DzQCaGw&s" alt="POS Indonesia" class="h-8">
+      <img src="https://1000logos.net/wp-content/uploads/2022/08/JT-Express-Logo.png" alt="J&T" class="h-8">
+      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRtsKUl2eXFCxNAra3HPdvMZuItRBg7vksbUQ&s" alt="SiCepat" class="h-8">
+      <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhyQDuujSmDAkPW3GoCII4rd9zIq7bC-BD1RB4xOVdj-HGXQCaxnJdI63n6YbsTYpE9QxQ5EsWWCSrotHoxGXBqOXfEbjHGMaflvceUxue7jqH9rRl6evQSoXn2dYPBH8VHmrwqo_TsKCC7odhZkIXn9F6D7FWSE0cqhXJIwAyvR6a6RijBepjAfbJR/s320/GKL24_GoSend%20-%20Koleksilogo.com.jpg" alt="GoSend" class="h-8">
     </div>
   </div>
         </div>
