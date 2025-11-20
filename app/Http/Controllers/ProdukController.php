@@ -4,17 +4,32 @@ namespace App\Http\Controllers;
 
 use App\Models\Produk;
 use App\Models\Harga;
+use App\Models\Kategori;
 use Illuminate\Http\Request;
 
 class ProdukController extends Controller
 {
     // ============================================================
-    // Tampilkan semua produk beserta stok & kategori
+    // Tampilkan semua produk + filter kategori
     // ============================================================
-    public function index()
+    public function index(Request $request)
     {
-        $produk = Produk::with(['stok', 'kategori'])->get();
-        return view('produk.index', compact('produk'));
+        // Ambil daftar kategori unik
+        $kategoriList = Kategori::select('kategori')->groupBy('kategori')->get();
+
+        // Query dasar produk + relasi
+        $query = Produk::with(['stok', 'kategori', 'harga', 'gambar']);
+
+        // Filter kategori jika dipilih
+        if ($request->filled('kategori')) {
+            $query->whereHas('kategori', function ($q) use ($request) {
+                $q->where('kategori', $request->kategori);
+            });
+        }
+
+        $produk = $query->get();
+
+        return view('produk.index', compact('produk', 'kategoriList'));
     }
 
     // ============================================================
@@ -26,29 +41,26 @@ class ProdukController extends Controller
     }
 
     // ============================================================
-    // Simpan Produk Baru
+    // SIMPAN PRODUK BARU
     // ============================================================
     public function store(Request $request)
     {
-
         $request->validate([
             'nama_produk' => 'required|string|max:150',
             'deskripsi'   => 'required|string',
             'harga'       => 'required|numeric',
         ]);
 
-        // Simpan produk dan ambil ID-nya
+        // Buat produk
         $produk = Produk::create([
-            // id sudah auto increment di DB kamu
-        'nama_produk' => $request->nama_produk,
-        'deskripsi'   => $request->deskripsi,
+            'nama_produk' => $request->nama_produk,
+            'deskripsi'   => $request->deskripsi,
         ]);
 
-        // SIMPAN HARGA BERDASARKAN ID PRODUK
+        // Simpan harga berdasarkan id produk
         Harga::create([
             'id_prod' => $produk->id,
             'harga'   => $request->harga,
-
         ]);
 
         return redirect()->route('produk.index')
@@ -56,7 +68,7 @@ class ProdukController extends Controller
     }
 
     // ============================================================
-    // Form Edit Produk
+    // EDIT
     // ============================================================
     public function edit($id)
     {
@@ -65,7 +77,7 @@ class ProdukController extends Controller
     }
 
     // ============================================================
-    // Update Produk
+    // UPDATE PRODUK
     // ============================================================
     public function update(Request $request, $id)
     {
@@ -86,7 +98,7 @@ class ProdukController extends Controller
     }
 
     // ============================================================
-    // Hapus Produk
+    // HAPUS PRODUK
     // ============================================================
     public function destroy($id)
     {
@@ -96,15 +108,14 @@ class ProdukController extends Controller
         return redirect()->route('produk.index')
                          ->with('success', 'Produk berhasil dihapus!');
     }
+
+    // ============================================================
+    // DETAIL
+    // ============================================================
     public function show($id)
-{
-    $produk = Produk::with(['kategori', 'stok', 'harga', 'gambar'])->findOrFail($id);
+    {
+        $produk = Produk::with(['kategori', 'stok', 'harga', 'gambar'])->findOrFail($id);
 
-    return view('produk.show', compact('produk'));
+        return view('produk.show', compact('produk'));
+    }
 }
-
-}
-
-
-
-

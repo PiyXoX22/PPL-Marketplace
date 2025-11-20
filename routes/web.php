@@ -11,7 +11,7 @@ use App\Http\Controllers\GambarController;
 use App\Http\Controllers\ProdukController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\KategoriController;
-
+use App\Http\Controllers\FilterController;
 
 // ===========================
 // Tampilan Untuk User (Public)
@@ -103,9 +103,7 @@ Route::middleware(['auth'])->group(function () {
 Route::middleware(['auth', 'user'])->group(function () {
     Route::get('/home', fn() => view('site.index'));
 });
-
-
-
+Route::get('/filter', [FilterController::class, 'index'])->name('filter');
 // ==========================================
 // AUTH
 // ==========================================

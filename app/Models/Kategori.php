@@ -11,12 +11,12 @@ class Kategori extends Model
 
     protected $table = 'kategori';
     protected $primaryKey = 'id_prod';
-    public $incrementing = false;    // WAJIB karena id_prod bukan auto increment
+    public $incrementing = false;
     public $timestamps = false;
 
     protected $fillable = [
         'id_prod',
-        'kategori',
+        'kategori'
     ];
 
     public function barang()
