@@ -157,33 +157,40 @@ setInterval(nextSlide, 4000);
 
 
 
-{{-- Search Produk --}}
-<div class="container mx-auto px-4 mt-8">
-    <form action="{{ route('produk.index') }}" method="GET" class="flex items-center max-w-md mx-auto">
-        <input type="text" name="search" placeholder="Cari produk..." class="w-full p-2 border rounded-l-md focus:ring-2 focus:ring-blue-500">
-        <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-r-md hover:bg-blue-700">Cari</button>
-    </form>
-</div>
-
 {{-- Daftar Produk --}}
 <main class="container mx-auto px-4 py-12" id="produk">
     <h3 class="text-2xl font-bold mb-6">Produk Terbaru</h3>
+
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-        @foreach ([
-            ['nama' => 'Sepatu Sport', 'harga' => 250000, 'gambar' => 'https://via.placeholder.com/300x200'],
-            ['nama' => 'Tas Ransel', 'harga' => 180000, 'gambar' => 'https://via.placeholder.com/300x200'],
-            ['nama' => 'Headphone', 'harga' => 320000, 'gambar' => 'https://via.placeholder.com/300x200'],
-            ['nama' => 'Kemeja Casual', 'harga' => 150000, 'gambar' => 'https://via.placeholder.com/300x200'],
-        ] as $produk)
+
+        @forelse ($produk as $item)
         <div class="bg-white shadow rounded-lg overflow-hidden hover:shadow-lg transition">
-            <img src="{{ $produk['gambar'] }}" alt="{{ $produk['nama'] }}" class="w-full h-40 object-cover">
+
+            {{-- GAMBAR PRODUK --}}
+            <img src="{{ $item->gambar ?? 'https://via.placeholder.com/300x200' }}"
+                 alt="{{ $item->nama_produk }}"
+                 class="w-full h-40 object-cover">
+
             <div class="p-4">
-                <h4 class="font-semibold text-lg">{{ $produk['nama'] }}</h4>
-                <p class="text-gray-600">Rp {{ number_format($produk['harga'], 0, ',', '.') }}</p>
-                <button class="mt-3 w-full py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">Beli</button>
+                {{-- NAMA PRODUK --}}
+                <h4 class="font-semibold text-lg">{{ $item->nama_produk }}</h4>
+
+                {{-- HARGA PRODUK --}}
+                <p class="text-gray-600">
+                    Rp {{ number_format($item->harga->harga ?? 0, 0, ',', '.') }}
+                </p>
+
+                {{-- BUTTON BELI --}}
+                <button class="mt-3 w-full py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+                    Beli
+                </button>
             </div>
+
         </div>
-        @endforeach
+        @empty
+            <p class="text-gray-500">Tidak ada produk tersedia.</p>
+        @endforelse
+
     </div>
 </main>
 

@@ -2,6 +2,7 @@
 
     use Illuminate\Support\Facades\Route;
     use App\Http\Controllers\QtyController;
+    use App\Http\Controllers\SiteController;
     use App\Http\Controllers\AuthController;
     use App\Http\Controllers\HomeController;
     use App\Http\Controllers\UpuiController;
@@ -13,9 +14,7 @@
     use App\Http\Controllers\RegisterController;
 
     // Tampilan User
-    Route::get('/', function () {
-        return view('site.index');
-    })->name('home');
+    Route::get('/', [SiteController::class, 'index'])->name('home');
 
 
 

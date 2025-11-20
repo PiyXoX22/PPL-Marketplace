@@ -8,7 +8,7 @@
         <h1 class="h3 text-gray-800">Dashboard Admin</h1>
 
         <!-- Filter Tanggal -->
-        <form method="GET" action="{{ route('home') }}" class="form-inline">
+
             <label class="mr-2">Filter Tanggal:</label>
             <input type="date" name="start" value="{{ request('start') }}" class="form-control mr-2">
             <input type="date" name="end" value="{{ request('end') }}" class="form-control mr-2">

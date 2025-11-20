@@ -36,7 +36,7 @@ class AuthController extends Controller
             'username'   => 'required|string|max:30|unique:login,username',
             'email'      => 'required|email|unique:login,email',
             'phone'      => 'required|string|max:12',
-            'password'   => 'required|string|min:4|confirmed',
+            'password'   => 'required|string|min:8|confirmed',
         ]);
 
         // Insert ke tabel login melalui Model User
@@ -68,7 +68,13 @@ class AuthController extends Controller
 
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
-            return redirect()->route('home');
+
+            // CEK ROLE
+            if (Auth::user()->role_id == 1) {
+                return redirect()->route('dashboard'); // Admin -> dashboard
+            }
+
+            return redirect()->route('home'); // User biasa -> home
         }
 
         return back()->withErrors([
