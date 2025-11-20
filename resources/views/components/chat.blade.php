@@ -32,7 +32,7 @@
 
 <!-- Tombol WhatsApp -->
 <a
-    href="https://wa.me/6281234567890?text=Halo%20Admin,%20saya%20butuh%20bantuan"
+    href="https://wa.me/628384300?/text=Halo%20Admin,%20Saya%20butuh%20bantuan"
     target="_blank"
     class="chat-wa-btn"
 >
