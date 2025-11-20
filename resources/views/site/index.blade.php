@@ -16,7 +16,7 @@
         </a>
         <nav class="hidden md:flex space-x-6 font-medium">
             <a href="{{ route('home') }}" class="text-gray-700 hover:text-blue-600 transition">Home</a>
-            <a href="{{ route('produk.index') }}" class="text-gray-700 hover:text-blue-600 transition">Produk</a>
+            <a href="#produk" class="text-gray-700 hover:text-blue-600 transition">Produk</a>
             <a href="{{ route('kategori.index') }}" class="text-gray-700 hover:text-blue-600 transition">Kategori</a>
             <a href="{{ route('login') }}" class="text-gray-700 hover:text-blue-600 transition">Login</a>
         </nav>
@@ -31,7 +31,7 @@
     <div id="mobile-menu" class="md:hidden hidden bg-white border-t border-gray-200">
         <nav class="flex flex-col space-y-2 p-4 font-medium">
             <a href="{{ route('home') }}" class="text-gray-700 hover:text-blue-600">Home</a>
-            <a href="{{ route('produk.index') }}" class="text-gray-700 hover:text-blue-600">Produk</a>
+            <a href="#produk" class="text-gray-700 hover:text-blue-600">Produk</a>
             <a href="{{ route('kategori.index') }}" class="text-gray-700 hover:text-blue-600">Kategori</a>
             <a href="{{ route('login') }}" class="text-gray-700 hover:text-blue-600">Login</a>
         </nav>
