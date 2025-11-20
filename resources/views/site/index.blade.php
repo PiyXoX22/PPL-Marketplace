@@ -243,6 +243,7 @@ setInterval(nextSlide, 4000);
 
     </div>
 </main>
+<x-chat />
 
 {{-- Footer --}}
 <footer class="bg-gray-800 text-white py-8 mt-12">
@@ -261,6 +262,19 @@ setInterval(nextSlide, 4000);
       <img src="https://i.pinimg.com/474x/06/bd/ea/06bdea70eb048176056881cad078453a.jpg" alt="DANA" class="h-8">
       <img src="https://i.pinimg.com/1200x/02/2e/98/022e9877180fdc3ef50f973e7620547d.jpg" alt="OVO" class="h-8">
     </div>
+    <br>
+    <br>
+    <h3 class="font-semibold text-lg mb-2">Jelajahi Kami</h3>
+    <a href="asd" class="text-decoration-none hover-underline">Tentang Kami</a><br>
+    <a href="asd" class="text-decoration-none hover-underline">Kebijakan Dan Privasi</a><br>
+    <a href="asd" class="text-decoration-none hover-underline">Tim Pengembang</a>
+
+    <style>
+    .hover-underline:hover {
+        text-decoration: underline;
+    }
+    </style>
+
   </div>
 
   {{-- Jasa Pengiriman --}}
@@ -273,6 +287,25 @@ setInterval(nextSlide, 4000);
       <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRtsKUl2eXFCxNAra3HPdvMZuItRBg7vksbUQ&s" alt="SiCepat" class="h-8">
       <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhyQDuujSmDAkPW3GoCII4rd9zIq7bC-BD1RB4xOVdj-HGXQCaxnJdI63n6YbsTYpE9QxQ5EsWWCSrotHoxGXBqOXfEbjHGMaflvceUxue7jqH9rRl6evQSoXn2dYPBH8VHmrwqo_TsKCC7odhZkIXn9F6D7FWSE0cqhXJIwAyvR6a6RijBepjAfbJR/s320/GKL24_GoSend%20-%20Koleksilogo.com.jpg" alt="GoSend" class="h-8">
     </div>
+    <br>
+    <br>
+    <h3 class="font-semibold text-lg mb-2">Sosial Media</h3>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+    <div class="d-flex gap-3" style="font-size: 40px;">
+        <a href="https://facebook.com" class="text-primary">
+            <i class="bi bi-facebook"></i>
+        </a>
+        <a href="https://instagram.com" class="text-danger">
+            <i class="bi bi-instagram"></i>
+        </a>
+        <a href="https://twitter.com" class="text-info">
+            <i class="bi bi-twitter"></i>
+        </a>
+        <a href="https://youtube.com" class="text-danger">
+            <i class="bi bi-youtube"></i>
+        </a>
+    </div>
+
   </div>
         </div>
 
