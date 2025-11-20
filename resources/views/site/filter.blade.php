@@ -57,7 +57,11 @@
 
 <div class="navbar">
     <strong style="font-size: 20px; color:#1a73e8;">E-Blox Store</strong>
-    <input type="text" placeholder="Cari produk...">
+    <form method="GET" action="{{ route('filter') }}" style="width: 40%;">
+    <input type="text" name="search" value="{{ request('search') }}" 
+           placeholder="Cari produk..." 
+           style="width:100%; padding:10px 14px; border:1px solid #ccc; border-radius:6px;">
+</form>
 </div>
 
 <div class="container">
