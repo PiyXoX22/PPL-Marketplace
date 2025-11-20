@@ -85,9 +85,9 @@
 
 
                 {{-- Tombol Kategori --}}
-                <a href="{{ route('kategori.index') }}">
+                <a href="{{ route('cart.index') }}">
                     <button class="w-full py-2 bg-gray-300 text-gray-800 rounded hover:bg-gray-400">
-                        {{ $produk->kategori->kategori ?? 'Kategori' }}
+                        {{ $produk->kategori->kategori ?? 'Cart' }}
                     </button>
                 </a>
 

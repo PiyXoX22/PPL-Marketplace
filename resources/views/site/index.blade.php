@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>E-Blox Store</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 <body class="bg-gray-100 text-gray-800">
 
@@ -18,7 +19,22 @@
             <a href="{{ route('home') }}" class="text-gray-700 hover:text-blue-600 transition">Home</a>
             <a href="#produk" class="text-gray-700 hover:text-blue-600 transition">Produk</a>
             <a href="{{ route('kategori.index') }}" class="text-gray-700 hover:text-blue-600 transition">Kategori</a>
-            <a href="{{ route('login') }}" class="text-gray-700 hover:text-blue-600 transition">Login</a>
+{{-- Jika user belum login --}}
+@guest
+    <a href="{{ route('login') }}" class="text-gray-700 hover:text-blue-600 transition">Login</a>
+    <a href="{{ route('register') }}" class="text-gray-700 hover:text-blue-600">Register</a>
+@endguest
+
+{{-- Jika user sudah login --}}
+@auth
+    <a href="{{ route('cart.index') }}" class="text-gray-700 hover:text-blue-600 transition flex items-center space-x-1">
+        <i class="fas fa-shopping-cart fa-lg"></i>
+    </a>
+    <a href="{{ route('profile.index') }}" class="text-gray-700 hover:text-blue-600 transition flex items-center space-x-1">
+        <i class="fas fa-user fa-lg"></i>
+    </a>
+@endauth
+
         </nav>
         <button id="menu-toggle" class="md:hidden text-gray-700 hover:text-blue-600 focus:outline-none">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none"
@@ -33,7 +49,21 @@
             <a href="{{ route('home') }}" class="text-gray-700 hover:text-blue-600">Home</a>
             <a href="#produk" class="text-gray-700 hover:text-blue-600">Produk</a>
             <a href="{{ route('kategori.index') }}" class="text-gray-700 hover:text-blue-600">Kategori</a>
-            <a href="{{ route('login') }}" class="text-gray-700 hover:text-blue-600">Login</a>
+{{-- Jika user belum login --}}
+@guest
+    <a href="{{ route('login') }}" class="text-gray-700 hover:text-blue-600 transition">Login</a>
+    <a href="{{ route('register') }}" class="text-gray-700 hover:text-blue-600">Register</a>
+@endguest
+
+{{-- Jika user sudah login --}}
+@auth
+    <a href="{{ route('cart.index') }}" class="text-gray-700 hover:text-blue-600 transition flex items-center space-x-1">
+        <i class="fas fa-shopping-cart fa-lg"></i>
+    </a>
+    <a href="{{ route('profile.index') }}" class="text-gray-700 hover:text-blue-600 transition flex items-center space-x-1">
+        <i class="fas fa-user fa-lg"></i>
+    </a>
+@endauth
         </nav>
     </div>
 </header>
@@ -405,6 +435,7 @@
 
     </div>
 </main>
+{{-- Floating chat nya --}}
 <x-chat />
 
 {{-- Footer --}}
@@ -467,10 +498,13 @@
             <i class="bi bi-youtube"></i>
         </a>
     </div>
-
+    <br>
+    <h3 class="font-semibold text-lg mb-2">Download Aplikasi E-Blox Store</h3>
+    <img src="https://qr.scanned.page/uploads/qr_codes/0SLj6V.svg?1763658253"
+    alt="QR Code"
+    class="font-semibold text-lg mb-2 h-40 ml-80 block">
   </div>
         </div>
-
     </div>
 </footer>
 
