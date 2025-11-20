@@ -12,7 +12,6 @@
             font-family: Arial, sans-serif;
         }
 
-        /* GRID BASE */
         .layout {
             max-width: 1200px;
             margin: 20px auto;
@@ -21,7 +20,6 @@
             gap: 25px;
         }
 
-        /* CARD */
         .card {
             background: #fff;
             border-radius: 12px;
@@ -36,13 +34,11 @@
             margin-bottom: 12px;
         }
 
-        /* ADDRESS */
         .address-box {
             line-height: 1.5;
             font-size: 14px;
         }
 
-        /* PRODUCT BOX */
         .product {
             display: flex;
             gap: 15px;
@@ -57,41 +53,6 @@
             border: 1px solid #ddd;
         }
 
-        .product-price {
-            font-weight: bold;
-            font-size: 15px;
-            float: right;
-        }
-
-        /* SHIPPING OPTION */
-        .shipping-option {
-            border: 1px solid #dcdcdc;
-            padding: 12px;
-            border-radius: 8px;
-            margin-top: 8px;
-            font-size: 14px;
-        }
-
-        /* PAYMENT LIST */
-        .payment-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 14px 0;
-            border-bottom: 1px solid #efefef;
-            font-size: 14px;
-        }
-
-        .payment-item:last-child {
-            border-bottom: none;
-        }
-
-        input[type="radio"] {
-            width: 18px;
-            height: 18px;
-        }
-
-        /* SIDEBAR */
         .summary-box {
             background: #fff;
             padding: 20px;
@@ -132,13 +93,55 @@
             background: #02940c;
         }
 
+        select {
+            width: 100%;
+            padding: 10px;
+            border-radius: 7px;
+            border: 1px solid #ccc;
+            margin-top: 10px;
+            font-size: 14px;
+        }
+
+        .payment-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 14px 0;
+            border-bottom: 1px solid #efefef;
+            font-size: 14px;
+        }
+
+        input[type="radio"] {
+            width: 18px;
+            height: 18px;
+        }
     </style>
 </head>
 <body>
 
+@php
+    // Opsi ongkir berdasarkan kurir
+    $ongkirList = [
+        'jne'     => 18000,
+        'pos'     => 17000,
+        'jnt'     => 19000,
+        'sicepat' => 16000,
+        'gosend'  => 20000,
+    ];
+
+    // Ambil pilihan kurir dari query string (?kurir=jne)
+    $kurirDipilih = request('kurir') ?? 'pos';
+
+    // Tentukan ongkir berdasar pilihan
+    $ongkir = $ongkirList[$kurirDipilih] ?? 17000;
+
+    // Hitung total
+    $total = $produk->harga->harga + $ongkir;
+@endphp
+
 <div class="layout">
 
-    <!-- LEFT SIDE -->
+    <!-- LEFT -->
     <div>
 
         <!-- ADDRESS -->
@@ -168,17 +171,19 @@
                 </div>
             </div>
 
-            <div class="shipping-option">
-                <strong>Reguler</strong><br>
-                Pos Indonesia (Rp17.000)<br>
-                Estimasi tiba 23 - 26 Nov
-            </div>
-        </div>
+            {{-- SELECT PENGIRIMAN --}}
+            <div class="mt-3">
+                <label class="card-title">Metode Pengiriman</label>
 
-        <!-- NOTE -->
-        <div class="card">
-            <div style="display:flex;align-items:center;gap:8px;font-size:14px;">
-                📝 Kasih Catatan
+                <form method="GET">
+                    <select name="kurir" onchange="this.form.submit()">
+                        <option value="jne"     {{ $kurirDipilih == 'jne'     ? 'selected' : '' }}>JNE - Rp18.000</option>
+                        <option value="pos"     {{ $kurirDipilih == 'pos'     ? 'selected' : '' }}>Pos Indonesia - Rp17.000</option>
+                        <option value="jnt"     {{ $kurirDipilih == 'jnt'     ? 'selected' : '' }}>J&T - Rp19.000</option>
+                        <option value="sicepat" {{ $kurirDipilih == 'sicepat' ? 'selected' : '' }}>SiCepat - Rp16.000</option>
+                        <option value="gosend"  {{ $kurirDipilih == 'gosend'  ? 'selected' : '' }}>GoSend - Rp20.000</option>
+                    </select>
+                </form>
             </div>
         </div>
 
@@ -197,10 +202,10 @@
 
     </div>
 
-    <!-- RIGHT SIDE -->
+    <!-- RIGHT -->
     <div>
         <div class="summary-box">
-            <div class="card-title">Cek ringkasan transaksimu, yuk</div>
+            <div class="card-title">Cek ringkasan transaksimu</div>
 
             <div class="row">
                 <span>Total Harga (1 Barang)</span>
@@ -208,13 +213,9 @@
             </div>
 
             <div class="row">
-                <span>Total Ongkos Kirim</span>
-                <span>Rp17.000</span>
+                <span>Ongkir ({{ strtoupper($kurirDipilih) }})</span>
+                <span>Rp{{ number_format($ongkir, 0, ',', '.') }}</span>
             </div>
-
-            @php
-                $total = $produk->harga->harga + 17000;
-            @endphp
 
             <div class="total-label">
                 Rp{{ number_format($total, 0, ',', '.') }}

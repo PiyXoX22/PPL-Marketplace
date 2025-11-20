@@ -1,26 +1,45 @@
 <style>
-    .cart-container {
-        padding: 30px;
-        background: #f7f7f7;
-        min-height: 90vh;
+    body {
+        font-family: Arial, sans-serif;
+        background: #f1f2f4;
+        margin: 0;
+        padding: 20px;
+    }
+
+    .container {
+        display: flex;
+        gap: 20px;
+    }
+
+    /* --- LEFT CONTENT (LIST PRODUK) --- */
+    .cart-box {
+        background: white;
+        padding: 20px;
+        border-radius: 8px;
+        flex: 1;
+    }
+
+    .cart-title {
+        font-size: 22px;
+        font-weight: bold;
+        margin-bottom: 15px;
     }
 
     table {
         width: 100%;
         border-collapse: collapse;
-        background: white;
     }
 
     th {
-        background: #dcdcdc;
+        background: #ececec;
         padding: 12px;
-        text-align: left;
         font-weight: bold;
+        text-align: left;
+        border-radius: 4px;
     }
 
     td {
         padding: 12px;
-        vertical-align: middle;
         border-bottom: 1px solid #eee;
     }
 
@@ -28,99 +47,96 @@
         width: 70px;
         height: 70px;
         background: #ccc;
-        border-radius: 4px;
+        border-radius: 6px;
     }
 
+    /* --- SUMMARY BOX (KANAN) --- */
     .summary-box {
-        width: 260px;
-        background: #fff;
+        width: 320px;
+        background: white;
         padding: 20px;
-        border-radius: 4px;
-        float: right;
-        margin-top: 40px;
+        border-radius: 8px;
+        height: fit-content;
     }
 
-    .summary-header {
-        background: #d1d1d1;
-        padding: 8px;
-        text-align: center;
+    .summary-title {
         font-weight: bold;
+        font-size: 18px;
         margin-bottom: 15px;
-        border-radius: 4px;
     }
 
     .summary-row {
         display: flex;
         justify-content: space-between;
-        margin-bottom: 8px;
+        margin-bottom: 10px;
         font-size: 15px;
     }
+
+    .btn-buy {
+        width: 100%;
+        padding: 12px;
+        border: none;
+        border-radius: 6px;
+        background: #03ac0e;
+        color: white;
+        font-size: 16px;
+        cursor: pointer;
+        margin-top: 10px;
+    }
+
+    .btn-buy:hover {
+        background: #02920c;
+    }
+
 </style>
 
-<div class="cart-container">
+<div class="container">
 
-    {{-- TABEL PRODUK --}}
-    <table>
-        <thead>
-            <tr>
-                <th>Gambar</th>
-                <th>Produk</th>
-                <th>Harga</th>
-                <th>Jumlah</th>
-                <th>Total</th>
-            </tr>
-        </thead>
+    <!-- LEFT PRODUCT TABLE -->
+    <div class="cart-box">
+        <div class="cart-title">Keranjang</div>
 
-        <tbody>
-            <tr>
-                <td><div class="img-box"></div></td>
-                <td>XX</td>
-                <td>Rp. 1.500.000,00</td>
-                <td>1</td>
-                <td>Rp. 1.500.000,00</td>
-            </tr>
+        <table>
+            <thead>
+                <tr>
+                    <th>Gambar</th>
+                    <th>Produk</th>
+                    <th>Harga</th>
+                    <th>Jumlah</th>
+                    <th>Total</th>
+                </tr>
+            </thead>
 
-            <tr>
-                <td><div class="img-box"></div></td>
-                <td>XXX</td>
-                <td>Rp. 3.500.000,00</td>
-                <td>5</td>
-                <td>Rp. 17.500.000,00</td>
-            </tr>
-        </tbody>
-    </table>
+            <tbody>
+                <tr>
+                    <td><div class="img-box"></div></td>
+                    <td>Morris Grey 100ml</td>
+                    <td>Rp 37.740</td>
+                    <td>1</td>
+                    <td>Rp 37.740</td>
+                </tr>
 
-    {{-- SUMMARY --}}
+                <tr>
+                    <td><div class="img-box"></div></td>
+                    <td>Produk Lain</td>
+                    <td>Rp 50.000</td>
+                    <td>2</td>
+                    <td>Rp 100.000</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- SUMMARY BOX -->
     <div class="summary-box">
-        <div class="summary-header">Total Keranjang</div>
+        <div class="summary-title">Ringkasan Belanja</div>
 
         <div class="summary-row">
-            <span>Sub Total</span>
-            <span>Rp 19.000.000,00</span>
-        </div>
-
-        <div class="summary-row">
-            <span>Ongkir</span>
-            <span>Rp 10.000,00</span>
-        </div>
-
-        <div class="summary-row">
-            <span>Diskon</span>
-            <span>10%</span>
-        </div>
-
-        <div class="summary-row">
-            <span>&nbsp;</span>
-            <span>Rp 1.900.000,00</span>
-        </div>
-
-        <hr>
-
-        <div class="summary-row" style="font-weight: bold;">
             <span>Total</span>
-            <span>Rp 17.100.000,00</span>
+            <span>Rp 137.740</span>
         </div>
+
+        <button class="btn-buy">Beli (2)</button>
     </div>
 
 </div>
-
