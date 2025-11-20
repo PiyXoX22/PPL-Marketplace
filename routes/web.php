@@ -74,7 +74,7 @@ Route::get('/produk/detail', function () {
 // ✔ CHECKOUT DINAMIS (PENTING)
 // ==========================================
 Route::get('/checkout/{id}', [CheckoutController::class, 'index'])
-    ->name('checkout.index');
+    ->name('checkout.show');
 
 
 // ==========================================
@@ -103,7 +103,7 @@ Route::middleware(['auth'])->group(function () {
 Route::middleware(['auth', 'user'])->group(function () {
     Route::get('/home', fn() => view('site.index'));
 });
-    
+
 
 
 // ==========================================

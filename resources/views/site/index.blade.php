@@ -231,9 +231,12 @@ setInterval(nextSlide, 4000);
                 </p>
 
                 {{-- BUTTON BELI --}}
-                <button class="mt-3 w-full py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
-                    Beli
-                </button>
+                <a href="{{ route('produk.show', $item->id) }}">
+                    <button class="mt-3 w-full py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+                        Lihat Barang
+                    </button>
+                </a>
+
             </div>
 
         </div>

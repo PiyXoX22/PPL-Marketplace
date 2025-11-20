@@ -15,4 +15,5 @@ class CheckoutController extends Controller
         // Kirim ke view
         return view('checkout.index', compact('produk'));
     }
+
 }

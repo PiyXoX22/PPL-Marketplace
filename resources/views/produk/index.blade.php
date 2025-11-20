@@ -69,6 +69,7 @@
 
                             <td>
                                 <a href="{{ route('produk.edit', $p->id) }}" class="btn btn-warning btn-sm">Edit</a>
+                                {{-- <a href="{{ route('produk.show', $p->id) }}" class="btn btn-info btn-sm">Show</a> --}}
 
                                 <form action="{{ route('produk.destroy', $p->id) }}" method="POST" class="d-inline">
                                     @csrf

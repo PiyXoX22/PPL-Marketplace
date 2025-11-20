@@ -96,6 +96,13 @@ class ProdukController extends Controller
         return redirect()->route('produk.index')
                          ->with('success', 'Produk berhasil dihapus!');
     }
+    public function show($id)
+{
+    $produk = Produk::with(['kategori', 'stok', 'harga', 'gambar'])->findOrFail($id);
+
+    return view('produk.show', compact('produk'));
+}
+
 }
 
 

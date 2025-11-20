@@ -12,15 +12,18 @@
 {{-- NAVBAR --}}
 <header class="bg-white shadow-md sticky top-0 z-50">
     <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+
         <a href="{{ route('home') }}" class="flex items-center space-x-2">
             <span class="text-2xl font-extrabold text-blue-600">E-Blox Store</span>
         </a>
+
         <nav class="hidden md:flex space-x-6 font-medium">
             <a href="{{ route('home') }}" class="text-gray-700 hover:text-blue-600 transition">Home</a>
             <a href="{{ route('produk.index') }}" class="text-gray-700 hover:text-blue-600 transition">Produk</a>
             <a href="{{ route('kategori.index') }}" class="text-gray-700 hover:text-blue-600 transition">Kategori</a>
             <a href="{{ route('login') }}" class="text-gray-700 hover:text-blue-600 transition">Login</a>
         </nav>
+
         <button id="menu-toggle" class="md:hidden text-gray-700 hover:text-blue-600">
             ☰
         </button>
@@ -30,10 +33,12 @@
 {{-- ISI HALAMAN --}}
 <main class="container mx-auto px-4 py-12">
 
+    <a href="{{ route('home') }}" class="text-blue-600 hover:underline mb-6 inline-block">← Kembali</a>
+
     <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
 
         {{-- GAMBAR PRODUK --}}
-        <div class="bg-gray-200 rounded-lg w-full h-96 flex items-center justify-center overflow-hidden">
+        <div class="bg-gray-200 rounded-lg w-full h-96 flex items-center justify-center overflow-hidden shadow">
             @if($produk->gambar && $produk->gambar->gambar)
                 <img src="{{ asset($produk->gambar->gambar) }}" class="object-cover w-full h-full">
             @else
@@ -48,11 +53,11 @@
             <h1 class="text-3xl font-bold mb-2">{{ $produk->nama_produk }}</h1>
 
             {{-- Harga --}}
-            <p class="text-2xl font-semibold mt-3">
+            <p class="text-2xl font-semibold mt-3 text-green-700">
                 Rp {{ number_format($produk->harga->harga ?? 0, 0, ',', '.') }}
             </p>
 
-            {{-- Review Box (dummy) --}}
+            {{-- Review Box --}}
             <div class="mt-4 border rounded-lg p-4 shadow-sm bg-white w-64">
                 <div class="flex text-yellow-400 text-xl space-x-1">
                     ★ ★ ★ ★ ☆
@@ -73,11 +78,11 @@
             <div class="mt-8 space-y-3 w-60">
 
                 {{-- Tombol Checkout --}}
-                <a href="{{ route('checkout', $produk->id) }}">
-                    <button class="w-full py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
-                        Beli Sekarang
-                    </button>
-                </a>
+                <a href="{{ route('checkout.show', $produk->id) }}"
+                    class="w-full py-2 bg-blue-600 text-white rounded hover:bg-blue-700 block text-center">
+                     Beli Sekarang
+                 </a>
+
 
                 {{-- Tombol Kategori --}}
                 <a href="{{ route('kategori.index') }}">
