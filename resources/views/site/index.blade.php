@@ -45,83 +45,127 @@
 </script>
 
 {{-- Hero Section --}}
-<section class="bg-blue-600 text-white py-12 text-center relative">
+{{-- <section class="bg-blue-600 text-white py-12 text-center relative">
     <h2 class="text-3xl font-bold mb-2">Selamat Datang di E-Blox Store</h2>
-    <p class="mt-2 text-lg mb-6">Belanja produk favoritmu dengan mudah & cepat</p>
+    <p class="mt-2 text-lg mb-6">Belanja produk favoritmu dengan mudah & cepat</p> --}}
 
-    {{-- Slider Gambar --}}
-   <style>
-    body {
-        margin: 0;
-        padding: 0;
-        background: #0d6efd; /* FULL BIRU */
-        font-family: Arial, sans-serif;
-    }
+    {{-- Hero Banner Slider (TOKOPEDIA STYLE) --}}
+    <section class="py-10">
 
-    .slider-container {
-        width: 100%;
-        max-width: 2000px;
-        margin: 50px auto;
-        position: relative;
-        overflow: hidden;
-        border-radius: 12px;
-        background: rgba(255,255,255,0.2);
-        padding: 10px;
-    }
+        <style>
+            .banner-slider {
+                position: relative;
+                width: 100%;
+                max-width: 1200px;
+                margin: auto;
+                overflow: hidden;
+                border-radius: 18px;
+            }
+            .banner-track {
+                display: flex;
+                transition: transform 0.5s ease-in-out;
+            }
+            .banner-slide {
+                min-width: 100%;
+                background: #ffefbf; /* warna kuning soft tokopedia */
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 40px;
+            }
+            .banner-left h2 {
+                font-size: 32px;
+                font-weight: 800;
+                color: #000;
+            }
+            .banner-left p {
+                font-size: 22px;
+                font-weight: 600;
+                color: #333;
+                line-height: 1.3;
+            }
+            .banner-left span {
+                font-size: 42px;
+                font-weight: 900;
+                color: #000;
+            }
+            .banner-right img {
+                width: 260px;
+                height: auto;
+            }
+            .banner-nav {
+                position: absolute;
+                bottom: 15px;
+                left: 50%;
+                transform: translateX(-50%);
+                display: flex;
+                gap: 8px;
+            }
+            .dot {
+                width: 10px;
+                height: 10px;
+                background: #ccc;
+                border-radius: 50%;
+                transition: 0.3s;
+            }
+            .dot.active {
+                background: #1abc60;
+            }
+        </style>
 
-    .slider {
-        display: flex;
-        width: 100%;
-        length: 200%;
-        transition: transform 0.5s ease-in-out;
-    }
+        <div class="banner-slider">
+            <div id="bannerTrack" class="banner-track">
 
-    .slide {
-        min-width: 100%;
-    }
+                {{-- SLIDE 1 --}}
+                <div class="banner-slide">
+                    <div class="banner-left">
+                        <h2>NYAM!</h2>
+                        <p>Belanja Bulanan Hemat <br>
+                            Diskon s.d. <span>50%</span>
+                        </p>
+                    </div>
+                    <div class="banner-right">
+                        <img src="https://i.ibb.co/0fSzF5F/muesli.png" alt="Produk 1">
+                    </div>
+                </div>
 
-    .slide img {
-        width: 100%;
-        border-radius: 12px;
-    }
+                {{-- SLIDE 2 --}}
+                <div class="banner-slide">
+                    <div class="banner-left">
+                        <h2>Promo Spesial</h2>
+                        <p>Dapatkan Produk Terbaik <br>
+                            Mulai dari <span>Rp 10Rb</span>
+                        </p>
+                    </div>
+                    <div class="banner-right">
+                        <img src="https://i.ibb.co/ZV3BsCS/snack.png" alt="Produk 2">
+                    </div>
+                </div>
 
-    /* Tombol navigasi */
-    .nav-btn {
-        position: absolute;
-        top: 50%;
-        transform: translateY(-50%);
-        background: white;
-        color: #0d6efd;
-        border: none;
-        font-size: 30px;
-        width: 45px;
-        height: 45px;
-        border-radius: 50%;
-        cursor: pointer;
-        box-shadow: 0 0 10px rgba(0,0,0,0.3);
-    }
+                {{-- SLIDE 3 --}}
+                <div class="banner-slide">
+                    <div class="banner-left">
+                        <h2>Belanja Hemat</h2>
+                        <p>Gratis Ongkir <br>
+                            s.d. <span>Rp 20.000</span>
+                        </p>
+                    </div>
+                    <div class="banner-right">
+                        <img src="https://i.ibb.co/6qwWfNH/choco.png" alt="Produk 3">
+                    </div>
+                </div>
 
-    .nav-btn:hover {
-        background: #e3e3e3;
-    }
+            </div>
 
-    .prev {
-        left: 10px;
-    }
+            {{-- DOT NAV --}}
+            <div class="banner-nav">
+                <div class="dot active"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+            </div>
+        </div>
 
-    .next {
-        right: 10px;
-    }
-</style>
-</head>
-<body>
-
-<div class="slider-container">
-    <div class="slider" id="slider">
-        <div class="slide"><img src="https://picsum.photos/1100/400?random=1"></div>
-        <div class="slide"><img src="https://picsum.photos/1100/400?random=2"></div>
-        <div class="slide"><img src="https://picsum.photos/1100/400?random=3"></div>
-    </div>
+    </section>
 
     <!-- Tombol Navigasi Berfungsi -->
     <button class="nav-btn prev" onclick="prevSlide()">‹</button>
@@ -152,10 +196,16 @@ setInterval(nextSlide, 4000);
 </script>
 
 
-    <a href="#produk" class="inline-block px-6 py-3 bg-white text-blue-600 font-semibold rounded-lg shadow hover:bg-gray-100">Belanja Sekarang</a>
+    <a href="#produk" class="inline-block px-6 py-3 bg-white text-blue-600 font-semibold rounded-lg shadow hover:bg-gray-100">  </a>
 </section>
 
-
+{{-- Search Produk --}}
+<div class="container mx-auto px-4 mt-8">
+    <form action="{{ route('produk.index') }}" method="GET" class="flex items-center max-w-md mx-auto">
+        <input type="text" name="search" placeholder="Cari produk..." class="w-full p-2 border rounded-l-md focus:ring-2 focus:ring-blue-500">
+        <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-r-md hover:bg-blue-700">Cari</button>
+    </form>
+</div>
 
 {{-- Daftar Produk --}}
 <main class="container mx-auto px-4 py-12" id="produk">
