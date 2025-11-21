@@ -390,9 +390,17 @@
 
 {{-- Search Produk --}}
 <div class="container mx-auto px-4 mt-8">
-    <form action="{{ route('produk.index') }}" method="GET" class="flex items-center max-w-md mx-auto">
-        <input type="text" name="search" placeholder="Cari produk..." class="w-full p-2 border rounded-l-md focus:ring-2 focus:ring-blue-500">
-        <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-r-md hover:bg-blue-700">Cari</button>
+    <form action="{{ route('filter') }}" method="GET" class="flex items-center max-w-md mx-auto">
+        <input 
+            type="text" 
+            name="search" 
+            placeholder="Cari produk..." 
+            class="w-full p-2 border rounded-l-md focus:ring-2 focus:ring-blue-500"
+            value="{{ request('search') }}"
+        >
+        <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-r-md hover:bg-blue-700">
+            Cari
+        </button>
     </form>
 </div>
 
