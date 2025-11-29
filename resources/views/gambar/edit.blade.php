@@ -4,7 +4,7 @@
 <div class="container mt-4">
   <h2>Edit Gambar Produk</h2>
 
-  <form action="{{ route('gambar.update', $gambar->id_prod) }}" method="POST" enctype="multipart/form-data">
+  <form action="{{ route('admin.gambar.update', $gambar->id_prod) }}" method="POST" enctype="multipart/form-data">
     @csrf
     @method('PUT')
 
@@ -24,7 +24,7 @@
     </div>
 
     <button type="submit" class="btn btn-primary">Perbarui</button>
-    <a href="{{ route('gambar.index') }}" class="btn btn-secondary">Kembali</a>
+    <a href="{{ route('admin.gambar.index') }}" class="btn btn-secondary">Kembali</a>
   </form>
 </div>
 @endsection

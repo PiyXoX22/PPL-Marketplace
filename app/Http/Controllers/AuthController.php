@@ -53,7 +53,7 @@ class AuthController extends Controller
         // Login otomatis
         Auth::login($user);
 
-        return redirect()->route('home')->with('success', 'Akun berhasil dibuat!');
+        return redirect()->route('otp.form')->with('success', 'Akun berhasil dibuat!');
     }
 
     // ==============================
@@ -64,6 +64,7 @@ class AuthController extends Controller
         $credentials = $request->validate([
             'email'    => ['required', 'email'],
             'password' => ['required'],
+            // 'g-recaptcha-response' => 'required|captcha',
         ]);
 
         if (Auth::attempt($credentials)) {
@@ -71,7 +72,7 @@ class AuthController extends Controller
 
             // CEK ROLE
             if (Auth::user()->role_id == 1) {
-                return redirect()->route('dashboard'); // Admin -> dashboard
+                return redirect()->route('admin.dashboard'); // Admin -> dashboard
             }
 
             return redirect()->route('home'); // User biasa -> home

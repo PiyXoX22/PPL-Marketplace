@@ -13,7 +13,7 @@
 
     <!-- Nav Item - Dashboard -->
     <li class="nav-item">
-        <a class="nav-link" href="{{ route('home') }}">
+        <a class="nav-link" href="{{ route('admin.dashboard') }}">
             <i class="fas fa-fw fa-tachometer-alt"></i>
             <span>Dashboard</span></a>
     </li>
@@ -28,7 +28,14 @@
 
     <!-- Nav Item - Produk -->
     <li class="nav-item">
-        <a class="nav-link collapsed" href="{{ route('produk.index')}}"
+        <a class="nav-link collapsed" href="{{ route('admin.produk.buat')}}"
+            aria-expanded="true" aria-controls="collapseTwo">
+            <i class="fas fa-fw fa-cog"></i>
+            <span>Penambahan Barang</span>
+        </a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link collapsed" href="{{ route('admin.produk.index')}}"
             aria-expanded="true" aria-controls="collapseTwo">
             <i class="fas fa-fw fa-cog"></i>
             <span>Produk</span>
@@ -37,7 +44,7 @@
 
         <!-- Nav Item - Produk -->
     <li class="nav-item">
-        <a class="nav-link collapsed" href="{{ route('kategori.index')}}"
+        <a class="nav-link collapsed" href="{{ route('admin.kategori.index')}}"
             aria-expanded="true" aria-controls="collapseTwo">
             <i class="fas fa-fw fa-cog"></i>
             <span>Kategori</span>
@@ -46,7 +53,7 @@
 
         <!-- Nav Item - Produk -->
     <li class="nav-item">
-        <a class="nav-link collapsed" href="{{ route('qty.index')}}"
+        <a class="nav-link collapsed" href="{{ route('admin.qty.index')}}"
             aria-expanded="true" aria-controls="collapseTwo">
             <i class="fas fa-fw fa-cog"></i>
             <span>Qty</span>
@@ -55,7 +62,7 @@
 
      <!-- Nav Item - Produk -->
     <li class="nav-item">
-        <a class="nav-link collapsed" href="{{ route('gambar.index')}}"
+        <a class="nav-link collapsed" href="{{ route('admin.gambar.index')}}"
             aria-expanded="true" aria-controls="collapseTwo">
             <i class="fas fa-fw fa-cog"></i>
             <span>Gambar</span>
@@ -64,16 +71,40 @@
 
         <!-- Nav Item - Produk -->
     <li class="nav-item">
-        <a class="nav-link collapsed" href="{{ route('harga.index')}}"
+        <a class="nav-link collapsed" href="{{ route('admin.harga.index')}}"
             aria-expanded="true" aria-controls="collapseTwo">
             <i class="fas fa-fw fa-cog"></i>
             <span>Harga</span>
         </a>
     </li>
+            <!-- Nav Item - Produk -->
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="{{ route('admin.harga.index')}}"
+                    aria-expanded="true" aria-controls="collapseTwo">
+                    <i class="fas fa-fw fa-cog"></i>
+                    <span>Transaksi</span>
+                </a>
+            </li>
 
+            <!-- Nav Item - Produk -->
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="{{ route('admin.harga.index')}}"
+                    aria-expanded="true" aria-controls="collapseTwo">
+                    <i class="fas fa-fw fa-cog"></i>
+                    <span>Kupon</span>
+                </a>
+            </li>
+            <!-- Nav Item - Produk -->
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="{{ route('admin.posts.index')}}"
+                    aria-expanded="true" aria-controls="collapseTwo">
+                    <i class="fas fa-fw fa-cog"></i>
+                    <span>Blog</span>
+                </a>
+            </li>
 
     <!-- Nav Item - Pages Collapse Menu -->
-    <li class="nav-item">
+    {{-- <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
             aria-expanded="true" aria-controls="collapseTwo">
             <i class="fas fa-fw fa-cog"></i>
@@ -86,11 +117,11 @@
                 <a class="collapse-item" href="cards.html">Cards</a>
             </div>
         </div>
-    </li>
+    </li> --}}
 
     <!-- Nav Item - Utilities Collapse Menu -->
     <li class="nav-item">
-        <a class="nav-link collapsed" href="{{ route('upui.index')}}"
+        <a class="nav-link collapsed" href="{{ route('admin.upui.index')}}"
             aria-expanded="true" aria-controls="collapseTwo">
             <i class="fas fa-fw fa-wrench"></i>
             <span>Tampilan UI</span>

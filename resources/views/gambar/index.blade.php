@@ -4,7 +4,7 @@
 <div class="container mt-4">
   <div class="d-flex justify-content-between align-items-center mb-3">
     <h2>Daftar Gambar Produk</h2>
-    <a href="{{ route('gambar.create') }}" class="btn btn-primary">+ Tambah Gambar</a>
+    <a href="{{ route('admin.gambar.create') }}" class="btn btn-primary">+ Tambah Gambar</a>
   </div>
 
   @if(session('success'))
@@ -22,13 +22,13 @@
     <tbody>
       @foreach($gambar as $g)
       <tr>
-        <td>{{ $g->id_prod }}</td>
+        <td>{{ $loop->iteration }}</td>
         <td>
           <img src="{{ asset($g->gambar) }}" alt="gambar produk" width="120">
         </td>
         <td>
-          <a href="{{ route('gambar.edit', $g->id_prod) }}" class="btn btn-warning btn-sm">Edit</a>
-          <form action="{{ route('gambar.destroy', $g->id_prod) }}" method="POST" style="display:inline-block;">
+          <a href="{{ route('admin.gambar.edit', $g->id_prod) }}" class="btn btn-warning btn-sm">Edit</a>
+          <form action="{{ route('admin.gambar.destroy', $g->id_prod) }}" method="POST" style="display:inline-block;">
             @csrf
             @method('DELETE')
             <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Hapus gambar ini?')">Hapus</button>

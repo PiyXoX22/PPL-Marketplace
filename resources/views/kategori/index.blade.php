@@ -18,7 +18,7 @@
         <div class="alert alert-success">{{ session('success') }}</div>
     @endif
 
-    <a href="{{ route('kategori.create') }}" class="btn btn-primary mb-3">+ Tambah Kategori</a>
+    <a href="{{ route('admin.kategori.create') }}" class="btn btn-primary mb-3">+ Tambah Kategori</a>
 
     <table class="table table-bordered">
         <thead class="table-dark">
@@ -31,11 +31,11 @@
         <tbody>
             @forelse ($kategori as $k)
                 <tr>
-                    <td>{{ $k->id_prod }}</td>
+                    <td>{{ $loop->iteration }}</td>
                     <td>{{ $k->kategori }}</td>
                     <td>
-                        <a href="{{ route('kategori.edit', $k->id_prod) }}" class="btn btn-warning btn-sm">Edit</a>
-                        <form action="{{ route('kategori.destroy', $k->id_prod) }}" method="POST" class="d-inline">
+                        <a href="{{ route('admin.kategori.edit', $k->id_prod) }}" class="btn btn-warning btn-sm">Edit</a>
+                        <form action="{{ route('admin.kategori.destroy', $k->id_prod) }}" method="POST" class="d-inline">
                             @csrf
                             @method('DELETE')
                             <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Yakin ingin menghapus?')">Hapus</button>

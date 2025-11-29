@@ -1,34 +1,4 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ $produk->nama_produk }} - E-Blox Store</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-</head>
-
-<body class="bg-gray-100 text-gray-800">
-
-{{-- NAVBAR --}}
-<header class="bg-white shadow-md sticky top-0 z-50">
-    <div class="container mx-auto px-4 py-4 flex justify-between items-center">
-
-        <a href="{{ route('home') }}" class="flex items-center space-x-2">
-            <span class="text-2xl font-extrabold text-blue-600">E-Blox Store</span>
-        </a>
-
-        <nav class="hidden md:flex space-x-6 font-medium">
-            <a href="{{ route('home') }}" class="text-gray-700 hover:text-blue-600 transition">Home</a>
-            <a href="{{ route('produk.index') }}" class="text-gray-700 hover:text-blue-600 transition">Produk</a>
-            <a href="{{ route('kategori.index') }}" class="text-gray-700 hover:text-blue-600 transition">Kategori</a>
-            <a href="{{ route('login') }}" class="text-gray-700 hover:text-blue-600 transition">Login</a>
-        </nav>
-
-        <button id="menu-toggle" class="md:hidden text-gray-700 hover:text-blue-600">
-            ☰
-        </button>
-    </div>
-</header>
+<x-headersite/>
 
 {{-- ISI HALAMAN --}}
 <main class="container mx-auto px-4 py-12">
@@ -85,11 +55,12 @@
 
 
                 {{-- Tombol Kategori --}}
-                <a href="{{ route('cart.index') }}">
-                    <button class="w-full py-2 bg-gray-300 text-gray-800 rounded hover:bg-gray-400">
-                        {{ $produk->kategori->kategori ?? 'Cart' }}
+                <form action="{{ route('cart.add', $produk->id) }}" method="POST">
+                    @csrf
+                    <button type="submit" class="w-full py-2 bg-gray-300 text-gray-800 rounded hover:bg-gray-400">
+                        Tambah ke Keranjang
                     </button>
-                </a>
+                </form>
 
             </div>
 

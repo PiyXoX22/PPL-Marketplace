@@ -4,7 +4,7 @@
 <div class="container py-4">
     <h2 class="mb-4">Edit Kategori</h2>
 
-    <form action="{{ route('kategori.update', $kategori->id_prod) }}" method="POST">
+    <form action="{{ route('admin.kategori.update', $kategori->id_prod) }}" method="POST">
         @csrf
         @method('PUT')
 
@@ -19,7 +19,7 @@
         </div>
 
         <button type="submit" class="btn btn-success">Update</button>
-        <a href="{{ route('kategori.index') }}" class="btn btn-secondary">Kembali</a>
+        <a href="{{ route('admin.kategori.index') }}" class="btn btn-secondary">Kembali</a>
     </form>
 </div>
 @endsection

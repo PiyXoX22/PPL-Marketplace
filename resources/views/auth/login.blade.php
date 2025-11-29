@@ -162,6 +162,11 @@
                                 {{ $errors->first() }}
                             </div>
                         @endif
+                        {!! NoCaptcha::display() !!}
+
+                        @if ($errors->has('g-recaptcha-response'))
+                            <small class="text-danger">{{ $errors->first('g-recaptcha-response') }}</small>
+                        @endif
 
                         <button type="submit">LOGIN</button>
                     </form>
@@ -179,5 +184,6 @@
         <footer>
             © E-Blox 2025. Hak Cipta Dilindungi
         </footer>
+        {!! NoCaptcha::renderJs() !!}
     </body>
     </html>

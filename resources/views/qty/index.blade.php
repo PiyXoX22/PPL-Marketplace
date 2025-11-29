@@ -8,7 +8,7 @@
         <div class="alert alert-success">{{ session('success') }}</div>
     @endif
 
-    <a href="{{ route('qty.create') }}" class="btn btn-primary mb-3">+ Tambah Qty</a>
+    <a href="{{ route('admin.qty.create') }}" class="btn btn-primary mb-3">+ Tambah Qty</a>
 
     <table class="table table-bordered">
         <thead class="table-dark">
@@ -21,12 +21,12 @@
         <tbody>
             @forelse ($qty as $q)
                 <tr>
-                    <td>{{ $q->id_prod }}</td>
+                    <td>{{ $loop->iteration }}</td>
                     <td>{{ $q->qty }}</td>
                     <td>
-                        <a href="{{ route('qty.edit', $q->id_prod) }}" class="btn btn-warning btn-sm">Edit</a>
+                        <a href="{{ route('admin.qty.edit', $q->id_prod) }}" class="btn btn-warning btn-sm">Edit</a>
 
-                        <form action="{{ route('qty.destroy', $q->id_prod) }}"
+                        <form action="{{ route('admin.qty.destroy', $q->id_prod) }}"
                               method="POST"
                               class="d-inline">
                             @csrf

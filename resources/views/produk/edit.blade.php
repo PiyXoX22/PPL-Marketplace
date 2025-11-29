@@ -8,7 +8,7 @@
     <div class="card shadow">
         <div class="card-body">
 
-            <form action="{{ route('produk.update', $produk->id) }}" method="POST">
+            <form action="{{ route('admin.produk.update', $produk->id) }}" method="POST">
                 @csrf
                 @method('PUT')
 
@@ -29,7 +29,7 @@
                 </div>
 
                 <button type="submit" class="btn btn-warning">Update</button>
-                <a href="{{ route('produk.index') }}" class="btn btn-secondary">Kembali</a>
+                <a href="{{ route('admin.produk.index') }}" class="btn btn-secondary">Kembali</a>
 
             </form>
 

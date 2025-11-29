@@ -15,8 +15,11 @@
         </div>
     @endif
 
-    <a href="{{ route('produk.create') }}" class="btn btn-primary mb-3">
+    <a href="{{ route('admin.produk.create') }}" class="btn btn-primary mb-3">
         + Tambah Produk
+    </a>
+    <a href="{{ route('admin.produk.export.pdf') }}" class="btn btn-danger">
+        Export PDF
     </a>
 
     <div class="card shadow">
@@ -39,7 +42,7 @@
                     <tbody>
                         @foreach($produk as $p)
                         <tr>
-                            <td>{{ $p->id }}</td>
+                            <td>{{ $loop->iteration }}</td>
                             <td>{{ $p->nama_produk }}</td>
                             <td>{{ $p->deskripsi }}</td>
 
@@ -68,10 +71,10 @@
                             </td>
 
                             <td>
-                                <a href="{{ route('produk.edit', $p->id) }}" class="btn btn-warning btn-sm">Edit</a>
+                                <a href="{{ route('admin.produk.edit', $p->id) }}" class="btn btn-warning btn-sm">Edit</a>
                                 {{-- <a href="{{ route('produk.show', $p->id) }}" class="btn btn-info btn-sm">Show</a> --}}
 
-                                <form action="{{ route('produk.destroy', $p->id) }}" method="POST" class="d-inline">
+                                <form action="{{ route('admin.produk.destroy', $p->id) }}" method="POST" class="d-inline">
                                     @csrf
                                     @method('DELETE')
                                     <button class="btn btn-danger btn-sm" onclick="return confirm('Hapus produk ini?')">
@@ -82,8 +85,8 @@
                         </tr>
                         @endforeach
                     </tbody>
-
                 </table>
+
             </div>
         </div>
     </div>

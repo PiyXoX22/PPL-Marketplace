@@ -80,11 +80,12 @@
                 </a>
 
                 {{-- Tombol Kategori --}}
-                <a href="{{ route('kategori.index') }}">
-                    <button class="w-full py-2 bg-gray-300 text-gray-800 rounded hover:bg-gray-400">
-                        {{ $produk->kategori->kategori ?? 'Kategori' }}
+                <form action="{{ route('cart.add', $produk->id) }}" method="POST">
+                    @csrf
+                    <button type="submit" class="w-full py-2 bg-gray-300 text-gray-800 rounded hover:bg-gray-400">
+                        Tambah ke Keranjang
                     </button>
-                </a>
+                </form>
 
             </div>
 

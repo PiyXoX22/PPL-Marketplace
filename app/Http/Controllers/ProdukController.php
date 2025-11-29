@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Produk;
 use App\Models\Harga;
 use App\Models\Kategori;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 
 class ProdukController extends Controller
@@ -118,4 +119,70 @@ class ProdukController extends Controller
 
         return view('produk.show', compact('produk'));
     }
+
+    public function exportPdf()
+    {
+        $produk = Produk::with(['stok', 'kategori', 'harga', 'gambar'])->get();
+
+        foreach ($produk as $p) {
+            if ($p->gambar && $p->gambar->gambar) {
+                $p->gambar_path = public_path($p->gambar->gambar); // PATH ABSOLUT
+            } else {
+                $p->gambar_path = null;
+            }
+        }
+
+        $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('produk.pdf', compact('produk'))
+                ->setPaper('a4', 'landscape'); // lebar biar muat tabel
+
+        return $pdf->download('data-produk.pdf');
+    }
+     // FORM CREATE
+     public function buat()
+     {
+         $kategori = Kategori::all();
+         return view('produk.buat', compact('kategori'));
+     }
+
+     // SIMPAN DATA DALAM RELASI
+     public function simpan(Request $request)
+     {
+         $request->validate([
+             'nama' => 'required',
+             'kategori_id' => 'required',
+             'harga' => 'required|numeric',
+             'stok' => 'required|numeric',
+             'gambar.*' => 'image|mimes:jpg,png,jpeg'
+         ]);
+
+         // 1. SIMPAN PRODUK
+         $produk = Produk::create([
+             'nama' => $request->nama,
+             'deskripsi' => $request->deskripsi,
+             'kategori_id' => $request->kategori_id,
+         ]);
+
+         // 2. SIMPAN HARGA
+         $produk->harga()->create([
+             'harga' => $request->harga
+         ]);
+
+         // 3. SIMPAN STOK
+         $produk->stok()->create([
+             'stok' => $request->stok
+         ]);
+
+         // 4. SIMPAN GAMBAR (multiple)
+         if ($request->hasFile('gambar')) {
+             foreach ($request->file('gambar') as $img) {
+                 $path = $img->store('produk', 'public');
+                 $produk->gambar()->create([
+                     'path' => $path
+                 ]);
+             }
+         }
+
+         return redirect()->route('produk.buat')->with('success', 'Produk berhasil ditambahkan!');
+     }
+
 }

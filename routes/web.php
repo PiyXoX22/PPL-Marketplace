@@ -1,128 +1,190 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+
+// =======================
+// ROUTE API
+// =======================
+use App\Http\Controllers\OtpController;
+Route::prefix('api')->name('api.')->group(function () {
+    Route::apiResource('produk', ProdukApiController::class);
+});
+
+
+// =======================
+// CONTROLLERS
+// =======================
 use App\Http\Controllers\QtyController;
-use App\Http\Controllers\SiteController;
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\HomeController;
+use App\Http\Controllers\BlogController;
+use App\Http\Controllers\CartController;
+use App\Http\Controllers\PostController;
+use App\Http\Controllers\SiteController;
 use App\Http\Controllers\UpuiController;
 use App\Http\Controllers\HargaController;
+use App\Http\Controllers\CouponController;
+use App\Http\Controllers\FilterController;
 use App\Http\Controllers\GambarController;
 use App\Http\Controllers\ProdukController;
+use App\Http\Controllers\AddressController;
+use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\KategoriController;
-use App\Http\Controllers\FilterController;
-
-// ===========================
-// Tampilan Untuk User (Public)
-// ===========================
-
-use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\CheckoutController;
+use App\Http\Controllers\KategoriController;
+use App\Http\Controllers\Api\ProdukApiController;
 
-// Tampilan User
 
+// =======================
+// PUBLIC ROUTES
+// =======================
+
+// Home
 Route::get('/', [SiteController::class, 'index'])->name('home');
 
-Route::middleware(['auth'])->group(function () {
-    Route::get('/profile', [ProfileController::class, 'index'])->name('profile.index');
-    Route::post('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
+// OTP
+Route::get('/otp', [OtpController::class, 'form'])->name('otp.form');
+Route::post('/otp/request', [OtpController::class, 'requestOtp'])->name('otp.request');
+Route::post('/otp/login', [OtpController::class, 'login'])->name('otp.login');
+
+// Produk PUBLIC
+Route::get('/produk/{id}', [ProdukController::class, 'show'])->name('produk.show');
+Route::get('/produk/detail', fn() => view('produk.detail'))->name('produk.detail');
+
+// Filter Produk
+Route::get('/filter', [FilterController::class, 'index'])->name('filter');
+
+
+// Public routes (visitor) -> view di /posts/user
+Route::get('/blog', [PostController::class, 'userIndex'])->name('posts.index');
+Route::get('/posts/{post}', [PostController::class, 'userShow'])->name('posts.show');
+
+
+// =======================
+// CART & CHECKOUT (AUTH)
+// =======================
+Route::middleware('auth')->group(function () {
+
+    // Cart
+    Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
+    Route::post('/cart/add/{product}', [CartController::class, 'add'])->name('cart.add');
+    Route::patch('/cart/{cart}', [CartController::class, 'update'])->name('cart.update');
+    Route::delete('/cart/{cart}', [CartController::class, 'remove'])->name('cart.destroy');
+
+    // Checkout
+    Route::get('/checkout/{id}', [CheckoutController::class, 'index'])->name('checkout.show');
+    Route::get('/checkout-cart', [CheckoutController::class, 'cartCheckout'])
+    ->name('checkout.cart');
+    Route::get('rajaongkir/', [App\Http\Controllers\RajaOngkirController::class, 'index']);
+    Route::get('/cities/{provinceId}', [App\Http\Controllers\RajaOngkirController::class, 'getCities']);
+    Route::get('/districts/{cityId}', [App\Http\Controllers\RajaOngkirController::class, 'getDistricts']);
+    Route::post('/check-ongkir', [App\Http\Controllers\RajaOngkirController::class, 'checkOngkir']);
 });
 
 
-Route::get('/cart', fn() => view('cart.index'))->name('cart.index');
-Route::get('/produk/detail', fn() => view('produk.detail'))->name('produk.detail');
-Route::get('/checkout', fn() => view('checkout.index'))->name('checkout.index');
-
-// ===========================
-// Auth Routes
-// ===========================
+// =======================
+// AUTH ROUTES
+// =======================
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [AuthController::class, 'login'])->name('login.process');
 Route::get('/register', [AuthController::class, 'showRegisterForm'])->name('register');
 Route::post('/register', [AuthController::class, 'register'])->name('register.process');
 Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 
-// ===========================
-// ADMIN AREA (Hanya Admin)
-// ===========================
-Route::middleware(['auth', 'admin'])->group(function () {
 
-    // Dashboard
-    Route::get('/dashboard', fn() => view('home'))->name('dashboard');
+// =======================
+// USER AREA (PROFILE + ADDRESS)
+// =======================
+Route::middleware(['auth', 'user'])
+    ->prefix('profile')
+    ->name('profile.')
+    ->group(function () {
 
-    // Semua CRUD Admin
+    // user profile
+    Route::get('/', [ProfileController::class, 'index'])->name('index');
+    Route::post('/update', [ProfileController::class, 'update'])->name('update');
 
-// Profile User (harus login)
-Route::middleware(['auth'])->group(function () {
-    Route::get('/profile', [ProfileController::class, 'index'])->name('profile.index');
-    Route::post('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
+    // user address
+    Route::resource('address', AddressController::class)->names([
+        'index'   => 'address.index',
+        'create'  => 'address.create',
+        'store'   => 'address.store',
+        'show'    => 'address.show',
+        'edit'    => 'address.edit',
+        'update'  => 'address.update',
+        'destroy' => 'address.destroy',
+    ]);
 });
 
-// Cart
-Route::get('/cart', function () {
-    return view('cart.index');
-})->name('cart.index');
 
-// Produk Detail
-Route::get('/produk/detail', function () {
-    return view('produk.detail');
-})->name('produk.detail');
+// =======================
+// ADMIN AREA
+// =======================
+Route::middleware(['auth', 'admin'])
+    ->prefix('admin')
+    ->name('admin.')
+    ->group(function () {
 
-
-// ==========================================
-// ✔ CHECKOUT DINAMIS (PENTING)
-// ==========================================
-Route::get('/checkout/{id}', [CheckoutController::class, 'index'])
-    ->name('checkout.show');
+        Route::middleware(['auth'])
+        ->get('/dashboard', fn() => view('home'))
+        ->name('dashboard');
 
 
-// ==========================================
-// CRUD Admin
-// ==========================================
-Route::middleware(['auth'])->group(function () {
+    // Produk Manual Form
+    Route::get('/produk/buat', [ProdukController::class, 'buat'])->name('produk.buat');
+    Route::post('/produk/buat', [ProdukController::class, 'simpanBuat'])->name('produk.simpanBuat');
 
-    Route::get('/dashboard', function () {
-        return view('home');
-    })->name('dashboard');
+    // Resource Produk ADMIN
+    Route::resource('produk', ProdukController::class)->names([
+        'index'   => 'produk.index',
+        'create'  => 'produk.create',
+        'store'   => 'produk.store',
+        'show'    => 'produk.show',
+        'edit'    => 'produk.edit',
+        'update'  => 'produk.update',
+        'destroy' => 'produk.destroy',
+    ]);
 
-    Route::resource('produk', ProdukController::class);
+    // CRUD Admin lainnya
     Route::resource('qty', QtyController::class);
     Route::resource('kategori', KategoriController::class);
-    Route::resource('harga', HargaController::class); // cukup resource
+    Route::resource('harga', HargaController::class);
     Route::resource('gambar', GambarController::class);
     Route::resource('upui', UpuiController::class);
+    Route::get('/blog', function () {
+        return redirect()->route('posts.index');
+    });
+
+    Route::resource('posts', PostController::class);
+// Admin CRUD kupon
+Route::prefix('admin')->name('admin.')->middleware('auth')->group(function () {
+    Route::resource('coupons', CouponController::class)->except(['show','edit','update','destroy']);
 });
 
+    // Export PDF
+    Route::get('/produk/export/pdf', [ProdukController::class, 'exportPdf'])
+        ->name('produk.export.pdf');
 
-});
+    // Profile + Address Admin
+    Route::prefix('profile')->name('profile.')->group(function () {
 
-// ===========================
-// USER AREA (Hanya User)
-// ===========================
-Route::middleware(['auth', 'user'])->group(function () {
-    Route::get('/home', fn() => view('site.index'));
-});
-Route::get('/filter', [FilterController::class, 'index'])->name('filter');
-// ==========================================
-// AUTH
-// ==========================================
-Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
-Route::post('/login', [AuthController::class, 'login'])->name('login.process');
-Route::get('/register', [AuthController::class, 'showRegisterForm'])->name('register');
-Route::post('/register', [AuthController::class, 'register'])->name('register.process');
-Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
+        Route::get('/', [ProfileController::class, 'index'])->name('index');
+        Route::post('/update', [ProfileController::class, 'update'])->name('update');
 
-
-// Role Middleware
-Route::middleware(['admin'])->group(function () {
-    Route::get('/dashboard', function () {
-        return view('home');
+        Route::resource('address', AddressController::class)->names([
+            'index'   => 'address.index',
+            'create'  => 'address.create',
+            'store'   => 'address.store',
+            'show'    => 'address.show',
+            'edit'    => 'address.edit',
+            'update'  => 'address.update',
+            'destroy' => 'address.destroy',
+        ]);
     });
 });
 
-Route::middleware(['user'])->group(function () {
-    Route::get('/home', function () {
-        return view('site.index');
-    });
-});
+
+// =======================
+// PAYMENT MIDTRANS
+// =======================
+Route::post('/payment', [PaymentController::class, 'generateSnapToken']);
+Route::post('/payment/callback', [PaymentController::class, 'callback']);

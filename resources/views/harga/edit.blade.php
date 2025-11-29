@@ -19,7 +19,7 @@
     <div class="card">
         <div class="card-body">
 
-            <form action="{{ route('harga.update', $harga->id_prod) }}" method="POST">
+            <form action="{{ route('admin.harga.update', $harga->id_prod) }}" method="POST">
                 @csrf
                 @method('PUT')
 
@@ -34,7 +34,7 @@
                 </div>
 
                 <button type="submit" class="btn btn-primary">Update</button>
-                <a href="{{ route('harga.index') }}" class="btn btn-secondary">Kembali</a>
+                <a href="{{ route('admin.harga.index') }}" class="btn btn-secondary">Kembali</a>
             </form>
 
         </div>

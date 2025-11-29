@@ -83,10 +83,16 @@
 
     {{-- Sidebar --}}
     <div class="sidebar">
-        <a href="#" class="active">PROFILE</a>
-        <a href="#">ADDRESSES</a>
+        <a href="{{ auth()->user()->role_id == 1 ? route('admin.profile.index') : route('profile.index') }}"
+            class="active">
+             PROFILE
+         </a>
+         <a href="{{ auth()->user()->role_id == 1 ? route('admin.profile.address.index') : route('profile.address.index') }}"
+            class="active">
+             ADDRESSES
+         </a>
         <a href="#">ORDERS</a>
-        <a href="#">LOGOUT</a>
+        <a href="{{ route('logout') }}">LOGOUT</a>
     </div>
 
     {{-- Main Content --}}

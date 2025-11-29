@@ -8,7 +8,7 @@
     <div class="card shadow">
         <div class="card-body">
 
-            <form action="{{ route('produk.store') }}" method="POST">
+            <form action="{{ route('admin.produk.store') }}" method="POST">
                 @csrf
 
                 <div class="form-group">
@@ -33,7 +33,7 @@
                 </div>
 
                 <button type="submit" class="btn btn-primary">Simpan</button>
-                <a href="{{ route('produk.index') }}" class="btn btn-secondary">Kembali</a>
+                <a href="{{ route('admin.produk.index') }}" class="btn btn-secondary">Kembali</a>
 
             </form>
 

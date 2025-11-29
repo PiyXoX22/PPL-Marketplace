@@ -24,7 +24,7 @@
     <div class="card mb-4">
         <div class="card-header">Tambah Harga Baru</div>
         <div class="card-body">
-            <form action="{{ route('harga.store') }}" method="POST">
+            <form action="{{ route('admin.harga.store') }}" method="POST">
                 @csrf
 
                 <div class="mb-3">
@@ -57,14 +57,14 @@
                <tbody>
                 @forelse ($data as $row)
                     <tr>
-                        <td>{{ $row->id_prod }}</td>
+                        <td>{{ $loop->iteration }}</td>
                         <td>{{ $row->harga }}</td>
                         <td>
-                            <a href="{{ route('harga.edit', $row->id_prod) }}" class="btn btn-warning btn-sm">
+                            <a href="{{ route('admin.harga.edit', $row->id_prod) }}" class="btn btn-warning btn-sm">
                                 Edit
                             </a>
 
-                            <form action="{{ route('harga.destroy', $row->id_prod) }}" method="POST" class="d-inline">
+                            <form action="{{ route('admin.harga.destroy', $row->id_prod) }}" method="POST" class="d-inline">
                                 @csrf
                                 @method('DELETE')
 
