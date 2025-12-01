@@ -43,6 +43,7 @@ use App\Http\Controllers\RajaOngkirController;
 // =======================
 Route::get('/', [SiteController::class, 'index'])->name('home');
 
+
 // OTP
 Route::get('/otp', [OtpController::class, 'form'])->name('otp.form');
 Route::post('/otp/request', [OtpController::class, 'requestOtp'])->name('otp.request');

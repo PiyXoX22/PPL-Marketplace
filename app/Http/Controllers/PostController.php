@@ -7,11 +7,13 @@ use Illuminate\Http\Request;
 
 class PostController extends Controller
 {
-    // ADMIN METHODS (tetap seperti sebelumnya)
+    // ============================
+    // ADMIN METHODS
+    // ============================
     public function index()
     {
-        $posts = Post::latest()->paginate(5);
-        return view('posts.index', compact('posts')); // admin view
+        $posts = Post::latest()->paginate(10);
+        return view('posts.index', compact('posts'));
     }
 
     public function create()
@@ -26,13 +28,21 @@ class PostController extends Controller
             'content' => 'required',
         ]);
 
-        Post::create($request->all());
-        return redirect()->route('admin.posts.index')->with('success', 'Post berhasil dibuat.');
+        $data = $request->all();
+
+        // MODE 1 -> tidak pakai upload gambar
+        $data['image'] = null;
+
+        Post::create($data);
+
+        return redirect()->route('admin.posts.index')
+            ->with('success', 'Post berhasil dibuat.');
     }
+
 
     public function show(Post $post)
     {
-        return view('posts.show', compact('post')); // admin detail
+        return view('posts.show', compact('post'));
     }
 
     public function edit(Post $post)
@@ -47,31 +57,37 @@ class PostController extends Controller
             'content' => 'required',
         ]);
 
-        $post->update($request->all());
-        return redirect()->route('admin.posts.index')->with('success', 'Post berhasil diupdate.');
+        $data = $request->all();
+        $data['image'] = null; // tidak digunakan
+
+        $post->update($data);
+
+        return redirect()->route('admin.posts.index')
+            ->with('success', 'Post berhasil diupdate.');
     }
+
 
     public function destroy(Post $post)
     {
         $post->delete();
-        return redirect()->route('admin.posts.index')->with('success', 'Post berhasil dihapus.');
+        return redirect()->route('admin.posts.index')
+                         ->with('success', 'Post berhasil dihapus.');
     }
 
-    // ------------------------
-    // USER METHODS
-    // ------------------------
 
-// Visitor / User
-public function userIndex()
-{
-    $posts = Post::latest()->paginate(5);
-    return view('posts.user.index', compact('posts')); // -> folder posts/user
-}
+    // ============================
+    // USER VIEW
+    // ============================
+    public function userIndex()
+    {
+        $posts = Post::latest()->paginate(10);
+        $topStories = Post::latest()->take(5)->get();
 
-public function userShow(Post $post)
-{
-    return view('posts.user.show', compact('post')); // -> folder posts/user
-}
+        return view('posts.user.index', compact('posts', 'topStories'));
+    }
 
-
+    public function userShow(Post $post)
+    {
+        return view('posts.user.show', compact('post'));
+    }
 }
