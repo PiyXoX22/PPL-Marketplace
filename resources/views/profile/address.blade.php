@@ -3,7 +3,6 @@
     display: flex;
     padding: 20px;
     background: #f7f7f7;
-    min-height: 80vh;
 }
 .sidebar {
     width: 200px;
@@ -14,9 +13,9 @@
     display: block;
     padding: 10px;
     margin-bottom: 5px;
-    text-decoration: none;
     color: #000;
     font-weight: bold;
+    text-decoration: none;
 }
 .sidebar a.active {
     background: #000;
@@ -29,28 +28,6 @@
     margin-left: 20px;
     border-radius: 4px;
 }
-.form-group {
-    margin-bottom: 15px;
-}
-label {
-    display: block;
-    font-weight: bold;
-    margin-bottom: 5px;
-}
-input[type="text"], select {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-}
-.btn-submit {
-    padding: 10px 20px;
-    background: #222;
-    color: #fff;
-    border: none;
-    border-radius: 4px;
-    margin-top: 10px;
-}
 .table-address {
     width: 100%;
     border-collapse: collapse;
@@ -60,132 +37,153 @@ input[type="text"], select {
     border: 1px solid #ccc;
     padding: 10px;
 }
+.btn-submit {
+    padding: 8px 16px;
+    background: #222;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+}
+input, select {
+    width: 100%;
+    height: 40px;
+    margin-bottom: 10px;
+    padding: 5px;
+}
 </style>
 
 <div class="profile-container">
+
     {{-- Sidebar --}}
     <div class="sidebar">
-        <a href="{{ auth()->user()->role_id == 1 ? route('admin.profile.index') : route('profile.index') }}"
-            class="active">
-             PROFILE
-         </a>
-         <a href="{{ auth()->user()->role_id == 1 ? route('admin.profile.address.index') : route('profile.address.index') }}"
-            class="active">
-             ADDRESSES
-         </a>
+        <a href="{{ route('profile.index') }}">PROFILE</a>
+        <a class="active" href="{{ route('profile.address.index') }}">ADDRESSES</a>
         <a href="#">ORDERS</a>
         <a href="{{ route('logout') }}">LOGOUT</a>
     </div>
 
     {{-- Content --}}
     <div class="content">
-        <h2>My Addresses</h2>
+        <h2>Alamat Saya</h2>
 
         @if(session('success'))
-            <div style="color:green; margin-bottom:10px;">{{ session('success') }}</div>
+            <div class="alert alert-success">
+                {{ session('success') }}
+            </div>
         @endif
 
+        {{-- Form Tambah --}}
         <form action="{{ route('profile.address.store') }}" method="POST">
             @csrf
-            <div class="row">
-                <div class="col">
-                    <div class="form-group">
-                        <label>Address Title</label>
-                        <input type="text" name="address_title">
-                    </div>
-                    <div class="form-group">
-                        <label>First Name</label>
-                        <input type="text" name="first_name">
-                    </div>
-                    <div class="form-group">
-                        <label>Last Name</label>
-                        <input type="text" name="last_name">
-                    </div>
-                    <div class="form-group">
-                        <label>Phone</label>
-                        <input type="text" name="phone">
-                    </div>
-                </div>
 
-                <div class="col">
-                    <div class="form-group">
-                        <label>Address</label>
-                        <input type="text" name="address">
-                    </div>
-                    {{-- <div class="form-group">
-                        <label>Country</label>
-                        <select name="country_id">
-                            @foreach(\App\Models\Country::all() as $country)
-                                <option value="{{ $country->id }}">{{ $country->name }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>State</label>
-                        <select name="state_id">
-                            <option value="">-- Select State --</option>
-                            @foreach(\App\Models\State::all() as $state)
-                                <option value="{{ $state->id }}">{{ $state->name }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>City</label>
-                        <select name="city_id">
-                            @foreach(\App\Models\City::all() as $city)
-                                <option value="{{ $city->id }}">{{ $city->name }}</option>
-                            @endforeach
-                        </select>
-                    </div> --}}
-                    <div class="form-group">
-                        <label>Zip Code</label>
-                        <input type="text" name="zip_code">
-                    </div>
-                </div>
-            </div>
+            <label>Nama Lengkap</label>
+            <input type="text" name="full_name" required>
 
-            <button class="btn-submit">Add Address</button>
+            <label>No. Telepon</label>
+            <input type="text" name="phone" required>
+
+            <label>Provinsi</label>
+            <select id="province" name="province" required>
+                <option value="">-- Pilih Provinsi --</option>
+                @foreach($provinces as $p)
+                    <option value="{{ $p['name'] }}" data-id="{{ $p['id'] }}">
+                        {{ $p['name'] }}
+                    </option>
+                @endforeach
+            </select>
+
+            <label>Kota</label>
+            <select id="city" name="city" required disabled>
+                <option value="">Pilih Provinsi dulu</option>
+            </select>
+
+            <label>Kecamatan</label>
+            <select id="district" name="district" required disabled>
+                <option value="">Pilih Kota dulu</option>
+            </select>
+
+            <label>Kode Pos</label>
+            <input type="text" name="postal_code" required>
+
+            <label>Alamat Lengkap</label>
+            <input type="text" name="address_line" required>
+
+            <label>Detail Tambahan (Opsional)</label>
+            <input type="text" name="additional_info">
+
+            <button class="btn-submit">Tambah Alamat</button>
         </form>
 
-        {{-- List Addresses --}}
+        {{-- Tabel List --}}
         <table class="table-address">
             <thead>
                 <tr>
-                    <th>Title</th>
-                    <th>Name</th>
-                    <th>Phone</th>
-                    <th>Address</th>
-                    <th>City</th>
-                    <th>State</th>
-                    <th>Country</th>
-                    <th>Zip</th>
-                    <th>Action</th>
+                    <th>Nama</th>
+                    <th>Telepon</th>
+                    <th>Provinsi</th>
+                    <th>Kota</th>
+                    <th>Kecamatan</th>
+                    <th>Kode Pos</th>
+                    <th>Alamat</th>
+                    <th>Default?</th>
+                    <th>Aksi</th>
                 </tr>
             </thead>
             <tbody>
-                @foreach($addresses as $address)
+                @forelse($addresses as $address)
                 <tr>
-                    <td>{{ $address->address_title }}</td>
-                    <td>{{ $address->first_name }} {{ $address->last_name }}</td>
+                    <td>{{ $address->full_name }}</td>
                     <td>{{ $address->phone }}</td>
-                    <td>{{ $address->address }}</td>
-                    <td>{{ $address->city->name ?? '-' }}</td>
-                    <td>{{ $address->state->name ?? '-' }}</td>
-                    <td>{{ $address->country->name ?? '-' }}</td>
-                    <td>{{ $address->zip_code }}</td>
+                    <td>{{ $address->province }}</td>
+                    <td>{{ $address->city }}</td>
+                    <td>{{ $address->district }}</td>
+                    <td>{{ $address->postal_code }}</td>
+                    <td>{{ $address->address_line }}</td>
+                    <td>{{ $address->is_default ? 'Default' : '-' }}</td>
                     <td>
-                        <form action="{{ route('profile.address.destroy', $address->id) }}" method="POST" style="display:inline-block;">
-                            @csrf
-                            @method('DELETE')
-                            <button class="btn-submit" onclick="return confirm('Delete this address?')" style="background:#FF0000;">Delete</button>
+                        <form action="{{ route('profile.address.destroy', $address->id) }}" method="POST">
+                            @csrf @method('DELETE')
+                            <button class="btn-submit" style="background:red"
+                                onclick="return confirm('Hapus alamat ini?')">
+                                Hapus
+                            </button>
                         </form>
                     </td>
                 </tr>
-                @endforeach
+                @empty
+                <tr><td colspan="9" class="text-center">Belum ada alamat</td></tr>
+                @endforelse
             </tbody>
         </table>
-
     </div>
 </div>
 
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+$('#province').on('change', function () {
+    let id = $(this).find(':selected').data('id');
 
+    $("#city").prop("disabled", false).html('<option>Loading...</option>');
+    $("#district").html('<option>Pilih Kota dulu</option>').prop("disabled", true);
+
+    $.get('/cities/' + id, function(data) {
+        $("#city").html('<option value="">-- Pilih Kota --</option>');
+        $.each(data, function(i, item) {
+            $("#city").append(`<option value="${item.name}" data-id="${item.id}">${item.name}</option>`);
+        });
+    });
+});
+
+$('#city').on('change', function () {
+    let id = $(this).find(':selected').data('id');
+
+    $("#district").prop("disabled", false).html('<option>Loading...</option>');
+
+    $.get('/districts/' + id, function(data) {
+        $("#district").html('<option value="">-- Pilih Kecamatan --</option>');
+        $.each(data, function(i, item) {
+            $("#district").append(`<option value="${item.name}">${item.name}</option>`);
+        });
+    });
+});
+</script>

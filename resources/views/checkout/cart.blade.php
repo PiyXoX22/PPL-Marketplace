@@ -116,7 +116,6 @@
 <body>
 
 @php
-    // Dummy ongkir sementara, nanti diganti RajaOngkir
     $ongkirList = [
         'jne'     => 18000,
         'pos'     => 17000,
@@ -127,6 +126,17 @@
 
     $kurirDipilih = request('kurir') ?? 'pos';
     $ongkir = $ongkirList[$kurirDipilih] ?? 17000;
+
+    $subtotal = 0;
+    foreach ($cartItems as $item) {
+        $subtotal += $item->product->harga->harga * $item->quantity;
+    }
+
+    $selectedAddress = auth()->user()->addresses()
+        ->where('id', request('address_id'))
+        ->first()
+        ?? auth()->user()->addresses()->where('is_default', 1)->first()
+        ?? auth()->user()->addresses()->first();
 @endphp
 
 <div class="layout">
@@ -134,28 +144,52 @@
     <!-- LEFT -->
     <div>
 
-        <!-- ADDRESS -->
+        <!-- ADDRESS SELECT -->
         <div class="card">
             <div class="card-title">📍 ALAMAT PENGIRIMAN</div>
 
+            <form method="GET">
+                <select name="address_id" onchange="this.form.submit()"
+                    style="width:100%; padding:10px; border-radius:7px; border:1px solid #ccc; margin-bottom:15px;">
+                    <option value="">-- Pilih Alamat Pengiriman --</option>
+                    @foreach(auth()->user()->addresses as $addr)
+                        <option value="{{ $addr->id }}"
+                            {{ request('address_id', optional($selectedAddress)->id) == $addr->id ? 'selected' : '' }}>
+                            {{ $addr->full_name }} - {{ $addr->city }}
+                        </option>
+                    @endforeach
+                </select>
+            </form>
+
             <div class="address-box">
-                <strong>{{ auth()->user()->name }}</strong><br>
-                {{ auth()->user()->alamat ?? 'Alamat belum diisi' }}<br>
-                {{ auth()->user()->nomor ?? '' }}
+                @if ($selectedAddress)
+                    <strong>{{ $selectedAddress->full_name }}</strong><br>
+                    {{ $selectedAddress->address_line }}<br>
+                    {{ $selectedAddress->district }}, {{ $selectedAddress->city }}<br>
+                    {{ $selectedAddress->province }} - {{ $selectedAddress->postal_code }}<br>
+                    {{ $selectedAddress->phone }}
+                @else
+                    <strong>Silakan pilih alamat terlebih dahulu</strong>
+                @endif
             </div>
+
+            <br>
+
+            <a href="{{ route('profile.address.index') }}"
+            style="display:inline-block; padding:8px 12px; background:#007bff;
+            color:#fff; border-radius:6px; text-decoration:none; font-size:13px;">
+                Kelola Alamat ➜
+            </a>
         </div>
 
-        <!-- PRODUCTS IN CART -->
+        <!-- CART PRODUCTS -->
         <div class="card">
             <div class="card-title">🛒 Barang dalam Keranjang</div>
 
             @foreach ($cartItems as $item)
                 <div class="product">
-
                     @if($item->product && $item->product->gambar)
                         <img src="{{ asset($item->product->gambar->gambar) }}" alt="produk">
-                    @else
-                        <span class="text-muted">Tidak ada</span>
                     @endif
 
                     <div style="width:100%;">
@@ -168,11 +202,10 @@
                             × {{ $item->quantity }}
                         </div>
                     </div>
-
                 </div>
             @endforeach
 
-            {{-- SELECT PENGIRIMAN --}}
+            {{-- SHIPPING --}}
             <div class="mt-3">
                 <label class="card-title">Metode Pengiriman</label>
 
@@ -188,7 +221,7 @@
             </div>
         </div>
 
-        <!-- PAYMENT METHOD -->
+        <!-- PAYMENT -->
         <div class="card">
             <div class="card-title">Metode Pembayaran</div>
 
@@ -198,24 +231,19 @@
                     <input type="radio" name="pay" value="{{ $pay }}">
                 </label>
             @endforeach
-
         </div>
 
     </div>
 
-    <!-- RIGHT -->
+    <!-- RIGHT - SUMMARY -->
     <div>
         <div class="summary-box">
             <div class="card-title">Cek ringkasan transaksimu</div>
 
-            @foreach ($cartItems as $item)
-                <div class="row">
-                    <span>{{ $item->product->nama_produk }} (x{{ $item->quantity }})</span>
-                    <span>
-                        Rp{{ number_format($item->product->harga->harga * $item->quantity, 0, ',', '.') }}
-                    </span>
-                </div>
-            @endforeach
+            <div class="row">
+                <span>Total Produk</span>
+                <span>Rp{{ number_format($subtotal, 0, ',', '.') }}</span>
+            </div>
 
             <div class="row">
                 <span>Ongkir ({{ strtoupper($kurirDipilih) }})</span>
@@ -223,7 +251,7 @@
             </div>
 
             <div class="total-label">
-                Rp{{ number_format($total + $ongkir, 0, ',', '.') }}
+                Rp{{ number_format($subtotal + $ongkir, 0, ',', '.') }}
             </div>
 
             <button class="btn-pay">💳 Bayar Sekarang</button>

@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="container">
-    <h1>My Addresses</h1>
+    <h1>My gAddresses</h1>
 
     <a href="{{ route('address.create') }}" class="btn btn-primary mb-3">Add New Address</a>
 

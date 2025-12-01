@@ -9,42 +9,27 @@ class Address extends Model
 {
     use HasFactory;
 
-    // Laravel harus tau primary key & auto increment
-    protected $table = 'login_addresses';
+    protected $table = 'login2_addresses'; // Nama tabel sesuai database
+
     protected $primaryKey = 'id';
     public $incrementing = true;
-    protected $keyType = 'int';
+    protected $keyType = 'string'; // BIGINT UNSIGNED
 
     protected $fillable = [
         'user_id',
-        'address_title',
-        'first_name',
-        'last_name',
+        'full_name',
         'phone',
-        'address',
-        'country_id',
-        'state_id',
-        'city_id',
-        'zip_code'
+        'province',
+        'city',
+        'district',
+        'postal_code',
+        'address_line',
+        'additional_info',
+        'is_default'
     ];
 
     public function user()
     {
         return $this->belongsTo(User::class, 'user_id');
     }
-
-    // public function country()
-    // {
-    //     return $this->belongsTo(Country::class, 'country_id');
-    // }
-
-    // public function state()
-    // {
-    //     return $this->belongsTo(State::class, 'state_id');
-    // }
-
-    // public function city()
-    // {
-    //     return $this->belongsTo(City::class, 'city_id');
-    // }
 }

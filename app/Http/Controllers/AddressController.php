@@ -4,87 +4,118 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Http;
 use App\Models\Address;
-use App\Models\Country;
-use App\Models\State;
-use App\Models\City;
 
 class AddressController extends Controller
 {
+    /**
+     * Menampilkan daftar alamat + dropdown provinsi
+     */
     public function index()
     {
         $user = Auth::user();
-        $addresses = Address::where('user_id', $user->id)
-                            ->with(['country', 'state', 'city'])
-                            ->get();
+        $addresses = Address::where('user_id', $user->id)->get();
 
-        return view('profile.address', compact('user', 'addresses'));
+        $response = Http::withHeaders([
+            'Accept' => 'application/json',
+            'key' => config('rajaongkir.api_key'),
+        ])->get('https://rajaongkir.komerce.id/api/v1/destination/province');
+
+        $provinces = $response->successful() ? ($response->json()['data'] ?? []) : [];
+
+        return view('profile.address', compact('user', 'addresses', 'provinces'));
     }
 
+    /**
+     * Menampilkan form edit alamat
+     */
+    public function edit($id)
+    {
+        $address = Address::findOrFail($id);
+
+        $response = Http::withHeaders([
+            'Accept' => 'application/json',
+            'key' => config('rajaongkir.api_key'),
+        ])->get('https://rajaongkir.komerce.id/api/v1/destination/province');
+
+        $provinces = $response->successful() ? ($response->json()['data'] ?? []) : [];
+
+        return view('profile.address-edit', compact('address', 'provinces'));
+    }
+
+    /**
+     * Menyimpan alamat baru
+     */
     public function store(Request $request)
     {
         $request->validate([
-            'address_title' => 'required|string|max:255',
-            'first_name'    => 'nullable|string|max:255',
-            'last_name'     => 'nullable|string|max:255',
-            'phone'         => 'nullable|string|max:255',
-            'address'       => 'nullable|string|max:255',
-            'country_id'    => 'required|exists:countries,id',
-            'state_id'      => 'nullable|exists:states,id',
-            'city_id'       => 'required|exists:cities,id',
-            'zip_code'      => 'nullable|string|max:255',
+            'full_name'     => 'required|string|max:100',
+            'phone'         => 'required|string|max:20',
+            'province'      => 'required|string|max:100',
+            'city'          => 'required|string|max:100',
+            'district'      => 'required|string|max:100',
+            'postal_code'   => 'required|string|max:10',
+            'address_line'  => 'required|string',
+            'additional_info' => 'nullable|string',
         ]);
-
-        $user = Auth::user();
 
         Address::create([
-            'user_id'       => $user->id,
-            'address_title' => $request->address_title,
-            'first_name'    => $request->first_name,
-            'last_name'     => $request->last_name,
+            'user_id'       => Auth::id(),
+            'full_name'     => $request->full_name,
             'phone'         => $request->phone,
-            'address'       => $request->address,
-            'country_id'    => $request->country_id ?? 1,
-            'state_id'      => $request->state_id ?? 1,
-            'city_id'       => $request->city_id ?? 1,
-            'zip_code'      => $request->zip_code,
+            'province'      => $request->province,
+            'city'          => $request->city,
+            'district'      => $request->district,
+            'postal_code'   => $request->postal_code,
+            'address_line'  => $request->address_line,
+            'additional_info' => $request->additional_info ?? '',
+            'is_default'    => 0,
         ]);
 
-        return back()->with('success', 'Address added!');
+        return redirect()->route('profile.address.index')->with('success', 'Alamat berhasil ditambahkan!');
     }
 
-    public function update(Request $request, Address $address)
+    /**
+     * Update alamat yang sudah ada
+     */
+    public function update(Request $request, $id)
     {
         $request->validate([
-            'address_title' => 'required|string|max:255',
-            'first_name'    => 'nullable|string|max:255',
-            'last_name'     => 'nullable|string|max:255',
-            'phone'         => 'nullable|string|max:255',
-            'address'       => 'nullable|string|max:255',
-            'country_id'    => 'required|exists:countries,id',
-            'state_id'      => 'nullable|exists:states,id',
-            'city_id'       => 'required|exists:cities,id',
-            'zip_code'      => 'nullable|string|max:255',
+            'full_name'     => 'required|string|max:100',
+            'phone'         => 'required|string|max:20',
+            'province'      => 'required|string|max:100',
+            'city'          => 'required|string|max:100',
+            'district'      => 'required|string|max:100',
+            'postal_code'   => 'required|string|max:10',
+            'address_line'  => 'required|string',
+            'additional_info' => 'nullable|string',
         ]);
+
+        $address = Address::findOrFail($id);
 
         $address->update([
-            'address_title' => $request->address_title,
-            'first_name'    => $request->first_name,
-            'last_name'     => $request->last_name,
+            'full_name'     => $request->full_name,
             'phone'         => $request->phone,
-            'address'       => $request->address,
-            'country_id'    => $request->country_id,
-            'state_id'      => $request->state_id,
-            'city_id'       => $request->city_id,
-            'zip_code'      => $request->zip_code,
+            'province'      => $request->province,
+            'city'          => $request->city,
+            'district'      => $request->district,
+            'postal_code'   => $request->postal_code,
+            'address_line'  => $request->address_line,
+            'additional_info' => $request->additional_info ?? '',
         ]);
 
-        return back()->with('success', 'Address updated!');
+        return redirect()->route('profile.address.index')->with('success', 'Alamat berhasil diperbarui!');
     }
 
-    public function destroy(Address $address)
+    /**
+     * Menghapus alamat
+     */
+    public function destroy($id)
     {
+        $address = Address::findOrFail($id);
         $address->delete();
-        return back()->with('success', 'Address deleted!');
+
+        return redirect()->route('profile.address.index')->with('success', 'Alamat berhasil dihapus!');
     }
 }

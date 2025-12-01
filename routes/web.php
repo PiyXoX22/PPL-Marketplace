@@ -3,13 +3,14 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\ProdukApiController;
 // =======================
-// ROUTE API
+// API ROUTES
 // =======================
 use App\Http\Controllers\OtpController;
+
+
 Route::prefix('api')->name('api.')->group(function () {
     Route::apiResource('produk', ProdukApiController::class);
 });
-
 
 // =======================
 // CONTROLLERS
@@ -34,11 +35,12 @@ use App\Http\Controllers\KategoriController;
 
 
 
+use App\Http\Controllers\RajaOngkirController;
+
+
 // =======================
 // PUBLIC ROUTES
 // =======================
-
-// Home
 Route::get('/', [SiteController::class, 'index'])->name('home');
 
 // OTP
@@ -53,18 +55,25 @@ Route::get('/produk/detail', fn() => view('produk.detail'))->name('produk.detail
 // Filter Produk
 Route::get('/filter', [FilterController::class, 'index'])->name('filter');
 
-
-// Public routes (visitor) -> view di /posts/user
+// Blog visitor
 Route::get('/blog', [PostController::class, 'userIndex'])->name('posts.index');
 Route::get('/posts/{post}', [PostController::class, 'userShow'])->name('posts.show');
+
+
+// =======================
+// RAJA ONGKIR AJAX ROUTES
+// =======================
+Route::get('/cities/{provinceId}', [RajaOngkirController::class, 'getCities']);
+Route::get('/districts/{cityId}', [RajaOngkirController::class, 'getDistricts']);
+Route::post('/check-ongkir', [RajaOngkirController::class, 'checkOngkir']);
 
 
 // =======================
 // CART & CHECKOUT (AUTH)
 // =======================
 Route::middleware('auth')->group(function () {
-
-    // Cart
+    
+    // Cart System
     Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
     Route::post('/cart/add/{product}', [CartController::class, 'add'])->name('cart.add');
     Route::patch('/cart/{cart}', [CartController::class, 'update'])->name('cart.update');
@@ -72,6 +81,7 @@ Route::middleware('auth')->group(function () {
 
     // Checkout
     Route::get('/checkout/{id}', [CheckoutController::class, 'index'])->name('checkout.show');
+
     Route::get('/checkout-cart', [CheckoutController::class, 'cartCheckout'])
     ->name('checkout.cart');
     Route::post('/checkout-cart/pay', [CheckoutController::class, 'payCart'])->name('checkout.cart.pay');
@@ -79,6 +89,12 @@ Route::middleware('auth')->group(function () {
     Route::get('/cities/{provinceId}', [App\Http\Controllers\RajaOngkirController::class, 'getCities']);
     Route::get('/districts/{cityId}', [App\Http\Controllers\RajaOngkirController::class, 'getDistricts']);
     Route::post('/check-ongkir', [App\Http\Controllers\RajaOngkirController::class, 'checkOngkir']);
+
+    Route::get('/checkout-cart', [CheckoutController::class, 'cartCheckout'])->name('checkout.cart');
+
+    // NEW — PROSES BAYAR (POST)
+    Route::post('/checkout/pay', [CheckoutController::class, 'pay'])->name('checkout.pay');
+
 });
 
 
@@ -93,28 +109,27 @@ Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 
 
 // =======================
-// USER AREA (PROFILE + ADDRESS)
+// USER AREA (PROFILE & ADDRESS)
 // =======================
 Route::middleware(['auth', 'user'])
     ->prefix('profile')
     ->name('profile.')
     ->group(function () {
 
-    // user profile
-    Route::get('/', [ProfileController::class, 'index'])->name('index');
-    Route::post('/update', [ProfileController::class, 'update'])->name('update');
+        Route::get('/', [ProfileController::class, 'index'])->name('index');
+        Route::post('/update', [ProfileController::class, 'update'])->name('update');
 
-    // user address
-    Route::resource('address', AddressController::class)->names([
-        'index'   => 'address.index',
-        'create'  => 'address.create',
-        'store'   => 'address.store',
-        'show'    => 'address.show',
-        'edit'    => 'address.edit',
-        'update'  => 'address.update',
-        'destroy' => 'address.destroy',
-    ]);
-});
+        Route::resource('address', AddressController::class)
+            ->except(['show'])
+            ->names([
+                'index' => 'address.index',
+                'create' => 'address.create',
+                'store' => 'address.store',
+                'edit' => 'address.edit',
+                'update' => 'address.update',
+                'destroy' => 'address.destroy',
+            ]);
+    });
 
 
 // =======================
@@ -125,63 +140,25 @@ Route::middleware(['auth', 'admin'])
     ->name('admin.')
     ->group(function () {
 
-        Route::middleware(['auth'])
-        ->get('/dashboard', fn() => view('home'))
-        ->name('dashboard');
+        Route::get('/dashboard', fn() => view('home'))->name('dashboard');
 
+        Route::resource('produk', ProdukController::class);
+        Route::resource('qty', QtyController::class);
+        Route::resource('kategori', KategoriController::class);
+        Route::resource('harga', HargaController::class);
+        Route::resource('gambar', GambarController::class);
+        Route::resource('upui', UpuiController::class);
+        Route::resource('posts', PostController::class);
 
-    // Produk Manual Form
-    Route::get('/produk/buat', [ProdukController::class, 'buat'])->name('produk.buat');
-    Route::post('/produk/buat', [ProdukController::class, 'simpanBuat'])->name('produk.simpanBuat');
+        Route::resource('coupons', CouponController::class)
+            ->except(['show','edit','update','destroy']);
 
-    // Resource Produk ADMIN
-    Route::resource('produk', ProdukController::class)->names([
-        'index'   => 'produk.index',
-        'create'  => 'produk.create',
-        'store'   => 'produk.store',
-        'show'    => 'produk.show',
-        'edit'    => 'produk.edit',
-        'update'  => 'produk.update',
-        'destroy' => 'produk.destroy',
-    ]);
-
-    // CRUD Admin lainnya
-    Route::resource('qty', QtyController::class);
-    Route::resource('kategori', KategoriController::class);
-    Route::resource('harga', HargaController::class);
-    Route::resource('gambar', GambarController::class);
-    Route::resource('upui', UpuiController::class);
-    Route::get('/blog', function () {
-        return redirect()->route('posts.index');
+        Route::prefix('profile')->name('profile.')->group(function () {
+            Route::get('/', [ProfileController::class, 'index'])->name('index');
+            Route::post('/update', [ProfileController::class, 'update'])->name('update');
+            Route::resource('address', AddressController::class)->except(['show']);
+        });
     });
-
-    Route::resource('posts', PostController::class);
-// Admin CRUD kupon
-Route::prefix('admin')->name('admin.')->middleware('auth')->group(function () {
-    Route::resource('coupons', CouponController::class)->except(['show','edit','update','destroy']);
-});
-
-    // Export PDF
-    Route::get('/produk/export/pdf', [ProdukController::class, 'exportPdf'])
-        ->name('produk.export.pdf');
-
-    // Profile + Address Admin
-    Route::prefix('profile')->name('profile.')->group(function () {
-
-        Route::get('/', [ProfileController::class, 'index'])->name('index');
-        Route::post('/update', [ProfileController::class, 'update'])->name('update');
-
-        Route::resource('address', AddressController::class)->names([
-            'index'   => 'address.index',
-            'create'  => 'address.create',
-            'store'   => 'address.store',
-            'show'    => 'address.show',
-            'edit'    => 'address.edit',
-            'update'  => 'address.update',
-            'destroy' => 'address.destroy',
-        ]);
-    });
-});
 
 
 // =======================

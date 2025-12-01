@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Address;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
@@ -12,7 +13,7 @@ class User extends Authenticatable
     protected $table = 'login';
     protected $primaryKey = 'id';
 
-    public $timestamps = false;  // tabel login tidak punya created_at & updated_at
+    public $timestamps = false;
 
     protected $fillable = [
         'first_name',
@@ -35,8 +36,10 @@ class User extends Authenticatable
     {
         return $this->belongsTo(Role::class, 'role_id');
     }
-    public function address()
+
+    // RELASI USER → ADDRESS
+    public function addresses()
     {
-        return $this->belongsTo(Role::class, 'user_id');
+        return $this->hasMany(Address::class, 'user_id');
     }
 }

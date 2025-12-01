@@ -120,7 +120,6 @@
 <body>
 
 @php
-    // Opsi ongkir berdasarkan kurir
     $ongkirList = [
         'jne'     => 18000,
         'pos'     => 17000,
@@ -129,13 +128,8 @@
         'gosend'  => 20000,
     ];
 
-    // Ambil pilihan kurir dari query string (?kurir=jne)
     $kurirDipilih = request('kurir') ?? 'pos';
-
-    // Tentukan ongkir berdasar pilihan
     $ongkir = $ongkirList[$kurirDipilih] ?? 17000;
-
-    // Hitung total
     $total = $produk->harga->harga + $ongkir;
 @endphp
 
@@ -144,60 +138,71 @@
     <!-- LEFT -->
     <div>
 
-        <!-- ADDRESS -->
+        <!-- ADDRESS PILIHAN -->
         <div class="card">
             <div class="card-title">📍 ALAMAT PENGIRIMAN</div>
 
-            <div class="address-box">
-                <strong>{{ auth()->user()->name ?? 'Nama User' }}</strong><br>
-                {{ auth()->user()->alamat ?? 'Alamat belum diisi' }}<br>
-                {{ auth()->user()->nomor ?? '' }}
+            @foreach($addresses as $address)
+            <div class="address-card" id="address_{{ $address->id }}" onclick="selectAddress({{ $address->id }})"
+                style="border:2px solid #ccc; padding:12px; border-radius:6px; margin-bottom:10px; cursor:pointer;">
+
+                <strong>{{ $address->full_name }}</strong><br>
+                {{ $address->phone }}<br>
+                {{ $address->address_line }}<br>
+                {{ $address->district }}, {{ $address->city }}<br>
+                {{ $address->province }} - {{ $address->postal_code }}
+
+                <button type="button" class="btn-select"
+                    style="margin-top:8px; width:100%; padding:8px; background:#03ac0e; color:#fff;
+                    border:none; border-radius:5px"
+                    onclick="selectAddress({{ $address->id }})">
+                    Pilih Alamat
+                </button>
             </div>
+            @endforeach
+
+            {{-- SIMPAN ALAMAT TERPILIH --}}
+            <input type="hidden" name="address_id" id="selected_address">
         </div>
 
         <!-- PRODUCT -->
         <div class="card">
             <div class="product">
                 <img src="{{ asset($produk->gambar->gambar) }}" alt="produk">
-
                 <div style="width:100%;">
                     <div style="font-weight:bold; font-size:14px;">
                         {{ $produk->nama_produk }}
                     </div>
-
                     <div class="product-price">
                         Rp{{ number_format($produk->harga->harga, 0, ',', '.') }}
                     </div>
                 </div>
             </div>
 
-            {{-- SELECT PENGIRIMAN --}}
             <div class="mt-3">
                 <label class="card-title">Metode Pengiriman</label>
 
                 <form method="GET">
                     <select name="kurir" onchange="this.form.submit()">
-                        <option value="jne"     {{ $kurirDipilih == 'jne'     ? 'selected' : '' }}>JNE - Rp18.000</option>
-                        <option value="pos"     {{ $kurirDipilih == 'pos'     ? 'selected' : '' }}>Pos Indonesia - Rp17.000</option>
-                        <option value="jnt"     {{ $kurirDipilih == 'jnt'     ? 'selected' : '' }}>J&T - Rp19.000</option>
+                        <option value="jne"     {{ $kurirDipilih == 'jne' ? 'selected' : '' }}>JNE - Rp18.000</option>
+                        <option value="pos"     {{ $kurirDipilih == 'pos' ? 'selected' : '' }}>Pos Indonesia - Rp17.000</option>
+                        <option value="jnt"     {{ $kurirDipilih == 'jnt' ? 'selected' : '' }}>J&T - Rp19.000</option>
                         <option value="sicepat" {{ $kurirDipilih == 'sicepat' ? 'selected' : '' }}>SiCepat - Rp16.000</option>
-                        <option value="gosend"  {{ $kurirDipilih == 'gosend'  ? 'selected' : '' }}>GoSend - Rp20.000</option>
+                        <option value="gosend"  {{ $kurirDipilih == 'gosend' ? 'selected' : '' }}>GoSend - Rp20.000</option>
                     </select>
                 </form>
             </div>
         </div>
 
-        <!-- PAYMENT METHOD -->
+        <!-- PAYMENT -->
         <div class="card">
             <div class="card-title">Metode Pembayaran</div>
-
             @foreach(['OVO','DANA','Mastercard','Visa','PayPal'] as $pay)
-                <label class="payment-item">
-                    <span>{{ $pay }}</span>
-                    <input type="radio" name="pay" value="{{ $pay }}">
-                </label>
+            <label class="payment-item">
+                <span>{{ $pay }}</span>
+                <input type="radio" name="pay" value="{{ $pay }}">
+            </label>
             @endforeach
-
         </div>
 
     </div>
@@ -205,7 +210,7 @@
     <!-- RIGHT -->
     <div>
         <div class="summary-box">
-            <div class="card-title">Cek ringkasan transaksimu</div>
+            <div class="card-title">Ringkasan</div>
 
             <div class="row">
                 <span>Total Harga (1 Barang)</span>
@@ -226,6 +231,21 @@
     </div>
 
 </div>
+
+<script>
+function selectAddress(id) {
+    document.getElementById('selected_address').value = id;
+
+    document.querySelectorAll('.address-card').forEach(el => {
+        el.style.borderColor = "#ccc";
+        el.style.background = "#fff";
+    });
+
+    let selected = document.getElementById('address_' + id);
+    selected.style.borderColor = "#03ac0e";
+    selected.style.background = "#eaffea";
+}
+</script>
 
 </body>
 </html>
