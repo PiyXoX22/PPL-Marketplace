@@ -136,30 +136,37 @@
 <div class="layout">
 
     <!-- LEFT -->
-    <div>
+     <div>
 
-        <!-- ADDRESS PILIHAN -->
+        <!-- ADDRESS SELECT -->
         <div class="card">
             <div class="card-title">📍 ALAMAT PENGIRIMAN</div>
 
-            @foreach($addresses as $address)
-            <div class="address-card" id="address_{{ $address->id }}" onclick="selectAddress({{ $address->id }})"
-                style="border:2px solid #ccc; padding:12px; border-radius:6px; margin-bottom:10px; cursor:pointer;">
+            <form method="GET">
+                <select name="address_id" onchange="this.form.submit()"
+                    style="width:100%; padding:10px; border-radius:7px; border:1px solid #ccc; margin-bottom:15px;">
+                    <option value="">-- Pilih Alamat Pengiriman --</option>
+                    @foreach(auth()->user()->addresses as $addr)
+                        <option value="{{ $addr->id }}"
+                            {{ request('address_id', optional($selectedAddress)->id) == $addr->id ? 'selected' : '' }}>
+                            {{ $addr->full_name }} - {{ $addr->city }}
+                        </option>
+                    @endforeach
+                </select>
+            </form>
 
-                <strong>{{ $address->full_name }}</strong><br>
-                {{ $address->phone }}<br>
-                {{ $address->address_line }}<br>
-                {{ $address->district }}, {{ $address->city }}<br>
-                {{ $address->province }} - {{ $address->postal_code }}
-
-                <button type="button" class="btn-select"
-                    style="margin-top:8px; width:100%; padding:8px; background:#03ac0e; color:#fff;
-                    border:none; border-radius:5px"
-                    onclick="selectAddress({{ $address->id }})">
-                    Pilih Alamat
-                </button>
+            <div class="address-box">
+                @if ($selectedAddress)
+                    <strong>{{ $selectedAddress->full_name }}</strong><br>
+                    {{ $selectedAddress->address_line }}<br>
+                    {{ $selectedAddress->district }}, {{ $selectedAddress->city }}<br>
+                    {{ $selectedAddress->province }} - {{ $selectedAddress->postal_code }}<br>
+                    {{ $selectedAddress->phone }}
+                @else
+                    <strong>Silakan pilih alamat terlebih dahulu</strong>
+                @endif
             </div>
-            @endforeach
+          
 
             {{-- SIMPAN ALAMAT TERPILIH --}}
             <input type="hidden" name="address_id" id="selected_address">
