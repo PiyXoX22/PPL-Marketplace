@@ -1,7 +1,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>E-Blox Store</title>
+    <title>E-Blox Store  | Situs Marketplace Indonesia</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
@@ -11,6 +11,7 @@
 <header class="bg-white shadow-md sticky top-0 z-50">
     <div class="container mx-auto px-4 py-4 flex justify-between items-center">
         <a href="{{ route('home') }}" class="flex items-center space-x-2">
+            <img src="{{ asset('uploads/logo.png') }}" alt="Logo E-Blox Store" class="w-16 h-16 object-contain">
             <span class="text-2xl font-extrabold text-blue-600">E-Blox Store</span>
         </a>
         <nav class="hidden md:flex space-x-6 font-medium">

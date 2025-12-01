@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-
+use App\Http\Controllers\Api\ProdukApiController;
 // =======================
 // ROUTE API
 // =======================
@@ -31,7 +31,7 @@ use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\KategoriController;
-use App\Http\Controllers\Api\ProdukApiController;
+
 
 
 // =======================
@@ -74,6 +74,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/checkout/{id}', [CheckoutController::class, 'index'])->name('checkout.show');
     Route::get('/checkout-cart', [CheckoutController::class, 'cartCheckout'])
     ->name('checkout.cart');
+    Route::post('/checkout-cart/pay', [CheckoutController::class, 'payCart'])->name('checkout.cart.pay');
     Route::get('rajaongkir/', [App\Http\Controllers\RajaOngkirController::class, 'index']);
     Route::get('/cities/{provinceId}', [App\Http\Controllers\RajaOngkirController::class, 'getCities']);
     Route::get('/districts/{cityId}', [App\Http\Controllers\RajaOngkirController::class, 'getDistricts']);

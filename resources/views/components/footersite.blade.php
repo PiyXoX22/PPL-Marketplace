@@ -1,7 +1,7 @@
 <footer class="bg-gray-800 text-white py-8 mt-12">
     <div class="container mx-auto px-4 text-center">
 
-        <p class="mb-4">&copy; {{ date('Y') }} E-Blox Store. Semua Hak Dilindungi.</p>
+        <p class="mb-4">&copy; {{ date('Y') }} E-Blox Store. Hak Cipta Dilindungi.</p>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-10 mt-6">
 

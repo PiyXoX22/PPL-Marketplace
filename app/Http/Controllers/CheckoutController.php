@@ -4,32 +4,38 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Produk;
-use App\Models\Cart;           // ← WAJIB
-use Illuminate\Support\Facades\Auth; // ← WAJIB
+use App\Models\Cart;
+use App\Models\Transaction;
+use App\Models\TransactionItem;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class CheckoutController extends Controller
 {
+    // Checkout 1 produk
     public function index($id)
     {
-        // Coba cek apakah ID adalah ID produk
-        $produk = Produk::with(['harga', 'gambar', 'stok', 'kategori'])
-                        ->find($id);
+        $produk = Produk::with(['harga', 'gambar', 'stok', 'kategori'])->find($id);
 
-        if ($produk) {
-            // MODE: checkout 1 produk
-            return view('checkout.index', [
-                'mode' => 'single',
-                'produk' => $produk,
-            ]);
+        if (!$produk) {
+            return redirect()->back()->with('error', 'Produk tidak ditemukan!');
         }
 
-        // Jika bukan ID produk, berarti ID user → checkout cart
-        $cartItems = Cart::with('product')
-                        ->where('user_id', $id)
-                        ->get();
+        return view('checkout.index', [
+            'mode' => 'single',
+            'produk' => $produk,
+        ]);
+    }
+
+    // Checkout seluruh cart
+    public function cartCheckout()
+    {
+        $user = Auth::user();
+
+        $cartItems = Cart::with('product.harga')->where('user_id', $user->id)->get();
 
         if ($cartItems->isEmpty()) {
-            return abort(404, 'Cart kosong atau user tidak ditemukan.');
+            return redirect()->route('cart.index')->with('error', 'Keranjang kosong!');
         }
 
         $total = 0;
@@ -39,25 +45,65 @@ class CheckoutController extends Controller
         }
 
         return view('checkout.cart', [
-            'mode' => 'cart',
             'cartItems' => $cartItems,
-            'total' => $total
+            'total' => $total,
         ]);
     }
-    public function update(Request $request, $id)
-{
-    $cart = Cart::findOrFail($id);
 
-    if($request->action === 'increase') {
-        $cart->quantity += 1;
-    } elseif($request->action === 'decrease' && $cart->quantity > 1) {
-        $cart->quantity -= 1;
+    // Proses checkout cart (saat klik "Bayar Sekarang")
+    public function payCart(Request $request)
+    {
+        $request->validate([
+            'kurir' => 'required|string',
+            'payment_method' => 'required|string',
+        ]);
+
+        $user = Auth::user();
+        $cartItems = Cart::with('product.harga')->where('user_id', $user->id)->get();
+
+        if ($cartItems->isEmpty()) {
+            return redirect()->route('cart.index')->with('error', 'Keranjang kosong!');
+        }
+
+        $ongkirList = [
+            'jne'     => 18000,
+            'pos'     => 17000,
+            'jnt'     => 19000,
+            'sicepat' => 16000,
+            'gosend'  => 20000,
+        ];
+
+        $ongkir = $ongkirList[$request->kurir] ?? 17000;
+
+        DB::beginTransaction();
+        try {
+            $transaction = Transaction::create([
+                'user_id' => $user->id,
+                'total' => $cartItems->sum(fn($item) => ($item->product->harga->harga ?? 0) * $item->quantity),
+                'shipping_fee' => $ongkir,
+                'shipping_courier' => $request->kurir,
+                'payment_method' => $request->payment_method,
+                'status' => 'pending',
+            ]);
+
+            foreach ($cartItems as $item) {
+                TransactionItem::create([
+                    'transaction_id' => $transaction->id,
+                    'product_id' => $item->product_id,
+                    'quantity' => $item->quantity,
+                    'price' => $item->product->harga->harga ?? 0,
+                ]);
+            }
+
+            Cart::where('user_id', $user->id)->delete();
+
+            DB::commit();
+
+            return redirect()->route('checkout.success', $transaction->id)
+                             ->with('success', 'Transaksi berhasil dibuat!');
+        } catch (\Exception $e) {
+            DB::rollback();
+            return back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
+        }
     }
-
-    $cart->save();
-
-    return redirect()->route('cart.index')->with('success', 'Keranjang berhasil diperbarui!');
-}
-
-
 }

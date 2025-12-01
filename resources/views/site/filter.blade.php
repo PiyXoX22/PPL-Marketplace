@@ -8,152 +8,223 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            background: #f5f6f7;
+            background: #f3f4f6;
             margin: 0;
             padding: 0;
         }
 
+        /* NAVBAR */
         .navbar {
             background: white;
-            padding: 14px 20px;
-            box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+            padding: 14px 24px;
+            box-shadow: 0 1px 6px rgba(0,0,0,0.1);
             display: flex;
             align-items: center;
-            gap: 20px;
             justify-content: center;
+            gap: 20px;
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+
+        .navbar-title {
+            font-size: 22px;
+            font-weight: bold;
+            color: #1a73e8;
+            margin-right: 20px;
+        }
+
+        /* SEARCH AREA */
+        .search-wrapper {
+            width: 40%;
             position: relative;
         }
 
+        .search-input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            font-size: 15px;
+            transition: 0.2s;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: #1a73e8;
+            box-shadow: 0 0 0 2px rgba(26, 115, 232, 0.2);
+        }
+
+        /* HISTORY BOX */
+        #historyBox {
+            position: absolute;
+            top: 48px;
+            left: 0;
+            width: 100%;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            overflow: hidden;
+            display: none;
+            max-height: 220px;
+            overflow-y: auto;
+            z-index: 100;
+        }
+
+        #historyBox li {
+            padding: 10px 16px;
+            cursor: pointer;
+            border-bottom: 1px solid #f0f0f0;
+            transition: 0.2s;
+        }
+        #historyBox li:hover {
+            background: #f5f5f5;
+        }
+
+        /* MAIN LAYOUT */
         .container {
             display: flex;
             padding: 20px;
-            gap: 20px;
+            gap: 22px;
         }
 
+        /* SIDEBAR */
         .sidebar {
             width: 260px;
             background: white;
             padding: 20px;
-            border-radius: 8px;
+            border-radius: 10px;
             height: fit-content;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.06);
         }
 
-        .filter-item {
-            margin-bottom: 20px;
+        .sidebar h3 {
+            margin-top: 0;
+            color: #1a73e8;
         }
 
+        select {
+            width: 100%;
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid #d1d5db;
+            font-size: 15px;
+        }
+
+        /* PRODUCTS */
         .product-container {
             flex: 1;
         }
 
+        .product-container h2 {
+            margin-top: 0;
+            color: #333;
+        }
+
         .product-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-            gap: 15px;
+            grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+            gap: 18px;
         }
 
         .card {
             background: white;
-            border-radius: 8px;
+            border-radius: 10px;
             overflow: hidden;
-            border: 1px solid #e5e5e5;
+            border: 1px solid #e5e7eb;
             transition: 0.2s;
-            cursor: pointer;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 5px 14px rgba(0,0,0,0.12);
         }
 
         .card img {
             width: 100%;
             height: 170px;
             object-fit: cover;
+            background: #f0f0f0;
         }
 
-        .price {
-            font-weight: bold;
-            color: #333;
+        .card-body {
+            padding: 12px;
         }
 
         .title {
-            font-size: 14px;
+            font-size: 15px;
             font-weight: bold;
-            margin-bottom: 5px;
+            margin-bottom: 6px;
+            color: #333;
         }
 
+        .price {
+            color: #1a73e8;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        /* BUTTON */
         .btn-view {
             width: 100%;
             padding: 10px;
-            margin-top: 10px;
             background: #1a73e8;
             color: white;
             border: none;
-            border-radius: 6px;
-            cursor: pointer;
+            border-radius: 8px;
             font-weight: bold;
-            transition: background 0.2s ease-in-out;
+            cursor: pointer;
+            transition: 0.2s;
         }
 
         .btn-view:hover {
             background: #1558b0;
         }
+
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+            }
+            .sidebar {
+                width: 100%;
+            }
+            .search-wrapper {
+                width: 70%;
+            }
+        }
     </style>
 </head>
+
 <body>
 
+    <!-- NAVBAR -->
     <div class="navbar">
+        <strong class="navbar-title">E-Blox Store</strong>
 
-        <strong style="font-size: 20px; color:#1a73e8; margin-right:20px;">
-            E-Blox Store
-        </strong>
-
-        <!-- WRAPPER AGAR SEARCH & HISTORY TENGAH -->
-        <div style="width:40%; position:relative;">
-
-            <form method="GET" action="{{ route('filter') }}" style="width:100%;">
-                <input
-                    type="text"
-                    name="search"
-                    id="searchInput"
-                    value="{{ request('search') }}"
+        <div class="search-wrapper">
+            <form method="GET" action="{{ route('filter') }}">
+                <input type="text" name="search" id="searchInput"
+                    class="search-input"
                     placeholder="Cari produk..."
-                    style="width:100%; padding:10px 14px; border:1px solid #ccc; border-radius:6px;"
-                    autocomplete="off"
-                >
+                    value="{{ request('search') }}"
+                    autocomplete="off">
             </form>
 
-            <!-- RIWAYAT PENCARIAN -->
             @if(!empty($history))
-                <ul id="historyBox" style="
-                    position:absolute;
-                    top:50px;
-                    left:0;
-                    width:100%;
-                    background:white;
-                    border:1px solid #ccc;
-                    border-radius:6px;
-                    margin-top:4px;
-                    max-height:200px;
-                    overflow:auto;
-                    z-index:50;
-                    list-style:none;
-                    padding:0;
-                    display:none;
-                ">
+                <ul id="historyBox">
                     @foreach($history as $item)
-                        <li style="
-                            padding:10px 14px;
-                            cursor:pointer;
-                            border-bottom:1px solid #eee;
-                        ">
-                            <a href="{{ route('filter', ['search' => $item]) }}"
-                                style="text-decoration:none; color:#333; display:block;">
-                                {{ $item }}
-                            </a>
-                        </li>
+                    <li>
+                        <a href="{{ route('filter', ['search' => $item]) }}"
+                           style="text-decoration:none; color:#333; display:block;">
+                           {{ $item }}
+                        </a>
+                    </li>
                     @endforeach
                 </ul>
             @endif
-
         </div>
-
     </div>
 
 <script>
@@ -161,12 +232,11 @@
     const historyBox = document.getElementById("historyBox");
 
     if (input && historyBox) {
-        input.addEventListener("input", function () {
-            const value = input.value.trim();
-            historyBox.style.display = value.length > 0 ? "block" : "none";
+        input.addEventListener("input", () => {
+            historyBox.style.display = input.value.trim().length > 0 ? "block" : "none";
         });
 
-        document.addEventListener("click", function(e) {
+        document.addEventListener("click", (e) => {
             if (!historyBox.contains(e.target) && e.target !== input) {
                 historyBox.style.display = "none";
             }
@@ -174,18 +244,18 @@
     }
 </script>
 
+<!-- MAIN -->
 <div class="container">
 
+    <!-- SIDEBAR -->
     <div class="sidebar">
         <h3>Filter</h3>
 
         <div class="filter-item">
             <strong>Kategori</strong>
-            <form method="GET" action="">
-                <select name="kategori" onchange="this.form.submit()"
-                    style="width:100%; padding:8px; border-radius:6px;">
+            <form method="GET">
+                <select name="kategori" onchange="this.form.submit()">
                     <option value="">-- Semua Kategori --</option>
-
                     @foreach ($kategoriList as $k)
                         <option value="{{ $k->kategori }}"
                             {{ request('kategori') == $k->kategori ? 'selected' : '' }}>
@@ -197,23 +267,24 @@
         </div>
     </div>
 
+    <!-- PRODUCTS -->
     <div class="product-container">
         <h2>Daftar Produk</h2>
         <p>Menampilkan {{ count($produk) }} produk</p>
 
         <div class="product-grid">
             @foreach ($produk as $p)
-            <div class="card">
-                <img src="{{ $p->gambar ? asset($p->gambar->gambar) : 'https://via.placeholder.com/300x200' }}">
-                <div class="card-body">
-                    <div class="title">{{ $p->nama_produk }}</div>
-                    <div class="price">Rp {{ number_format($p->harga->harga ?? 0, 0, ',', '.') }}</div>
+                <div class="card">
+                    <img src="{{ $p->gambar ? asset($p->gambar->gambar) : 'https://via.placeholder.com/300x200' }}">
+                    <div class="card-body">
+                        <div class="title">{{ $p->nama_produk }}</div>
+                        <div class="price">Rp {{ number_format($p->harga->harga ?? 0, 0, ',', '.') }}</div>
 
-                    <a href="{{ route('produk.show', $p->id) }}">
-                        <button class="btn-view">Lihat Barang</button>
-                    </a>
+                        <a href="{{ route('produk.show', $p->id) }}">
+                            <button class="btn-view">Lihat Barang</button>
+                        </a>
+                    </div>
                 </div>
-            </div>
             @endforeach
         </div>
     </div>
@@ -221,5 +292,4 @@
 </div>
 
 </body>
-<x-footersite/>
 </html>
