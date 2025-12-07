@@ -17,9 +17,9 @@
                 </div>
 
                 <h3 class="font-semibold text-lg mt-6 mb-2">Jelajahi Kami</h3>
-                <a href="#" class="hover:underline block">Tentang Kami</a>
-                <a href="#" class="hover:underline block">Kebijakan Dan Privasi</a>
-                <a href="#" class="hover:underline block">Tim Pengembang</a>
+                <a href="/about" class="hover:underline block">Tentang Kami</a>
+                <a href="/privacy" class="hover:underline block">Kebijakan Dan Privasi</a>
+                <a href="/developer" class="hover:underline block">Tim Pengembang</a>
                 <a href="/blog" class="hover:underline block">Blog</a>
 
                 {{-- Lokasi Kami --}}

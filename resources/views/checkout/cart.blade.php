@@ -205,21 +205,37 @@
                 </div>
             @endforeach
 
-            {{-- SHIPPING --}}
             <div class="mt-3">
                 <label class="card-title">Metode Pengiriman</label>
 
-                <form method="GET">
-                    <select name="kurir" onchange="this.form.submit()">
-                        <option value="jne"     {{ $kurirDipilih == 'jne'     ? 'selected' : '' }}>JNE - Rp18.000</option>
-                        <option value="pos"     {{ $kurirDipilih == 'pos'     ? 'selected' : '' }}>Pos Indonesia - Rp17.000</option>
-                        <option value="jnt"     {{ $kurirDipilih == 'jnt'     ? 'selected' : '' }}>J&T - Rp19.000</option>
-                        <option value="sicepat" {{ $kurirDipilih == 'sicepat' ? 'selected' : '' }}>SiCepat - Rp16.000</option>
-                        <option value="gosend"  {{ $kurirDipilih == 'gosend'  ? 'selected' : '' }}>GoSend - Rp20.000</option>
+                <!-- Dropdown Kurir -->
+                <div class="mb-8">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Pilih Kurir</label>
+                    <select name="courier" id="courier"
+                        class="block w-full rounded-lg border-gray-300 focus:ring-indigo-500 focus:border-indigo-500 text-sm">
+                        <option value="">-- Pilih Kurir --</option>
+                        <option value="jne">JNE</option>
+                        <option value="pos">POS Indonesia</option>
+                        <option value="tiki">TIKI</option>
                     </select>
-                </form>
+                </div>
+
+                <div class="flex justify-center mb-8 flex-col items-center">
+                    <button type="button" id="hitung-ongkir"
+                        class="btn-check w-full md:w-auto px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700">
+                        Hitung Ongkos Kirim
+                    </button>
+
+                    <div class="loader mt-4 hidden" id="loading-indicator">Memproses...</div>
+                </div>
+
+                <!-- Hasil Perhitungan Ongkir -->
+                <div class="mt-8 p-6 bg-indigo-50 border border-indigo-200 rounded-lg results-container hidden">
+                    <h2 class="text-xl font-semibold text-indigo-800 mb-4 text-center">Hasil Perhitungan Ongkos Kirim</h2>
+                    <div id="results-ongkir"></div>
+                </div>
             </div>
-        </div>
+
 
         <!-- PAYMENT -->
         <div class="card">
@@ -259,6 +275,59 @@
     </div>
 
 </div>
+<script>
+    document.getElementById('hitung-ongkir').addEventListener('click', function() {
+
+        let courier = document.getElementById('courier').value;
+        if (!courier) return alert("Pilih kurir dulu!");
+
+        let destination = {{ $selectedAddress->city_id ?? 0 }}; // city_id dari DB login2_address
+        let origin = 152; // GANTI: ID kota toko kamu (wajib isi!)
+
+        let weight = 0;
+        @foreach($cartItems as $item)
+            weight += {{ (int)$item->product->berat }} * {{ $item->quantity }};
+        @endforeach
+
+        document.getElementById('loading-indicator').classList.remove('hidden');
+
+        fetch("{{ route('cek.ongkir') }}", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRF-TOKEN": "{{ csrf_token() }}"
+            },
+            body: JSON.stringify({
+                origin: origin,
+                destination: destination,
+                weight: weight,
+                courier: courier
+            })
+        })
+        .then(res => res.json())
+        .then(data => {
+            document.getElementById('loading-indicator').classList.add('hidden');
+
+            let container = document.getElementById('results-ongkir');
+            container.innerHTML = "";
+
+            let results = data.rajaongkir.results[0].costs;
+
+            results.forEach(service => {
+                container.innerHTML += `
+                    <div class="p-3 bg-white border rounded mb-3">
+                        <b>${service.service} (${service.description})</b><br>
+                        Rp ${service.cost[0].value.toLocaleString('id-ID')}<br>
+                        Estimasi: ${service.cost[0].etd} hari
+                    </div>
+                `;
+            });
+
+            document.querySelector('.results-container').classList.remove('hidden');
+        });
+    });
+
+    </script>
 
 </body>
 </html>

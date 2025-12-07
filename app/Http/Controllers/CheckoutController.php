@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
 use App\Models\Produk;
 use App\Models\Cart;
 use App\Models\Address;
@@ -24,7 +25,7 @@ class CheckoutController extends Controller
 
             // Ambil alamat default user
             $addresses = $user->addresses;
-            $selectedAddress = $addresses->where('is_default', 1)->first() 
+            $selectedAddress = $addresses->where('is_default', 1)->first()
                 ?? $addresses->first();
 
             return view('checkout.index', [
@@ -52,7 +53,7 @@ class CheckoutController extends Controller
 
         // Ambil alamat user
         $addresses = $user->addresses;
-        $selectedAddress = $addresses->where('is_default', 1)->first() 
+        $selectedAddress = $addresses->where('is_default', 1)->first()
             ?? $addresses->first();
 
         return view('checkout.cart', [
@@ -105,4 +106,27 @@ class CheckoutController extends Controller
 
         return back()->with('success', 'Alamat utama berhasil diubah!');
     }
+
+
+public function cekOngkir(Request $request)
+{
+    $request->validate([
+        'origin' => 'required',
+        'destination' => 'required',
+        'weight' => 'required|integer',
+        'courier' => 'required'
+    ]);
+
+    $response = Http::withHeaders([
+        'key' => env('RAJAONGKIR_API_KEY')
+    ])->asForm()->post('https://api.rajaongkir.com/starter/cost', [
+        'origin'        => $request->origin,
+        'destination'   => $request->destination,
+        'weight'        => $request->weight,
+        'courier'       => $request->courier,
+    ]);
+
+    return $response->json();
+}
+
 }

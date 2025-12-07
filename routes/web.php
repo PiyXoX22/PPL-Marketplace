@@ -59,6 +59,9 @@ Route::get('/filter', [FilterController::class, 'index'])->name('filter');
 // Blog visitor
 Route::get('/blog', [PostController::class, 'userIndex'])->name('posts.index');
 Route::get('/posts/{post}', [PostController::class, 'userShow'])->name('posts.show');
+Route::view('/about', 'site.about')->name('about');
+Route::view('/privacy', 'site.privacy')->name('privacy');
+Route::view('/developer', 'site.developer')->name('developer');
 
 
 // =======================
@@ -67,13 +70,14 @@ Route::get('/posts/{post}', [PostController::class, 'userShow'])->name('posts.sh
 Route::get('/cities/{provinceId}', [RajaOngkirController::class, 'getCities']);
 Route::get('/districts/{cityId}', [RajaOngkirController::class, 'getDistricts']);
 Route::post('/check-ongkir', [RajaOngkirController::class, 'checkOngkir']);
+Route::post('/cek-ongkir', [CheckoutController::class, 'cekOngkir'])->name('cek.ongkir');
 
 
 // =======================
 // CART & CHECKOUT (AUTH)
 // =======================
 Route::middleware('auth')->group(function () {
-    
+
     // Cart System
     Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
     Route::post('/cart/add/{product}', [CartController::class, 'add'])->name('cart.add');

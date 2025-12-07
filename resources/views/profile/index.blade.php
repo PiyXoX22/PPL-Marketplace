@@ -1,3 +1,4 @@
+<x-headersite/>
 <style>
     .profile-container {
         display: flex;
