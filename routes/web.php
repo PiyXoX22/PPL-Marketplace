@@ -98,7 +98,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/checkout-cart', [CheckoutController::class, 'cartCheckout'])->name('checkout.cart');
 
     // NEW — PROSES BAYAR (POST)
-    Route::post('/checkout/pay', [CheckoutController::class, 'pay'])->name('checkout.pay');
+Route::post('/checkout/pay', [CheckoutController::class, 'pay'])
+    ->name('checkout.pay');
 
 });
 
