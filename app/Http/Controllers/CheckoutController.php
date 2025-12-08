@@ -3,8 +3,12 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Produk;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use App\Models\Trx;
+use App\Models\TrxDetail;
 use App\Models\Cart;
+use App\Models\Produk;
 use App\Models\Address;
 
 class CheckoutController extends Controller
