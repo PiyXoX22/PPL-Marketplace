@@ -100,15 +100,67 @@ class CheckoutController extends Controller
 
         Cart::where('user_id', Auth::id())->delete();
 
-        DB::commit();
-        return redirect()->route('cart.index')
-            ->with('success', 'Transaksi berhasil disimpan');
+DB::commit();
+return redirect()->route('checkout.viewPay', $trx->id);
+
 
     } catch (\Exception $e) {
         DB::rollBack();
         return back()->with('error', 'Terjadi kesalahan: '.$e->getMessage());
     }
+    
 }
+public function viewPay($id)
+{
+    $trx = Trx::findOrFail($id);
+
+    return view('checkout.pay', compact('trx'));
+}
+public function midtransCreate(Request $request)
+{
+    $trx = Trx::findOrFail($request->trx_id);
+
+    \Midtrans\Config::$serverKey    = config('services.midtrans.server_key');
+    \Midtrans\Config::$isProduction = config('services.midtrans.is_production');
+    \Midtrans\Config::$isSanitized  = true;
+    \Midtrans\Config::$is3ds        = true;
+
+    $params = [
+        'transaction_details' => [
+            'order_id'     => $trx->id,
+            'gross_amount' => $trx->grand_total,
+        ],
+        'customer_details' => [
+            'first_name' => auth()->user()->name,
+            'email'      => auth()->user()->email,
+        ]
+    ];
+
+    $snapToken = \Midtrans\Snap::getSnapToken($params);
+
+    return response()->json([
+        'success' => true,
+        'snap_token' => $snapToken
+    ]);
+}
+public function paymentSuccess(Request $request)
+{
+    $trx = Trx::findOrFail($request->order_id);
+    return view('checkout.success', compact('trx'));
+}
+
+public function paymentPending(Request $request)
+{
+    $trx = Trx::findOrFail($request->order_id);
+    return view('checkout.pending', compact('trx'));
+}
+
+public function paymentFailed(Request $request)
+{
+    return view('checkout.failed');
+}
+
+
 
 
 }

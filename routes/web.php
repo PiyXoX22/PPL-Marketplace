@@ -100,6 +100,16 @@ Route::middleware('auth')->group(function () {
     // NEW — PROSES BAYAR (POST)
 Route::post('/checkout/pay', [CheckoutController::class, 'pay'])
     ->name('checkout.pay');
+Route::get('/checkout/pay/{id}', [CheckoutController::class, 'viewPay'])->name('checkout.viewPay');
+Route::post('/checkout/pay/midtrans', [CheckoutController::class, 'midtransCreate'])->name('checkout.midtrans');
+Route::get('/checkout/success', [CheckoutController::class, 'paymentSuccess'])
+    ->name('checkout.success');
+
+Route::get('/checkout/pending', [CheckoutController::class, 'paymentPending'])
+    ->name('checkout.pending');
+
+Route::get('/checkout/failed', [CheckoutController::class, 'paymentFailed'])
+    ->name('checkout.failed');
 
 });
 
