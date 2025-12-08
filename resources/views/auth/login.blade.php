@@ -12,28 +12,7 @@
                 color: #333;
             }
 
-            header {
-                padding: 15px 30px;
-                border-bottom: 1px solid #eee;
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-            }
-
-            header .logo {
-                font-size: 20px;
-                font-weight: bold;
-                color: #2d70ee;
-                display: flex;
-                align-items: center;
-            }
-
-            header .logo img {
-                height: 24px;
-                margin-right: 5px;
-            }
-
-            .container {
+            .login-container {
                 display: flex;
                 justify-content: center;
                 align-items: center;
@@ -122,25 +101,12 @@
                 text-decoration: none;
                 text-align: center;
             }
-
-            footer {
-                text-align: center;
-                padding: 15px;
-                font-size: 12px;
-                color: #888;
-                border-top: 1px solid #eee;
-            }
         </style>
     </head>
     <body>
-        <header>
-            <div class="logo">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/0/0f/Shopee_logo.svg" alt="Logo">
-                E-Blox Store
-            </div>
-        </header>
+<x-headersite/>
 
-        <div class="container">
+        <div class="login-container">
             <div class="left">
                 <h1>Jadilah Penjual Terbaik!</h1>
                 <p>Kelola toko Anda secara efisien di E-Blox dengan E-Blox Seller Center</p>
@@ -181,9 +147,7 @@
             </div>
         </div>
 
-        <footer>
-            © E-Blox 2025. Hak Cipta Dilindungi
-        </footer>
+<x-footersite/>
         {!! NoCaptcha::renderJs() !!}
     </body>
     </html>

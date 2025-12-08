@@ -82,7 +82,7 @@
         }
 
         /* MAIN LAYOUT */
-        .container {
+        .utama-container {
             display: flex;
             padding: 20px;
             gap: 22px;
@@ -184,7 +184,7 @@
 
         /* RESPONSIVE */
         @media (max-width: 768px) {
-            .container {
+            .utama-container {
                 flex-direction: column;
             }
             .sidebar {
@@ -245,7 +245,7 @@
 </script>
 
 <!-- MAIN -->
-<div class="container">
+<div class="utama-container">
 
     <!-- SIDEBAR -->
     <div class="sidebar">
@@ -290,6 +290,5 @@
     </div>
 
 </div>
-
 </body>
 </html>
