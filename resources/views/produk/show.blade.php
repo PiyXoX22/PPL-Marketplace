@@ -3,7 +3,10 @@
 {{-- ISI HALAMAN --}}
 <main class="container mx-auto px-4 py-12">
 
-    <a href="{{ route('home') }}" class="text-blue-600 hover:underline mb-6 inline-block">← Kembali</a>
+    <a href="{{ route('home') }}"
+    class="inline-block bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition mb-10">
+    ← Kembali
+</a>
 
     <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
 

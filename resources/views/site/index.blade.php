@@ -151,6 +151,54 @@
 }
 
 </style>
+<style>
+    .kategori-scroll {
+        display: flex;
+        gap: 22px;
+        overflow-x: auto;
+        padding: 10px 4px;
+        margin-bottom: 25px;
+        scrollbar-width: none;
+    }
+
+    .kategori-scroll::-webkit-scrollbar {
+        display: none;
+    }
+
+    .kategori-item {
+        text-align: center;
+        flex-shrink: 0;
+        cursor: pointer;
+        width: 90px;
+        text-decoration: none;
+        color: #333;
+    }
+
+    .kategori-icon {
+        width: 70px;
+        height: 70px;
+        border-radius: 50%;
+        background: #e5e7eb;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: 0 auto 8px;
+        overflow: hidden;
+        border: 2px solid #ddd;
+        transition: 0.2s;
+    }
+
+    .kategori-item:hover .kategori-icon {
+        border-color: #1a73e8;
+        transform: scale(1.05);
+    }
+
+    .kategori-title {
+        font-size: 14px;
+        font-weight: 600;
+        margin-top: 4px;
+    }
+</style>
 
 
     <div class="banner-slider">
@@ -327,6 +375,27 @@
         <input type="text" name="search" placeholder="Cari produk..." class="w-full p-2 border rounded-l-md focus:ring-2 focus:ring-blue-500">
         <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-r-md hover:bg-blue-700">Cari</button>
     </form>
+</div>
+<div class="kategori-scroll">
+
+    @foreach ($kategoriList as $k)
+    <a href="{{ route('filter', ['kategori' => $k->kategori]) }}" class="kategori-item">
+
+        <!-- ICON (ambil gambar kategori atau default bulat abu2) -->
+        <div class="kategori-icon">
+            @if($k->gambar)
+                <img src="{{ asset($k->gambar) }}" style="width:100%; height:100%; object-fit:cover;">
+            @else
+                <span style="font-size: 30px; color:#666;">📦</span>
+            @endif
+        </div>
+
+        <!-- NAMA KATEGORI -->
+        <div class="kategori-title">{{ $k->kategori }}</div>
+
+    </a>
+    @endforeach
+
 </div>
 
 {{-- Daftar Produk --}}

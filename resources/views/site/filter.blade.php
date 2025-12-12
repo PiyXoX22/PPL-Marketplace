@@ -90,13 +90,18 @@
 
         /* SIDEBAR */
         .sidebar {
-            width: 260px;
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            height: fit-content;
-            box-shadow: 0 1px 4px rgba(0,0,0,0.06);
-        }
+    width: 260px;
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    height: fit-content;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+
+    position: sticky;   /* tetap menempel */
+    top: 90px;          /* jarak dari atas navbar */
+    max-height: calc(100vh - 110px); /* tinggi maksimal sesuai layar */
+    overflow-y: auto;   /* aktifkan scroll di dalam sidebar */
+}
 
         .sidebar h3 {
             margin-top: 0;

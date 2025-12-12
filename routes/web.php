@@ -1,11 +1,11 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Api\ProdukApiController;
+use App\Http\Controllers\OtpController;
 // =======================
 // API ROUTES
 // =======================
-use App\Http\Controllers\OtpController;
+use App\Http\Controllers\QtyController;
 
 
 Route::prefix('api')->name('api.')->group(function () {
@@ -15,7 +15,6 @@ Route::prefix('api')->name('api.')->group(function () {
 // =======================
 // CONTROLLERS
 // =======================
-use App\Http\Controllers\QtyController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BlogController;
 use App\Http\Controllers\CartController;
@@ -32,10 +31,12 @@ use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\KategoriController;
-
-
-
 use App\Http\Controllers\RajaOngkirController;
+use App\Http\Controllers\Admin\OrderController;
+
+
+use App\Http\Controllers\Auth\GoogleController;
+use App\Http\Controllers\Api\ProdukApiController;
 
 
 // =======================
@@ -122,7 +123,8 @@ Route::post('/login', [AuthController::class, 'login'])->name('login.process');
 Route::get('/register', [AuthController::class, 'showRegisterForm'])->name('register');
 Route::post('/register', [AuthController::class, 'register'])->name('register.process');
 Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
-
+Route::get('/auth/google', [GoogleController::class, 'redirect'])->name('google.login');
+Route::get('/auth/google/callback', [GoogleController::class, 'callback']);
 
 // =======================
 // USER AREA (PROFILE & ADDRESS)
@@ -145,6 +147,9 @@ Route::middleware(['auth', 'user'])
                 'update' => 'address.update',
                 'destroy' => 'address.destroy',
             ]);
+            Route::get('/orders', function () {
+                return view('profile.orders');
+            })->name('orders');
     });
 
 
@@ -169,12 +174,17 @@ Route::middleware(['auth', 'admin'])
         Route::resource('coupons', CouponController::class)
             ->except(['show','edit','update','destroy']);
 
+        // CRUD ORDERS
+        Route::resource('orders', OrderController::class);
+
+        // admin profile
         Route::prefix('profile')->name('profile.')->group(function () {
             Route::get('/', [ProfileController::class, 'index'])->name('index');
             Route::post('/update', [ProfileController::class, 'update'])->name('update');
             Route::resource('address', AddressController::class)->except(['show']);
         });
     });
+
 
 
 // =======================

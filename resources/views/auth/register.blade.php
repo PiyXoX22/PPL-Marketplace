@@ -104,8 +104,8 @@
 
 <div class="login-container">
   <div class="left">
-    <h1>Buka Toko Anda Sekarang!</h1>
-    <p>Gabung menjadi bagian dari E-Blox Seller Centre dan kembangkan bisnis Anda</p>
+    <h1>Jelajahi Toko Kami Sekarang!</h1>
+    <p>Gabung menjadi bagian dari E-Blox Store dan nikmati layanan belanja online kami.</p>
     <img src="https://cdn-icons-png.flaticon.com/512/3081/3081559.png" alt="Ilustrasi">
   </div>
 

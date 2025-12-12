@@ -55,13 +55,27 @@ input, select {
 
 <div class="profile-container">
 
-    {{-- Sidebar --}}
-    <div class="sidebar">
-        <a href="{{ route('profile.index') }}">PROFILE</a>
-        <a class="active" href="{{ route('profile.address.index') }}">ADDRESSES</a>
-        <a href="#">ORDERS</a>
-        <a href="{{ route('logout') }}">LOGOUT</a>
-    </div>
+{{-- Sidebar --}}
+<div class="sidebar">
+    <a href="{{ route('profile.index') }}"
+       class="{{ request()->routeIs('profile.index') ? 'active' : '' }}">
+        PROFILE
+    </a>
+
+    <a href="{{ route('profile.address.index') }}"
+       class="{{ request()->routeIs('profile.address.*') ? 'active' : '' }}">
+        ADDRESSES
+    </a>
+
+    <a href="{{ route('profile.orders') }}"
+       class="{{ request()->routeIs('profile.orders') ? 'active' : '' }}">
+        ORDERS
+    </a>
+
+    <a href="{{ route('logout') }}">
+        LOGOUT
+    </a>
+</div>
 
     {{-- Content --}}
     <div class="content">

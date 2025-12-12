@@ -82,19 +82,27 @@
 
 <div class="profile-container">
 
-    {{-- Sidebar --}}
-    <div class="sidebar">
-        <a href="{{ auth()->user()->role_id == 1 ? route('admin.profile.index') : route('profile.index') }}"
-            class="active">
-             PROFILE
-         </a>
-         <a href="{{ auth()->user()->role_id == 1 ? route('admin.profile.address.index') : route('profile.address.index') }}"
-            class="active">
-             ADDRESSES
-         </a>
-        <a href="#">ORDERS</a>
-        <a href="{{ route('logout') }}">LOGOUT</a>
-    </div>
+{{-- Sidebar --}}
+<div class="sidebar">
+    <a href="{{ route('profile.index') }}"
+       class="{{ request()->routeIs('profile.index') ? 'active' : '' }}">
+        PROFILE
+    </a>
+
+    <a href="{{ route('profile.address.index') }}"
+       class="{{ request()->routeIs('profile.address.*') ? 'active' : '' }}">
+        ADDRESSES
+    </a>
+
+    <a href="{{ route('profile.orders') }}"
+       class="{{ request()->routeIs('profile.orders') ? 'active' : '' }}">
+        ORDERS
+    </a>
+
+    <a href="{{ route('logout') }}">
+        LOGOUT
+    </a>
+</div>
 
     {{-- Main Content --}}
     <div class="content">

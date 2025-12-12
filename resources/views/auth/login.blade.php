@@ -101,6 +101,28 @@
                 text-decoration: none;
                 text-align: center;
             }
+            .separator {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    margin: 20px 0;
+}
+
+.separator::before,
+.separator::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: #ccc;
+}
+
+.separator span {
+    margin: 0 12px;
+    color: #777;
+    font-size: 14px;
+    white-space: nowrap;
+}
+
         </style>
     </head>
     <body>
@@ -108,8 +130,8 @@
 
         <div class="login-container">
             <div class="left">
-                <h1>Jadilah Penjual Terbaik!</h1>
-                <p>Kelola toko Anda secara efisien di E-Blox dengan E-Blox Seller Center</p>
+                <h1>Jadilah Pembeli Terbaik!</h1>
+                <p>Nikmati layanan berbelanja online dengan fitur menakjubkan E-Blox Store</p>
                 <img src="https://cdn-icons-png.flaticon.com/512/3081/3081559.png" alt="Ilustrasi">
             </div>
 
@@ -137,10 +159,23 @@
                         <button type="submit">LOGIN</button>
                     </form>
 
+                    <div class="separator">
+                        <span>Atau login dengan</span>
+                    </div>
+
+                    <a href="{{ route('google.login') }}"
+                    class="mt-3 w-full flex items-center justify-center gap-3 px-4 py-2
+                           rounded-lg border border-gray-300 bg-white
+                           text-gray-700 font-semibold text-sm
+                           hover:bg-gray-100 transition-all duration-200">
+                     <img src="https://www.svgrepo.com/show/475656/google-color.svg" class="w-5 h-5">
+                     <span>Google</span>
+                 </a>
+
+
                     <p style="margin-top:15px; font-size:14px; text-align:center;">
                         Belum punya akun?
                         <a href="{{ route('register') }}" style="color:#2d70ee; font-weight:bold;">Daftar</a>
-                        <a href="http://localhost/register">Daftar</a>
 
                     </p>
                 </div>
