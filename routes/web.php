@@ -32,8 +32,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\KategoriController;
 use App\Http\Controllers\RajaOngkirController;
-use App\Http\Controllers\Admin\OrderController;
-
+use App\Http\Controllers\TrxAdminController; // ❌ Jangan pakai Admin
 
 use App\Http\Controllers\Auth\GoogleController;
 use App\Http\Controllers\Api\ProdukApiController;
@@ -147,9 +146,13 @@ Route::middleware(['auth', 'user'])
                 'update' => 'address.update',
                 'destroy' => 'address.destroy',
             ]);
-            Route::get('/orders', function () {
-                return view('profile.orders');
-            })->name('orders');
+ // Orders
+ Route::get('/orders', [ProfileController::class, 'orders'])->name('orders');
+ Route::get('/orders/{id}', [ProfileController::class, 'orderDetail'])->name('orders.detail');
+ Route::get('/orders/invoice/{id}', [ProfileController::class, 'invoice'])
+ ->name('orders.invoice');
+
+
     });
 
 
@@ -161,9 +164,27 @@ Route::middleware(['auth', 'admin'])
     ->name('admin.')
     ->group(function () {
 
+        // Dashboard
         Route::get('/dashboard', fn() => view('home'))->name('dashboard');
 
+        // ===============================
+        // Resource Produk + Custom Routes
+        // ===============================
         Route::resource('produk', ProdukController::class);
+
+        // Custom form create (buat)
+        Route::get('produk/buat', [ProdukController::class, 'buat'])->name('produk.buat');
+
+        // Custom simpan (simpan)
+        Route::post('produk/simpan', [ProdukController::class, 'simpan'])->name('produk.simpan');
+
+        // Export PDF Produk
+        Route::get('produk/export/pdf', [ProdukController::class, 'exportPdf'])
+            ->name('produk.export.pdf');
+
+        // ===============================
+        // Resource Lain
+        // ===============================
         Route::resource('qty', QtyController::class);
         Route::resource('kategori', KategoriController::class);
         Route::resource('harga', HargaController::class);
@@ -174,16 +195,17 @@ Route::middleware(['auth', 'admin'])
         Route::resource('coupons', CouponController::class)
             ->except(['show','edit','update','destroy']);
 
-        // CRUD ORDERS
-        Route::resource('orders', OrderController::class);
+        // CRUD ORDERS / Transaksi
+        Route::resource('orders', TrxAdminController::class);
 
-        // admin profile
+        // Admin Profile
         Route::prefix('profile')->name('profile.')->group(function () {
             Route::get('/', [ProfileController::class, 'index'])->name('index');
             Route::post('/update', [ProfileController::class, 'update'])->name('update');
             Route::resource('address', AddressController::class)->except(['show']);
         });
     });
+
 
 
 

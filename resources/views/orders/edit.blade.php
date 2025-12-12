@@ -1,26 +1,37 @@
-<x-adminlayout>
+@extends('layouts.app')
 
-    <div class="card p-4">
-        <h2>Edit Order #{{ $order->id }}</h2>
+@section('title', 'Edit Transaksi')
 
-        <form action="{{ route('admin.orders.update', $order->id) }}" method="POST">
-            @csrf
-            @method('PUT')
+@section('content')
+<div class="container">
+    <h1 class="mb-4">Edit Transaksi: {{ $trx->id }}</h1>
 
-            <div class="mb-3">
-                <label>Status Order</label>
-                <select name="status" class="form-control">
-                    @foreach ($statuses as $status)
-                        <option value="{{ $status }}" {{ $order->status == $status ? 'selected' : '' }}>
-                            {{ strtoupper($status) }}
-                        </option>
-                    @endforeach
-                </select>
-            </div>
+    @if($errors->any())
+        <div class="alert alert-danger">
+            <ul>@foreach($errors->all() as $error)<li>{{ $error }}</li>@endforeach</ul>
+        </div>
+    @endif
 
-            <button class="btn btn-dark">Simpan</button>
-        </form>
+    <form action="{{ route('admin.orders.update', $trx->id) }}" method="POST">
+        @csrf
+        @method('PUT')
 
-    </div>
+        <div class="mb-3">
+            <label>Status</label>
+            <select name="status" class="form-control" required>
+                @foreach($statuses as $status)
+                    <option value="{{ $status }}" {{ $trx->status==$status?'selected':'' }}>{{ ucfirst($status) }}</option>
+                @endforeach
+            </select>
+        </div>
 
-    </x-adminlayout>
+        <div class="mb-3">
+            <label>Paid</label>
+            <input type="number" name="paid" class="form-control" value="{{ $trx->paid }}" required>
+        </div>
+
+        <button type="submit" class="btn btn-success">Update</button>
+        <a href="{{ route('admin.orders.index') }}" class="btn btn-secondary">Batal</a>
+    </form>
+</div>
+@endsection

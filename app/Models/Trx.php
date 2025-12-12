@@ -19,11 +19,13 @@ class Trx extends Model
         'total',
         'paid',
         'payment_method',
-        'grand_total'
+        'grand_total',
+        'status', // tambahkan ini
     ];
 
     public function detail()
     {
         return $this->hasMany(TrxDetail::class, 'trx_id', 'id');
     }
+
 }

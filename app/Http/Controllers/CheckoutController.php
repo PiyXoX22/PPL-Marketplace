@@ -81,7 +81,8 @@ class CheckoutController extends Controller
             'total'         => $request->subtotal,
             'paid'          => 0,
             'payment_method'=> $request->payment_method,
-            'grand_total'   => $request->grand_total
+            'grand_total'   => $request->grand_total,
+            'status' => 'pending',
         ]);
 
         $cartItems = Cart::with('product.harga')
@@ -108,7 +109,7 @@ return redirect()->route('checkout.viewPay', $trx->id);
         DB::rollBack();
         return back()->with('error', 'Terjadi kesalahan: '.$e->getMessage());
     }
-    
+
 }
 public function viewPay($id)
 {
@@ -146,8 +147,15 @@ public function midtransCreate(Request $request)
 public function paymentSuccess(Request $request)
 {
     $trx = Trx::findOrFail($request->order_id);
+
+    // Update paid menjadi grand_total
+    if($trx->paid == 0) {
+        $trx->update(['paid' => $trx->grand_total, 'status' => 'paid']);
+    }
+
     return view('checkout.success', compact('trx'));
 }
+
 
 public function paymentPending(Request $request)
 {

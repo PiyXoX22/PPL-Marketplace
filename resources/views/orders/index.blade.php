@@ -1,47 +1,52 @@
-<x-adminlayout>
+@extends('layouts.app')
 
-    <div class="card p-4">
-        <h2 class="mb-3">Order List</h2>
+@section('title', 'Pengelolaan Transaksi')
 
-        <table class="table table-bordered">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>User</th>
-                    <th>Total</th>
-                    <th>Status</th>
-                    <th>Tanggal</th>
-                    <th>Aksi</th>
-                </tr>
-            </thead>
+@section('content')
+<div class="container">
+    <h1 class="mb-4">Daftar Transaksi</h1>
 
-            <tbody>
-                @foreach ($orders as $o)
-                    <tr>
-                        <td>{{ $o->id }}</td>
-                        <td>{{ $o->user->name ?? '-' }}</td>
-                        <td>Rp {{ number_format($o->total,0,',','.') }}</td>
-                        <td>
-                            <span class="badge bg-dark">{{ strtoupper($o->status) }}</span>
-                        </td>
-                        <td>{{ $o->created_at->format('d-m-Y') }}</td>
-                        <td>
-                            <a href="{{ route('admin.orders.show', $o->id) }}" class="btn btn-primary btn-sm">Detail</a>
-                            <a href="{{ route('admin.orders.edit', $o->id) }}" class="btn btn-warning btn-sm">Edit</a>
-                            <form action="{{ route('admin.orders.destroy', $o->id) }}" method="POST" style="display:inline;">
-                                @csrf
-                                @method('DELETE')
-                                <button class="btn btn-danger btn-sm"
-                                    onclick="return confirm('Hapus order ini?')">Hapus</button>
-                            </form>
-                        </td>
-                    </tr>
-                @endforeach
-            </tbody>
+    <a href="{{ route('admin.orders.create') }}" class="btn btn-primary mb-3">Tambah Transaksi</a>
 
-        </table>
+    @if(session('success'))
+        <div class="alert alert-success">{{ session('success') }}</div>
+    @endif
 
-        {{ $orders->links() }}
-    </div>
+    <table class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Tanggal</th>
+                <th>Total</th>
+                <th>Grand Total</th>
+                <th>Paid</th> <!-- Tambahkan -->
+                <th>Status</th>
+                <th>Aksi</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach($trx as $t)
+            <tr>
+                <td>{{ $t->id }}</td>
+                <td>{{ $t->tanggal }}</td>
+                <td>{{ number_format($t->total,0,',','.') }}</td>
+                <td>{{ number_format($t->grand_total,0,',','.') }}</td>
+                <td>{{ number_format($t->paid,0,',','.') }}</td> <!-- Tambahkan -->
+                <td>{{ ucfirst($t->status) }}</td>
+                <td>
+                    <a href="{{ route('admin.orders.show', $t->id) }}" class="btn btn-info btn-sm">Detail</a>
+                    <a href="{{ route('admin.orders.edit', $t->id) }}" class="btn btn-warning btn-sm">Edit</a>
+                    <form action="{{ route('admin.orders.destroy', $t->id) }}" method="POST" style="display:inline-block;">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Hapus transaksi ini?')">Hapus</button>
+                    </form>
+                </td>
+            </tr>
+            @endforeach
+        </tbody>
+    </table>
 
-    </x-adminlayout>
+    {{ $trx->links() }}
+</div>
+@endsection

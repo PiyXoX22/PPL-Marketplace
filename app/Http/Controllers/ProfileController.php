@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Trx;
 
 class ProfileController extends Controller
 {
@@ -37,4 +38,34 @@ class ProfileController extends Controller
 
         return back()->with('success', 'Profile updated!');
     }
+    // =========================
+    // ORDERS SECTION
+    // =========================
+    public function orders()
+    {
+        // Ambil semua transaksi
+        $orders = Trx::orderBy('tanggal', 'desc')->get();
+
+        return view('profile.orders', compact('orders'));
+    }
+
+    public function orderDetail($id)
+    {
+        // Ambil transaksi tanpa filter user
+        $trx = Trx::with('detail')->findOrFail($id);
+
+        return view('profile.order-detail', compact('trx'));
+    }
+    public function invoice($id)
+    {
+        $trx = Trx::with('detail')->findOrFail($id);
+
+        $pdf = \PDF::loadView('profile.invoice', compact('trx'))
+                    ->setPaper('A4');
+
+        return $pdf->download('Invoice-'.$trx->id.'.pdf');
+    }
+
+
+
 }

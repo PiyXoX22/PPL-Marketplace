@@ -34,6 +34,7 @@
             <span>Penambahan Barang</span>
         </a>
     </li>
+
     <li class="nav-item">
         <a class="nav-link collapsed" href="{{ route('admin.produk.index')}}"
             aria-expanded="true" aria-controls="collapseTwo">
@@ -79,10 +80,10 @@
     </li>
             <!-- Nav Item - Produk -->
             <li class="nav-item">
-                <a class="nav-link collapsed" href="{{ route('admin.harga.index')}}"
-                    aria-expanded="true" aria-controls="collapseTwo">
-                    <i class="fas fa-fw fa-cog"></i>
-                    <span>Transaksi</span>
+                <a class="nav-link collapsed" href="{{ route('admin.orders.index') }}"
+                   aria-expanded="true" aria-controls="collapseTransaksi">
+                   <i class="fas fa-fw fa-money-bill-wave"></i>
+                   <span>Transaksi</span>
                 </a>
             </li>
 
