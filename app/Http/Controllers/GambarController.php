@@ -40,7 +40,8 @@ class GambarController extends Controller
             'gambar'  => $path,
         ]);
 
-        return redirect()->route('gambar.index')->with('success', 'Gambar berhasil ditambahkan.');
+        return redirect()->route('admin.gambar.index')->with('success', 'Gambar berhasil ditambahkan.');
+
     }
 
     public function edit($id)
@@ -78,7 +79,8 @@ class GambarController extends Controller
             ]);
         }
 
-        return redirect()->route('gambar.index')->with('success', 'Gambar berhasil diperbarui.');
+        return redirect()->route('admin.gambar.index')->with('success', 'Gambar berhasil diperbarui.');
+
     }
 
     public function destroy($id)
@@ -92,6 +94,7 @@ class GambarController extends Controller
 
         $gambar->delete();
 
-        return redirect()->route('gambar.index')->with('success', 'Gambar berhasil dihapus.');
+        return redirect()->route('admin.gambar.index')->with('success', 'Gambar berhasil dihapus.');
+
     }
 }

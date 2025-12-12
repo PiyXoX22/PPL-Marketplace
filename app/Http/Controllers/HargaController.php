@@ -26,7 +26,8 @@ class HargaController extends Controller
         ]);
 
         Harga::create($validated);
-        return redirect()->route('harga.index')->with('success', 'Data berhasil ditambahkan!');
+        return redirect()->route('admin.harga.index')
+        ->with('success', 'Data berhasil ditambahkan!');
     }
 
     public function show($id)
@@ -50,14 +51,14 @@ class HargaController extends Controller
         ]);
 
         $harga->update($validated);
-        return redirect()->route('harga.index')->with('success', 'Data berhasil diupdate!');
+        return redirect()->route('admin.harga.index')->with('success', 'Data berhasil diupdate!');
     }
 
     public function destroy($id)
     {
         $harga = Harga::where('id_prod', $id)->firstOrFail();
         $harga->delete();
-        return redirect()->route('harga.index')->with('success', 'Data berhasil dihapus!');
+        return redirect()->route('admin.harga.index')->with('success', 'Data berhasil dihapus!');
     }
 
 

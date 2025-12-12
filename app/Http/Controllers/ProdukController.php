@@ -64,7 +64,8 @@ class ProdukController extends Controller
             'harga'   => $request->harga,
         ]);
 
-        return redirect()->route('produk.index')
+        return redirect()->route('admin.produk.index')
+
                          ->with('success', 'Produk berhasil ditambahkan!');
     }
 
@@ -94,7 +95,8 @@ class ProdukController extends Controller
             'deskripsi'   => $request->deskripsi
         ]);
 
-        return redirect()->route('produk.index')
+        return redirect()->route('admin.produk.index')
+
                          ->with('success', 'Produk berhasil diperbarui!');
     }
 
@@ -106,7 +108,8 @@ class ProdukController extends Controller
         $produk = Produk::findOrFail($id);
         $produk->delete();
 
-        return redirect()->route('produk.index')
+        return redirect()->route('admin.produk.index')
+
                          ->with('success', 'Produk berhasil dihapus!');
     }
 

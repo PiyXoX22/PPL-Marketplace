@@ -37,7 +37,8 @@ class KategoriController extends Controller
             'kategori' => $request->kategori,
         ]);
 
-        return redirect()->route('kategori.index')->with('success', 'Kategori berhasil ditambahkan!');
+        return redirect()->route('admin.kategori.index')
+            ->with('success', 'Kategori berhasil ditambahkan!');
     }
 
     // Menampilkan form edit kategori
@@ -59,13 +60,14 @@ class KategoriController extends Controller
             'kategori' => $request->kategori,
         ]);
 
-        return redirect()->route('kategori.index')->with('success', 'Kategori berhasil diperbarui!');
+        return redirect()->route('admin.kategori.index')
+            ->with('success', 'Kategori berhasil diperbarui!');
     }
 
     // Hapus kategori
     public function destroy($id)
     {
         Kategori::destroy($id);
-        return redirect()->route('kategori.index')->with('success', 'Kategori berhasil dihapus!');
+        return redirect()->route('admin.kategori.index')->with('success', 'Kategori berhasil dihapus!');
     }
 }

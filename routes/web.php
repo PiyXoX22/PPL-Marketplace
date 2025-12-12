@@ -166,6 +166,9 @@ Route::middleware(['auth', 'admin'])
 
         // Dashboard
         Route::get('/dashboard', fn() => view('home'))->name('dashboard');
+        // ROUTE EXPORT PDF PRODUK
+        Route::get('produk/export/pdf', [ProdukController::class, 'exportPdf'])
+            ->name('produk.export.pdf');
 
         // ===============================
         // Resource Produk + Custom Routes
@@ -195,10 +198,15 @@ Route::middleware(['auth', 'admin'])
         Route::resource('coupons', CouponController::class)
             ->except(['show','edit','update','destroy']);
 
+
         // CRUD ORDERS / Transaksi
         Route::resource('orders', TrxAdminController::class);
 
         // Admin Profile
+
+
+
+
         Route::prefix('profile')->name('profile.')->group(function () {
             Route::get('/', [ProfileController::class, 'index'])->name('index');
             Route::post('/update', [ProfileController::class, 'update'])->name('update');
