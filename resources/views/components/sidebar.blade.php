@@ -28,7 +28,8 @@
 
     <!-- Nav Item - Produk -->
     <li class="nav-item">
-        <a class="nav-link collapsed" href="{{ route('admin.produk.buat')}}"
+        <a class="nav-link collapsed" href="{{ route('admin.produk.create')}}"
+
             aria-expanded="true" aria-controls="collapseTwo">
             <i class="fas fa-fw fa-cog"></i>
             <span>Penambahan Barang</span>
