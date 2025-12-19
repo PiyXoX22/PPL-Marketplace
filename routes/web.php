@@ -83,6 +83,10 @@ Route::middleware('auth')->group(function () {
     Route::post('/cart/add/{product}', [CartController::class, 'add'])->name('cart.add');
     Route::patch('/cart/{cart}', [CartController::class, 'update'])->name('cart.update');
     Route::delete('/cart/{cart}', [CartController::class, 'remove'])->name('cart.destroy');
+    Route::post('/cart/apply-coupon', [CartController::class, 'applyCoupon'])
+    ->name('cart.applyCoupon');
+
+
 
     // Checkout
     Route::get('/checkout/{id}', [CheckoutController::class, 'index'])->name('checkout.show');

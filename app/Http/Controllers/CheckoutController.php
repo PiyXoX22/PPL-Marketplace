@@ -32,11 +32,26 @@ class CheckoutController extends Controller
         $cartItems = Cart::with('product.harga','product.gambar')->where('user_id',$user->id)->get();
         if ($cartItems->isEmpty()) return redirect()->route('cart.index')->with('error','Keranjang kosong!');
 
-        $subtotal = $cartItems->sum(fn($item)=>($item->product->harga->harga ?? 0)*$item->quantity);
+        $subtotal = $request->subtotal ?? $cartItems->sum(fn($item) =>
+        ($item->product->harga->harga ?? 0) * $item->quantity
+    );
+
+    $discount = $request->discount ?? session('coupon.discount', 0);
+    $discount = min($discount, $subtotal);
+
+    $total = $request->total ?? ($subtotal - $discount);
         $addresses = $user->addresses;
         $selectedAddress = $addresses->where('is_default',1)->first() ?? $addresses->first();
 
-        return view('checkout.cart', compact('cartItems','subtotal','addresses','selectedAddress'));
+        return view('checkout.cart', compact(
+            'cartItems',
+            'subtotal',
+            'discount',
+            'total',
+            'addresses',
+            'selectedAddress'
+        ));
+
     }
 
     // Hitung ongkir
@@ -65,9 +80,11 @@ class CheckoutController extends Controller
         'courier'       => 'required',
         'ongkir'        => 'required|numeric',
         'subtotal'      => 'required|numeric',
+        'discount'      => 'nullable|numeric',
         'grand_total'   => 'required|numeric',
         'payment_method'=> 'required|string'
     ]);
+
 
     DB::beginTransaction();
     try {
@@ -79,10 +96,12 @@ class CheckoutController extends Controller
             'id'            => $trxId,
             'tanggal'       => now(),
             'total'         => $request->subtotal,
+            'discount'      => $request->discount ?? 0,
             'paid'          => 0,
             'payment_method'=> $request->payment_method,
             'grand_total'   => $request->grand_total,
         ]);
+
 
         $cartItems = Cart::with('product.harga')
             ->where('user_id', Auth::id())

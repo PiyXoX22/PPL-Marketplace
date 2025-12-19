@@ -114,7 +114,8 @@
                 <input type="hidden" name="courier" id="input-courier">
                 <input type="hidden" name="ongkir" id="input-ongkir" value="0">
                 <input type="hidden" name="subtotal" value="{{ $subtotal }}">
-                <input type="hidden" name="grand_total" id="input-grand-total" value="{{ $subtotal }}">
+                <input type="hidden" name="discount" value="{{ $discount }}">
+                <input type="hidden" id="input-grand-total" name="grand_total" value="{{ $total }}">
                 <input type="hidden" name="payment_method" id="input-payment-method">
 
                 <div class="row">
@@ -157,8 +158,8 @@
             if (!data.success) { alert(data.message); return; }
 
             let ongkir = Math.round(data.data.total_ongkir);
-            let subtotal = {{ $subtotal }};
-            let grandTotal = subtotal + ongkir;
+            let subtotal = {{ $total }}; // ⬅️ BUKAN subtotal mentah
+let grandTotal = subtotal + ongkir;
 
             document.getElementById('view-ongkir').innerText = "Rp " + ongkir.toLocaleString('id-ID');
             document.getElementById('view-total').innerText = "Rp " + grandTotal.toLocaleString('id-ID');

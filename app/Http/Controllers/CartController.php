@@ -5,58 +5,38 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Cart;
 use App\Models\Produk;
+use App\Models\Coupon;
 use Illuminate\Support\Facades\Auth;
 
 class CartController extends Controller
 {
     public function add(Produk $product)
     {
-        $user = Auth::user();
-
         $cart = Cart::firstOrCreate(
-            ['user_id' => $user->id, 'product_id' => $product->id],
+            ['user_id' => Auth::id(), 'product_id' => $product->id],
             ['quantity' => 0]
         );
 
-        $cart->quantity += 1;
-        $cart->save();
+        $cart->increment('quantity');
 
         return back()->with('success', 'Produk berhasil ditambahkan ke keranjang!');
     }
 
     public function index()
     {
-        $user = Auth::user();
-
         $cartItems = Cart::with('product.harga')
-            ->where('user_id', $user->id)
+            ->where('user_id', Auth::id())
             ->get();
 
-        // =========================
-        // HITUNG SUBTOTAL
-        // =========================
-        $subtotal = 0;
-        foreach ($cartItems as $item) {
-            $harga = $item->product->harga->harga ?? 0;
-            $subtotal += $harga * $item->quantity;
-        }
+        // SUBTOTAL
+        $subtotal = $cartItems->sum(fn($item) =>
+            ($item->product->harga->harga ?? 0) * $item->quantity
+        );
 
-        // =========================
-        // AMBIL DISKON DARI SESSION
-        // =========================
-        $discount = 0;
-        if (session()->has('coupon')) {
-            $discount = session('coupon.discount');
-        }
+        // DISKON DARI SESSION
+        $discount = session('coupon.discount', 0);
+        $discount = min($discount, $subtotal);
 
-        // Pastikan diskon tidak lebih besar dari subtotal
-        if ($discount > $subtotal) {
-            $discount = $subtotal;
-        }
-
-        // =========================
-        // TOTAL AKHIR
-        // =========================
         $total = $subtotal - $discount;
 
         return view('cart.index', compact(
@@ -67,44 +47,78 @@ class CartController extends Controller
         ));
     }
 
+    public function applyCoupon(Request $request)
+    {
+        $request->validate(['code' => 'required']);
+
+        $coupon = Coupon::where('code', $request->code)
+            ->where('is_active', 1)
+            ->whereDate('expired_at', '>=', now())
+            ->first();
+
+        if (!$coupon) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Kode kupon tidak valid'
+            ]);
+        }
+
+        $cartItems = Cart::with('product.harga')
+            ->where('user_id', Auth::id())
+            ->get();
+
+        $subtotal = $cartItems->sum(fn($item) =>
+            ($item->product->harga->harga ?? 0) * $item->quantity
+        );
+
+        if ($coupon->min_transaction && $subtotal < $coupon->min_transaction) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Minimal belanja tidak mencukupi'
+            ]);
+        }
+
+        $discount = $coupon->type === 'percent'
+            ? ($coupon->value / 100) * $subtotal
+            : $coupon->value;
+
+        if ($coupon->max_discount) {
+            $discount = min($discount, $coupon->max_discount);
+        }
+
+        session()->put('coupon', [
+            'code' => $coupon->code,
+            'discount' => $discount
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'discount' => $discount,
+            'total' => $subtotal - $discount
+        ]);
+    }
+
     public function update(Request $request, $id)
     {
         $cart = Cart::findOrFail($id);
 
-        // Aksi tombol: increase / decrease
-        $action = $request->input('action');
-        $quantity = (int) $request->input('quantity');
-
-        if ($action === 'increase') {
-            $cart->quantity += 1;
-        } elseif ($action === 'decrease') {
-            if ($cart->quantity > 1) {
-                $cart->quantity -= 1;
-            }
-        } else {
-            // Jika user edit manual input quantity
-            if ($quantity > 0) {
-                $cart->quantity = $quantity;
-            }
+        if ($request->action === 'increase') {
+            $cart->increment('quantity');
+        } elseif ($request->action === 'decrease' && $cart->quantity > 1) {
+            $cart->decrement('quantity');
         }
-
-        $cart->save();
 
         return back();
     }
 
     public function remove($id)
     {
-        $cartItem = Cart::findOrFail($id);
-        $cartItem->delete();
+        Cart::findOrFail($id)->delete();
 
-        // Hapus kupon jika keranjang kosong
         if (Cart::where('user_id', Auth::id())->count() === 0) {
             session()->forget('coupon');
         }
 
-        return redirect()
-            ->route('cart.index')
-            ->with('success', 'Item berhasil dihapus!');
+        return back()->with('success', 'Item berhasil dihapus!');
     }
 }
