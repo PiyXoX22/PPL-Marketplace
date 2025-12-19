@@ -25,10 +25,10 @@ class ProfileController extends Controller
         ]);
 
         $user = Auth::user();
-        $user->first_name   = $request->first_name;
-        $user->last_name    = $request->last_name;
-        $user->email        = $request->email;
-        $user->phone        = $request->phone;
+        $user->first_name = $request->first_name;
+        $user->last_name  = $request->last_name;
+        $user->email      = $request->email;
+        $user->phone      = $request->phone;
 
         if ($request->password) {
             $user->password = bcrypt($request->password);
@@ -38,55 +38,40 @@ class ProfileController extends Controller
 
         return back()->with('success', 'Profile updated!');
     }
+
     // =========================
-    // ORDERS SECTION
+    // ORDERS
     // =========================
     public function orders()
-{
-    // Ambil transaksi milik user yang login saja
-    $orders = Trx::where('user_id', Auth::id())
-                ->orderBy('tanggal', 'desc')
-                ->get();
+    {
+        $orders = Trx::where('user_id', Auth::id())
+                    ->orderBy('tanggal', 'desc')
+                    ->get();
 
-    return view('profile.orders', compact('orders'));
-}
+        return view('profile.orders', compact('orders'));
+    }
 
-public function orderDetail($id)
-{
-    // Ambil detail transaksi milik user login
-    $trx = Trx::with('detail')
-            ->where('user_id', Auth::id())
-            ->findOrFail($id);
+    public function orderDetail($id)
+    {
+        $trx = Trx::with(['detail.produk'])
+                ->where('user_id', Auth::id())
+                ->findOrFail($id);
 
-<<<<<<< HEAD
-    return view('profile.order-detail', compact('trx'));
-}
-=======
         return view('profile.order-detail', compact('trx'));
     }
+
+    // =========================
+    // INVOICE PDF
+    // =========================
     public function invoice($id)
     {
-        $trx = Trx::with(['detail.produk'])->findOrFail($id);
-<<<<<<< Updated upstream
-=======
->>>>>>> 3f0a34207af4cd1888f99c637c712dfaf9ea64cd
->>>>>>> Stashed changes
+        $trx = Trx::with(['detail.produk'])
+                ->where('user_id', Auth::id()) // 🔐 keamanan
+                ->findOrFail($id);
 
-public function invoice($id)
-{
-    // Invoice hanya boleh diakses oleh pemilik transaksi
-    $trx = Trx::with('detail')
-            ->where('user_id', Auth::id())
-            ->findOrFail($id);
+        $pdf = \PDF::loadView('profile.invoice', compact('trx'))
+                    ->setPaper('A4');
 
-    $pdf = \PDF::loadView('profile.invoice', compact('trx'))
-                ->setPaper('A4');
-
-    return $pdf->download('Invoice-'.$trx->id.'.pdf');
-}
-
-
-
-
-
+        return $pdf->download('Invoice-'.$trx->id.'.pdf');
+    }
 }
