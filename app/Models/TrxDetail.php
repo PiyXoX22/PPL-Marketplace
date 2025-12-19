@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Produk;
 
 class TrxDetail extends Model
 {
@@ -25,4 +26,8 @@ class TrxDetail extends Model
     {
         return $this->belongsTo(Trx::class, 'trx_id', 'id');
     }
+    public function produk()
+{
+    return $this->belongsTo(Produk::class, 'id_barang', 'id');
+}
 }

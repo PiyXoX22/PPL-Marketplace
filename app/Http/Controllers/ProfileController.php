@@ -58,13 +58,14 @@ class ProfileController extends Controller
     }
     public function invoice($id)
     {
-        $trx = Trx::with('detail')->findOrFail($id);
+        $trx = Trx::with(['detail.produk'])->findOrFail($id);
 
         $pdf = \PDF::loadView('profile.invoice', compact('trx'))
                     ->setPaper('A4');
 
         return $pdf->download('Invoice-'.$trx->id.'.pdf');
     }
+
 
 
 

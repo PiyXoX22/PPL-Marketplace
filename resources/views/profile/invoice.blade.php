@@ -122,7 +122,7 @@
         <table>
             <thead>
                 <tr>
-                    <th>Nama / ID Barang</th>
+                    <th>Nama Barang</th>
                     <th>Qty</th>
                     <th>Harga Satuan</th>
                     <th>Subtotal</th>
@@ -131,7 +131,7 @@
             <tbody>
                 @foreach($trx->detail as $item)
                 <tr>
-                    <td>{{ $item->id_barang }}</td>
+                    <td>{{ $item->produk->nama_produk ?? '-' }}</td>
                     <td>{{ $item->qty }}</td>
                     <td>Rp {{ number_format($item->harga_satuan, 0, ',', '.') }}</td>
                     <td>Rp {{ number_format($item->subtotal, 0, ',', '.') }}</td>
