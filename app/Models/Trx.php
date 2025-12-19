@@ -14,14 +14,15 @@ class Trx extends Model
     protected $keyType = 'string';      // ← WAJIB
 
     protected $fillable = [
-        'id',
-        'tanggal',
-        'total',
-        'paid',
-        'payment_method',
-        'grand_total',
-        'status', // tambahkan ini
-    ];
+    'id',
+    'user_id',
+    'tanggal',
+    'total',
+    'paid',
+    'payment_method',
+    'grand_total',
+    'status'
+];
 
     public function detail()
     {

@@ -42,29 +42,49 @@ class ProfileController extends Controller
     // ORDERS SECTION
     // =========================
     public function orders()
-    {
-        // Ambil semua transaksi
-        $orders = Trx::orderBy('tanggal', 'desc')->get();
+{
+    // Ambil transaksi milik user yang login saja
+    $orders = Trx::where('user_id', Auth::id())
+                ->orderBy('tanggal', 'desc')
+                ->get();
 
-        return view('profile.orders', compact('orders'));
-    }
+    return view('profile.orders', compact('orders'));
+}
 
-    public function orderDetail($id)
-    {
-        // Ambil transaksi tanpa filter user
-        $trx = Trx::with('detail')->findOrFail($id);
+public function orderDetail($id)
+{
+    // Ambil detail transaksi milik user login
+    $trx = Trx::with('detail')
+            ->where('user_id', Auth::id())
+            ->findOrFail($id);
 
+<<<<<<< HEAD
+    return view('profile.order-detail', compact('trx'));
+}
+=======
         return view('profile.order-detail', compact('trx'));
     }
     public function invoice($id)
     {
         $trx = Trx::with(['detail.produk'])->findOrFail($id);
+<<<<<<< Updated upstream
+=======
+>>>>>>> 3f0a34207af4cd1888f99c637c712dfaf9ea64cd
+>>>>>>> Stashed changes
 
-        $pdf = \PDF::loadView('profile.invoice', compact('trx'))
-                    ->setPaper('A4');
+public function invoice($id)
+{
+    // Invoice hanya boleh diakses oleh pemilik transaksi
+    $trx = Trx::with('detail')
+            ->where('user_id', Auth::id())
+            ->findOrFail($id);
 
-        return $pdf->download('Invoice-'.$trx->id.'.pdf');
-    }
+    $pdf = \PDF::loadView('profile.invoice', compact('trx'))
+                ->setPaper('A4');
+
+    return $pdf->download('Invoice-'.$trx->id.'.pdf');
+}
+
 
 
 
