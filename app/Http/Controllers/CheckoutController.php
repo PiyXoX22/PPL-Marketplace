@@ -82,7 +82,6 @@ class CheckoutController extends Controller
             'paid'          => 0,
             'payment_method'=> $request->payment_method,
             'grand_total'   => $request->grand_total,
-            'status' => 'pending',
         ]);
 
         $cartItems = Cart::with('product.harga')

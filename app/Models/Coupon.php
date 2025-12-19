@@ -9,9 +9,20 @@ class Coupon extends Model
 {
     use HasFactory;
 
+    protected $table = 'coupons';
+
     protected $fillable = [
-        'code', 'type', 'value', 'min_purchase', 'start_date', 'end_date', 'status'
+        'code',
+        'type',
+        'value',
+        'min_transaction',
+        'max_discount',
+        'expired_at',   // 🔥 WAJIB ADA
+        'is_active',
     ];
 
-    protected $dates = ['start_date', 'end_date'];
+    protected $casts = [
+        'expired_at' => 'date',
+        'is_active'  => 'boolean',
+    ];
 }

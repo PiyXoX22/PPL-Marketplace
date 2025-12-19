@@ -3,72 +3,107 @@
 namespace App\Http\Controllers;
 
 use App\Models\Coupon;
+use App\Models\Cart;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
 use Carbon\Carbon;
 
 class CouponController extends Controller
 {
-    // List semua kupon (admin)
+    // ================= ADMIN =================
     public function index()
     {
-        $coupons = Coupon::latest()->paginate(10);
-        return view('admin.coupons.index', compact('coupons'));
+        $coupons = Coupon::latest()->get();
+        return view('coupon.index', compact('coupons'));
     }
 
-    // Form create kupon
     public function create()
     {
-        return view('admin.coupons.create');
+        return view('coupon.create');
     }
 
-    // Simpan kupon baru
     public function store(Request $request)
     {
         $request->validate([
-            'code' => 'required|unique:coupons,code',
-            'type' => 'required|in:percentage,fixed',
-            'value' => 'required|numeric|min:0',
-            'min_purchase' => 'nullable|numeric|min:0',
-            'start_date' => 'required|date',
-            'end_date' => 'required|date|after_or_equal:start_date',
+            'code'            => 'required|unique:coupons,code',
+            'type'            => 'required|in:percent,fixed',
+            'value'           => 'required|integer',
+            'expired_at'      => 'required|date',
+            'min_transaction' => 'nullable|integer',
+            'max_discount'    => 'nullable|integer',
+            'is_active'       => 'required|boolean',
         ]);
 
         Coupon::create($request->all());
-        return redirect()->route('admin.coupons.index')->with('success', 'Kupon berhasil dibuat.');
+
+        return redirect()->route('admin.coupon.index')
+            ->with('success', 'Kupon berhasil ditambahkan');
     }
 
-    // Validasi kupon di checkout (user)
+    public function edit($id)
+    {
+        $coupon = Coupon::findOrFail($id);
+        return view('coupon.edit', compact('coupon'));
+    }
+
+    public function update(Request $request, $id)
+    {
+        $coupon = Coupon::findOrFail($id);
+        $coupon->update($request->all());
+
+        return redirect()->route('admin.coupon.index')
+            ->with('success', 'Kupon berhasil diupdate');
+    }
+
+    public function destroy($id)
+    {
+        Coupon::destroy($id);
+        return back()->with('success', 'Kupon berhasil dihapus');
+    }
+
+    // ================= USER APPLY =================
     public function apply(Request $request)
     {
-        $request->validate([
-            'code' => 'required|string',
-            'cart_total' => 'required|numeric',
-        ]);
+        $request->validate(['code'=>'required']);
 
-        $coupon = Coupon::where('code', $request->code)
-                        ->where('status', 1)
-                        ->whereDate('start_date', '<=', Carbon::today())
-                        ->whereDate('end_date', '>=', Carbon::today())
-                        ->first();
+        $coupon = Coupon::where('code',$request->code)
+            ->where('is_active',1)
+            ->whereDate('expired_at','>=',Carbon::now())
+            ->first();
 
         if(!$coupon){
-            return response()->json(['success' => false, 'message' => 'Kupon tidak valid atau sudah kadaluarsa.']);
+            return back()->with('error','Kupon tidak valid / expired');
         }
 
-        if($request->cart_total < $coupon->min_purchase){
-            return response()->json(['success' => false, 'message' => 'Belanja minimal ' . number_format($coupon->min_purchase) . ' untuk kupon ini.']);
+        $cartItems = Cart::with('product.harga')
+            ->where('user_id',auth()->id())
+            ->get();
+
+        $subtotal = $cartItems->sum(fn($i)=>
+            ($i->product->harga->harga ?? 0) * $i->quantity
+        );
+
+        if($coupon->min_transaction && $subtotal < $coupon->min_transaction){
+            return back()->with(
+                'error',
+                'Minimal transaksi Rp '.number_format($coupon->min_transaction)
+            );
         }
 
-        // Hitung diskon
-        $discount = $coupon->type == 'percentage'
-                    ? ($request->cart_total * $coupon->value / 100)
-                    : $coupon->value;
+        if($coupon->type === 'percent'){
+            $discount = ($coupon->value/100) * $subtotal;
+            if($coupon->max_discount && $discount > $coupon->max_discount){
+                $discount = $coupon->max_discount;
+            }
+        } else {
+            $discount = $coupon->value;
+        }
 
-        return response()->json([
-            'success' => true,
-            'discount' => $discount,
-            'new_total' => $request->cart_total - $discount,
-            'message' => 'Kupon berhasil diterapkan!'
+        Session::put('coupon',[
+            'code'=>$coupon->code,
+            'discount'=>$discount
         ]);
+
+        return back()->with('success','Kupon berhasil digunakan');
     }
 }

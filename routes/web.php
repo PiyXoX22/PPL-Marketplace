@@ -195,8 +195,7 @@ Route::middleware(['auth', 'admin'])
         Route::resource('upui', UpuiController::class);
         Route::resource('posts', PostController::class);
 
-        Route::resource('coupons', CouponController::class)
-            ->except(['show','edit','update','destroy']);
+        Route::resource('coupon', CouponController::class);
 
 
         // CRUD ORDERS / Transaksi
