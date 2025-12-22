@@ -905,8 +905,7 @@ CREATE TABLE IF NOT EXISTS `raja_ongkir` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- --------------------------------------------------------
-
+-----------------------------------------------------------
 --
 -- Table structure for table `roles`
 --
@@ -942,6 +941,20 @@ CREATE TABLE IF NOT EXISTS `slider` (
   `nama_slider` varchar(255) NOT NULL,
   `gambar` varchar(255) NOT NULL,
   PRIMARY KEY (`id_slider`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `reviews`
+--
+
+CREATE TABLE `reviews` (
+  `id` bigint(20) NOT NULL,
+  `product_id` bigint(20) NOT NULL,
+  `rating` int(11) NOT NULL,
+  `review` text DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
