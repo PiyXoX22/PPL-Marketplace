@@ -39,4 +39,8 @@
     </tbody>
   </table>
 </div>
+<div class="mt-3">
+    {{ $gambar->links() }}
+</div>
+
 @endsection

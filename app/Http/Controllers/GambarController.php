@@ -10,7 +10,7 @@ class GambarController extends Controller
 {
     public function index()
     {
-        $gambar = Gambar::with('produk')->get();
+        $gambar = Gambar::with('produk')->paginate(10);
         return view('gambar.index', compact('gambar'));
     }
 

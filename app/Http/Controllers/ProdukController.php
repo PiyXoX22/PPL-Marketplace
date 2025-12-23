@@ -28,7 +28,7 @@ class ProdukController extends Controller
             });
         }
 
-        $produk = $query->get();
+        $produk = $query->paginate(10); // 10 data per halaman
 
         return view('produk.index', compact('produk', 'kategoriList'));
     }

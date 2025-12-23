@@ -9,7 +9,7 @@ class HargaController extends Controller
 {
     public function index()
     {
-        $data = Harga::all();
+        $data = Harga::paginate(10);
         return view('harga.index', compact('data'));
     }
 

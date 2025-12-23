@@ -85,4 +85,8 @@
         </div>
     </div>
 </div>
+<div class="mt-3">
+    {{ $data->links() }}
+</div>
+
 @endsection

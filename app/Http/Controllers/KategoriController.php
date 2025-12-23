@@ -11,7 +11,7 @@ class KategoriController extends Controller
     // Menampilkan daftar kategori
     public function index()
     {
-        $kategori = Kategori::with('barang')->get();
+        $kategori = Kategori::with('barang')->paginate(10);
         return view('kategori.index', compact('kategori'));
     }
 

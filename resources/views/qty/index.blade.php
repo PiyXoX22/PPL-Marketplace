@@ -47,4 +47,8 @@
         </tbody>
     </table>
 </div>
+<div class="mt-3">
+    {{ $qty->links() }}
+</div>
+
 @endsection

@@ -11,7 +11,7 @@ class QtyController extends Controller
     // Tampilkan semua qty
     public function index()
     {
-        $qty = Qty::with('barang')->get();
+        $qty = Qty::with('barang')->paginate(10);
         return view('qty.index', compact('qty'));
     }
 

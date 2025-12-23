@@ -10,7 +10,7 @@ class TrxAdminController extends Controller
 {
     public function index()
     {
-        $trx = Trx::with('detail')->orderBy('tanggal', 'desc')->paginate(20);
+        $trx = Trx::with('detail')->orderBy('tanggal', 'desc')->paginate(10);
         return view('orders.index', compact('trx'));
     }
 
