@@ -33,6 +33,7 @@ use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\KategoriController;
 use App\Http\Controllers\RajaOngkirController;
 use App\Http\Controllers\TrxAdminController; // ❌ Jangan pakai Admin
+use App\Http\Controllers\HomeController;
 
 use App\Http\Controllers\Auth\GoogleController;
 use App\Http\Controllers\Api\ProdukApiController;
@@ -169,7 +170,9 @@ Route::middleware(['auth', 'admin'])
     ->group(function () {
 
         // Dashboard
-        Route::get('/dashboard', fn() => view('home'))->name('dashboard');
+       Route::get('/dashboard', [HomeController::class, 'index'])
+    ->name('dashboard');
+
         // ROUTE EXPORT PDF PRODUK
         Route::get('produk/export/pdf', [ProdukController::class, 'exportPdf'])
             ->name('produk.export.pdf');
