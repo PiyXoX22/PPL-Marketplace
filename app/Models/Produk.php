@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Review;
 
 class Produk extends Model
 {
@@ -37,4 +38,22 @@ class Produk extends Model
     {
         return $this->hasOne(Gambar::class, 'id_prod', 'id');
     }
+
+    // ✅ RELASI REVIEW YANG BENAR
+    public function reviews()
+    {
+        return $this->hasMany(Review::class, 'produk_id', 'id');
+    }
+
+    // ✅ CEK SUDAH BELI
+   public function sudahDibeliOleh($userId)
+{
+    return \App\Models\TrxDetail::where('id_barang', $this->id)
+        ->whereHas('trx', function ($q) use ($userId) {
+            $q->where('user_id', $userId)
+              ->where('status', 'selesai');
+        })
+        ->exists();
+}
+
 }

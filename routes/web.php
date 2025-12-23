@@ -213,6 +213,8 @@ Route::middleware(['auth', 'admin'])
 
 
 
+
+
         Route::prefix('profile')->name('profile.')->group(function () {
             Route::get('/', [ProfileController::class, 'index'])->name('index');
             Route::post('/update', [ProfileController::class, 'update'])->name('update');

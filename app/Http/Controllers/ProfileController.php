@@ -39,9 +39,9 @@ class ProfileController extends Controller
         return back()->with('success', 'Profile updated!');
     }
 
-    // =========================
+
     // ORDERS
-    // =========================
+
     public function orders()
     {
         $orders = Trx::where('user_id', Auth::id())
