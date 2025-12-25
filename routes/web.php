@@ -18,6 +18,7 @@ Route::prefix('api')->name('api.')->group(function () {
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BlogController;
 use App\Http\Controllers\CartController;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\SiteController;
 use App\Http\Controllers\UpuiController;
@@ -26,17 +27,17 @@ use App\Http\Controllers\CouponController;
 use App\Http\Controllers\FilterController;
 use App\Http\Controllers\GambarController;
 use App\Http\Controllers\ProdukController;
+use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\AddressController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\KategoriController;
 use App\Http\Controllers\RajaOngkirController;
-use App\Http\Controllers\TrxAdminController; // ❌ Jangan pakai Admin
-use App\Http\Controllers\HomeController;
 
 use App\Http\Controllers\Auth\GoogleController;
 use App\Http\Controllers\Api\ProdukApiController;
+use App\Http\Controllers\TrxAdminController; // ❌ Jangan pakai Admin
 
 
 // =======================
@@ -115,6 +116,9 @@ Route::get('/checkout/pending', [CheckoutController::class, 'paymentPending'])
 
 Route::get('/checkout/failed', [CheckoutController::class, 'paymentFailed'])
     ->name('checkout.failed');
+    Route::post('/produk/{id}/review', [ReviewController::class, 'store'])
+    ->name('review.store')
+    ->middleware('auth');
 
 });
 
@@ -156,6 +160,7 @@ Route::middleware(['auth', 'user'])
  Route::get('/orders/{id}', [ProfileController::class, 'orderDetail'])->name('orders.detail');
  Route::get('/orders/invoice/{id}', [ProfileController::class, 'invoice'])
  ->name('orders.invoice');
+
 
 
     });

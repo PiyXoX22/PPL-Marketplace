@@ -2,9 +2,10 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 use App\Models\Review;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Produk extends Model
 {
@@ -45,15 +46,14 @@ class Produk extends Model
         return $this->hasMany(Review::class, 'produk_id', 'id');
     }
 
-    // ✅ CEK SUDAH BELI
-   public function sudahDibeliOleh($userId)
+    // ✅ CEK SUDAH BEL
+
+
+// GANTI METHOD INI
+public function sudahDibeliOleh($userId)
 {
-    return \App\Models\TrxDetail::where('id_barang', $this->id)
-        ->whereHas('trx', function ($q) use ($userId) {
-            $q->where('user_id', $userId)
-              ->where('status', 'selesai');
-        })
-        ->exists();
+    return true; // sementara (opsi B)
 }
+
 
 }
