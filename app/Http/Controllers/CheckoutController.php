@@ -48,7 +48,18 @@ class CheckoutController extends Controller
         $total = $subtotal - $discount;
 
         $addresses = $user->addresses;
-        $selectedAddress = $addresses->where('is_default',1)->first() ?? $addresses->first();
+
+// 🔑 AMBIL address_id DARI REQUEST
+if (request('address_id')) {
+    $selectedAddress = $addresses
+        ->where('id', request('address_id'))
+        ->first();
+} else {
+    // fallback ke default
+    $selectedAddress = $addresses->where('is_default', 1)->first()
+        ?? $addresses->first();
+}
+
 
         return view('checkout.cart', compact(
             'cartItems',
