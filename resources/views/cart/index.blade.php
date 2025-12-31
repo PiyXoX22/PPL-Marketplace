@@ -57,7 +57,7 @@
         font-size: 13px;
     }
 
-    .btn-add { background: #03ac0e; color: #fff; }
+    .btn-add { background: #007bff; color: #fff; }
     .btn-minus { background: #ff4d4f; color: #fff; }
 
     .qty-form {
@@ -112,7 +112,7 @@
         width: 100%;
         padding: 12px;
         border-radius: 8px;
-        background: #03ac0e;
+        background: #007bff;
         color: #fff;
         font-size: 16px;
         border: none;

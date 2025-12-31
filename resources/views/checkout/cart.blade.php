@@ -15,9 +15,9 @@
         .product img { width: 100px; height: 100px; border-radius: 8px; object-fit: cover; border: 1px solid #ddd; }
         .summary-box { background: #fff; padding: 20px; border-radius: 12px; border: 1px solid #e3e3e3; position: sticky; top: 20px; }
         .row { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 14px; }
-        .total-label { font-weight: bold; font-size: 18px; margin-top: 12px; color: #03ac0e; }
-        .btn-pay { width: 100%; background: #03ac0e; color: white; border: none; padding: 14px; border-radius: 8px; font-size: 16px; cursor: pointer; margin-top: 18px; font-weight: bold; }
-        .btn-pay:hover { background: #02940c; }
+        .total-label { font-weight: bold; font-size: 18px; margin-top: 12px; color: #007bff; }
+        .btn-pay { width: 100%; background: #007bff; color: white; border: none; padding: 14px; border-radius: 8px; font-size: 16px; cursor: pointer; margin-top: 18px; font-weight: bold; }
+        .btn-pay:hover { background: #007bff; }
         select { width: 100%; padding: 10px; border-radius: 7px; border: 1px solid #ccc; margin-top: 10px; font-size: 14px; }
         .payment-item { display: flex; justify-content: space-between; align-items: center; padding: 14px 0; border-bottom: 1px solid #efefef; font-size: 14px; }
         .hidden { display: none; }
