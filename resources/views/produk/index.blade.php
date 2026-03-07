@@ -119,7 +119,9 @@
 
                         <!-- HARGA -->
                         <td>
+                            <span class="badge badge-success">
                             Rp {{ number_format($p->harga->harga ?? 0,0,',','.') }}
+                            </span>
                         </td>
 
 

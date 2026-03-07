@@ -2,63 +2,128 @@
 
 @section('content')
 
-<div class="container">
+<div class="container-fluid">
 
-<h2>Data Banner</h2>
+    <!-- Page Heading -->
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 text-gray-800">Data Banner</h1>
 
-<a href="{{ route('admin.upui.create') }}" class="btn btn-primary mb-3">
-Tambah Banner
-</a>
+        <a href="{{ route('admin.upui.create') }}"
+           class="btn btn-primary shadow-sm">
+            <i class="fas fa-plus fa-sm"></i> Tambah Banner
+        </a>
+    </div>
 
-<table class="table table-bordered">
 
-<tr>
-<th>ID</th>
-<th>Judul</th>
-<th>Subjudul</th>
-<th>Gambar</th>
-<th>Aksi</th>
-</tr>
+    <!-- Card -->
+    <div class="card shadow mb-4">
 
-@foreach($banner as $b)
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">
+                List Banner
+            </h6>
+        </div>
 
-<tr>
 
-<td>{{ $b->id }}</td>
-<td>{{ $b->judul }}</td>
-<td>{{ $b->subjudul }}</td>
+        <div class="card-body">
 
-<td>
-<img src="{{ asset($b->gambar) }}" width="120">
-</td>
+            <div class="table-responsive">
 
-<td>
+                <table class="table table-bordered table-hover align-middle">
 
-<a href="{{ route('admin.upui.edit',$b->id) }}"
-class="btn btn-warning btn-sm">
-Edit
-</a>
+                    <thead class="thead-dark">
+                        <tr>
+                            <th width="60">ID</th>
+                            <th>Judul</th>
+                            <th>Subjudul</th>
+                            <th width="150">Gambar</th>
+                            <th width="160">Aksi</th>
+                        </tr>
+                    </thead>
 
-<form action="{{ route('admin.upui.destroy',$b->id) }}"
-method="POST"
-style="display:inline">
+                    <tbody>
 
-@csrf
-@method('DELETE')
+                    @forelse($banner as $b)
 
-<button class="btn btn-danger btn-sm">
-Hapus
-</button>
+                        <tr>
 
-</form>
+                            <!-- ID -->
+                            <td>
+                                <span class="badge badge-secondary">
+                                    {{ $loop->iteration }}
+                                </span>
+                            </td>
 
-</td>
 
-</tr>
+                            <!-- JUDUL -->
+                            <td class="font-weight-bold">
+                                {{ $b->judul }}
+                            </td>
 
-@endforeach
 
-</table>
+                            <!-- SUBJUDUL -->
+                            <td>
+                                {{ $b->subjudul }}
+                            </td>
+
+
+                            <!-- GAMBAR -->
+                            <td>
+                                <img src="{{ asset($b->gambar) }}"
+                                     width="100"
+                                     class="img-thumbnail">
+                            </td>
+
+
+                            <!-- ACTION -->
+                            <td>
+
+                                <a href="{{ route('admin.upui.edit',$b->id) }}"
+                                   class="btn btn-warning btn-sm">
+
+                                    <i class="fas fa-edit"></i>
+
+                                </a>
+
+                                <form action="{{ route('admin.upui.destroy',$b->id) }}"
+                                      method="POST"
+                                      class="d-inline">
+
+                                    @csrf
+                                    @method('DELETE')
+
+                                    <button class="btn btn-danger btn-sm"
+                                        onclick="return confirm('Hapus banner ini?')">
+
+                                        <i class="fas fa-trash"></i>
+
+                                    </button>
+
+                                </form>
+
+                            </td>
+
+                        </tr>
+
+                    @empty
+
+                        <tr>
+                            <td colspan="5" class="text-center text-muted">
+                                Belum ada data banner
+                            </td>
+                        </tr>
+
+                    @endforelse
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </div>
 
 </div>
 
