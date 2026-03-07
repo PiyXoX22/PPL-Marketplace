@@ -12,30 +12,34 @@
                 @csrf
 
                 <div class="form-group">
-                    <label>Nama Produk</label>
-                    <input type="text" name="nama_produk" class="form-control" value="{{ old('nama_produk') }}">
-                    @error('nama_produk')
-                        <small class="text-danger">{{ $message }}</small>
-                    @enderror
+                <label>Nama Produk</label>
+                <input type="text" name="nama_produk" class="form-control" value="{{ old('nama_produk') }}" required>
                 </div>
 
                 <div class="form-group">
-                    <label>Deskripsi</label>
-                    <textarea name="deskripsi" class="form-control">{{ old('deskripsi') }}</textarea>
-                    @error('deskripsi')
-                        <small class="text-danger">{{ $message }}</small>
-                    @enderror
+                <label>Deskripsi</label>
+                <textarea name="deskripsi" class="form-control" required>{{ old('deskripsi') }}</textarea>
                 </div>
 
                 <div class="form-group">
-                    <label>Harga Produk</label>
-                    <input type="number" name="harga" class="form-control" required>
+                <label>Kategori</label>
+                <select name="id_kategori" class="form-control">
+                <option value="">-- Pilih Kategori --</option>
+                @foreach($kategori as $k)
+                <option value="{{ $k->id }}">{{ $k->kategori }}</option>
+                @endforeach
+                </select>
+                </div>
+
+                <div class="form-group">
+                <label>Harga Produk</label>
+                <input type="number" name="harga" class="form-control" required>
                 </div>
 
                 <button type="submit" class="btn btn-primary">Simpan</button>
                 <a href="{{ route('admin.produk.index') }}" class="btn btn-secondary">Kembali</a>
 
-            </form>
+                </form>
 
         </div>
     </div>

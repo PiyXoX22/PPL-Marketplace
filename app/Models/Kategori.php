@@ -10,17 +10,16 @@ class Kategori extends Model
     use HasFactory;
 
     protected $table = 'kategori';
-    protected $primaryKey = 'id_prod';
-    public $incrementing = false;
+    protected $primaryKey = 'id';
     public $timestamps = false;
 
     protected $fillable = [
-        'id_prod',
-        'kategori'
+        'kategori',
+        'gambar'
     ];
 
-    public function barang()
+    public function produk()
     {
-        return $this->belongsTo(Produk::class, 'id_prod', 'id');
+        return $this->hasMany(Produk::class, 'id_kategori', 'id');
     }
 }

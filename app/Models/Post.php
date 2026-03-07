@@ -9,6 +9,11 @@ class Post extends Model
 {
     use HasFactory;
 
-    protected $table = 'posts'; // optional, default Laravel sudah ambil nama tabel
-    protected $fillable = ['title', 'content'];
+    protected $table = 'posts';
+
+    protected $fillable = [
+        'title',
+        'content',
+        'image'
+    ];
 }

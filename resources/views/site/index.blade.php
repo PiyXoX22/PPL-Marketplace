@@ -207,45 +207,44 @@
         <div class="arrow arrow-left" onclick="prevBanner()">&#10094;</div>
         <div class="arrow arrow-right" onclick="nextBanner()">&#10095;</div>
 
-       <div id="bannerTrack" class="banner-track">
+        <div id="bannerTrack" class="banner-track">
 
-            <!-- SLIDE 1 — BOOKS -->
-            <div class="banner-slide banner-bg-1">
+            @foreach($banners as $banner)
+
+            <div class="banner-slide"
+                 style="
+                    background-image:url('{{ asset($banner->gambar) }}');
+                    background-size:cover;
+                    background-position:center;
+                    color:white;
+                 ">
+
                 <div class="banner-overlay"></div>
 
-                {{-- <div class="banner-left" style="position: relative; z-index: 2;">
-                    <h2>Luaskan Wawasanmu!</h2>
-                    <p>Diskon Spesial <br> s.d. <span>90%</span></p>
-                </div> --}}
-            </div>
-
-            <!-- SLIDE 2 — ELEKTRONIK (BACKGROUND GAMBAR) -->
-            <div class="banner-slide banner-bg-2">
-                <div class="banner-overlay"></div>
-
-                {{-- <div class="banner-left" style="position: relative; z-index: 2;">
-                    <h2>Elektronik Terbaru</h2>
-                    <p>Harga Mulai <span>Rp 99Rb</span></p>
-                </div> --}}
-            </div>
-
-            <!-- SLIDE 3 — PAKAIAN -->
-            <div class="banner-slide banner-bg-3">
-                <div class="banner-overlay"></div>
-
-                <div class="banner-left" style="position: relative; z-index: 2;">
-                    <h2>Fashion Keren</h2>
-                    <p>Promo Menarik <br> Diskon <span>50%</span></p>
+                <div class="banner-left" style="position:relative;z-index:2;">
+                    <h2>{{ $banner->judul }}</h2>
+                    <p>{{ $banner->subjudul }}</p>
                 </div>
+
             </div>
 
-        </div>
+            @endforeach
+
+            </div>
 
         <!-- DOT -->
         <div class="banner-nav">
-            <div class="dot active" onclick="goToBanner(0)"></div>
-            <div class="dot" onclick="goToBanner(1)"></div>
-            <div class="dot" onclick="goToBanner(2)"></div>
+            <div class="banner-nav">
+
+                @foreach($banners as $key => $banner)
+
+                <div class="dot {{ $key == 0 ? 'active' : '' }}"
+                     onclick="goToBanner({{ $key }})">
+                </div>
+
+                @endforeach
+
+                </div>
         </div>
 
     </div>

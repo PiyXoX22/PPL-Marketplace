@@ -1,29 +1,41 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container py-4">
-    <h2 class="mb-4">Tambah Kategori</h2>
+<div class="container-fluid">
 
-    <form action="{{ route('admin.kategori.store') }}" method="POST">
-        @csrf
+<h1 class="h3 mb-4 text-gray-800">Tambah Kategori</h1>
 
-        <div class="mb-3">
-            <label class="form-label">Pilih Produk</label>
-            <select name="id_prod" class="form-control" required>
-                <option value="">-- Pilih Produk --</option>
-                @foreach($produk as $p)
-                    <option value="{{ $p->id }}">{{ $p->nama_produk }}</option>
-                @endforeach
-            </select>
-        </div>
+<div class="card shadow">
+<div class="card-body">
 
-        <div class="mb-3">
-            <label class="form-label">Kategori</label>
-            <input type="text" name="kategori" class="form-control" required>
-        </div>
+<form action="{{ route('admin.kategori.store') }}" method="POST" enctype="multipart/form-data">
+@csrf
 
-        <button type="submit" class="btn btn-success">Simpan</button>
-        <a href="{{ route('admin.kategori.index') }}" class="btn btn-secondary">Kembali</a>
-    </form>
+<div class="form-group">
+<label>Nama Kategori</label>
+<input type="text" name="kategori" class="form-control" value="{{ old('kategori') }}">
+
+@error('kategori')
+<small class="text-danger">{{ $message }}</small>
+@enderror
+</div>
+
+<div class="form-group">
+<label>Gambar Kategori</label>
+<input type="file" name="gambar" class="form-control">
+
+@error('gambar')
+<small class="text-danger">{{ $message }}</small>
+@enderror
+</div>
+
+<button type="submit" class="btn btn-primary">Simpan</button>
+<a href="{{ route('admin.kategori.index') }}" class="btn btn-secondary">Kembali</a>
+
+</form>
+
+</div>
+</div>
+
 </div>
 @endsection

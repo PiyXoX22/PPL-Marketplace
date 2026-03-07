@@ -17,7 +17,9 @@ class Produk extends Model
 
     protected $fillable = [
         'nama_produk',
-        'deskripsi'
+        'deskripsi',
+        'berat',
+        'id_kategori'
     ];
 
     public function stok()
@@ -27,7 +29,7 @@ class Produk extends Model
 
     public function kategori()
     {
-        return $this->hasOne(Kategori::class, 'id_prod', 'id');
+        return $this->belongsTo(Kategori::class, 'id_kategori', 'id');
     }
 
     public function harga()

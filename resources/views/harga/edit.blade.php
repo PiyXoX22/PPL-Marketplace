@@ -1,44 +1,56 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container">
 
-    <h2 class="mb-4 text-center">✏ Edit Harga Produk</h2>
+<div class="container-fluid">
 
-    {{-- Pesan error validasi --}}
-    @if ($errors->any())
-        <div class="alert alert-danger">
-            <ul class="mb-0">
-                @foreach ($errors->all() as $err)
-                    <li>{{ $err }}</li>
-                @endforeach
-            </ul>
-        </div>
-    @endif
+<h1 class="h3 mb-4 text-gray-800">Edit Harga</h1>
 
-    <div class="card">
-        <div class="card-body">
+<div class="card shadow">
+<div class="card-body">
 
-            <form action="{{ route('admin.harga.update', $harga->id_prod) }}" method="POST">
-                @csrf
-                @method('PUT')
+<form action="{{ route('admin.harga.update',$harga->id_prod) }}"
+method="POST">
 
-                <div class="mb-3">
-                    <label class="form-label">ID Produk</label>
-                    <input type="text" class="form-control" value="{{ $harga->id_prod }}" disabled>
-                </div>
+@csrf
+@method('PUT')
 
-                <div class="mb-3">
-                    <label class="form-label">Harga</label>
-                    <input type="number" step="0.01" name="harga" class="form-control" value="{{ $harga->harga }}" required>
-                </div>
+<div class="form-group">
 
-                <button type="submit" class="btn btn-primary">Update</button>
-                <a href="{{ route('admin.harga.index') }}" class="btn btn-secondary">Kembali</a>
-            </form>
+<label>ID Produk</label>
 
-        </div>
-    </div>
+<input type="text"
+class="form-control"
+value="{{ $harga->id_prod }}"
+readonly>
 
 </div>
+
+<div class="form-group">
+
+<label>Harga</label>
+
+<input type="number"
+name="harga"
+class="form-control"
+value="{{ $harga->harga }}">
+
+</div>
+
+<button class="btn btn-warning">
+Update
+</button>
+
+<a href="{{ route('admin.harga.index') }}"
+class="btn btn-secondary">
+Kembali
+</a>
+
+</form>
+
+</div>
+</div>
+
+</div>
+
 @endsection

@@ -14,7 +14,11 @@
 
                 <div class="form-group">
                     <label>Nama Produk</label>
-                    <input type="text" name="nama_produk" class="form-control" value="{{ old('nama_produk', $produk->nama_produk) }}">
+                    <input type="text"
+                           name="nama_produk"
+                           class="form-control"
+                           value="{{ old('nama_produk', $produk->nama_produk) }}">
+
                     @error('nama_produk')
                         <small class="text-danger">{{ $message }}</small>
                     @enderror
@@ -22,8 +26,29 @@
 
                 <div class="form-group">
                     <label>Deskripsi</label>
-                    <textarea name="deskripsi" class="form-control">{{ old('deskripsi', $produk->deskripsi) }}</textarea>
+                    <textarea name="deskripsi"
+                              class="form-control">{{ old('deskripsi', $produk->deskripsi) }}</textarea>
+
                     @error('deskripsi')
+                        <small class="text-danger">{{ $message }}</small>
+                    @enderror
+                </div>
+
+                <div class="form-group">
+                    <label>Kategori</label>
+
+                    <select name="id_kategori" class="form-control">
+
+                        @foreach($kategori as $k)
+                            <option value="{{ $k->id }}"
+                                {{ $produk->id_kategori == $k->id ? 'selected' : '' }}>
+                                {{ $k->kategori }}
+                            </option>
+                        @endforeach
+
+                    </select>
+
+                    @error('id_kategori')
                         <small class="text-danger">{{ $message }}</small>
                     @enderror
                 </div>

@@ -1,57 +1,65 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin - Banner (Contoh Statis)</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-</head>
-<body class="bg-light">
+@extends('layouts.app')
 
-<div class="container py-5">
-    <h2 class="mb-4">Manajemen Banner — Contoh Statis</h2>
+@section('content')
 
-    <div class="card shadow-sm mb-4">
-        <div class="card-header bg-primary text-white">Banner Aktif</div>
-        <div class="card-body text-center">
-            <img src="https://via.placeholder.com/900x250?text=Banner+Aktif" class="img-fluid mb-3" style="border-radius: 10px;">
-            <button class="btn btn-warning btn-sm">Ganti Banner</button>
-        </div>
-    </div>
+<div class="container">
 
-    <div class="card shadow-sm">
-        <div class="card-header bg-dark text-white">Daftar Banner Lain</div>
-        <div class="card-body">
-            <table class="table table-bordered table-striped">
-                <thead class="thead-dark">
-                    <tr>
-                        <th>Preview</th>
-                        <th>Nama Banner</th>
-                        <th width="200px">Aksi</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td><img src="https://via.placeholder.com/250x80?text=Banner+1" width="200"></td>
-                        <td>Banner Promo Akhir Tahun</td>
-                        <td>
-                            <button class="btn btn-primary btn-sm">Aktifkan</button>
-                            <button class="btn btn-danger btn-sm">Hapus</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td><img src="https://via.placeholder.com/250x80?text=Banner+2" width="200"></td>
-                        <td>Banner Diskon 50%</td>
-                        <td>
-                            <button class="btn btn-primary btn-sm">Aktifkan</button>
-                            <button class="btn btn-danger btn-sm">Hapus</button>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
+<h2>Data Banner</h2>
+
+<a href="{{ route('admin.upui.create') }}" class="btn btn-primary mb-3">
+Tambah Banner
+</a>
+
+<table class="table table-bordered">
+
+<tr>
+<th>ID</th>
+<th>Judul</th>
+<th>Subjudul</th>
+<th>Gambar</th>
+<th>Aksi</th>
+</tr>
+
+@foreach($banner as $b)
+
+<tr>
+
+<td>{{ $b->id }}</td>
+<td>{{ $b->judul }}</td>
+<td>{{ $b->subjudul }}</td>
+
+<td>
+<img src="{{ asset($b->gambar) }}" width="120">
+</td>
+
+<td>
+
+<a href="{{ route('admin.upui.edit',$b->id) }}"
+class="btn btn-warning btn-sm">
+Edit
+</a>
+
+<form action="{{ route('admin.upui.destroy',$b->id) }}"
+method="POST"
+style="display:inline">
+
+@csrf
+@method('DELETE')
+
+<button class="btn btn-danger btn-sm">
+Hapus
+</button>
+
+</form>
+
+</td>
+
+</tr>
+
+@endforeach
+
+</table>
+
 </div>
 
-</body>
-</html>
+@endsection

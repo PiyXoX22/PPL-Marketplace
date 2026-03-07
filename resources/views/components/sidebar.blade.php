@@ -27,14 +27,14 @@
     </div>
 
     <!-- Nav Item - Produk -->
-    <li class="nav-item">
+    {{-- <li class="nav-item">
         <a class="nav-link collapsed" href="{{ route('admin.produk.create')}}"
 
             aria-expanded="true" aria-controls="collapseTwo">
             <i class="fas fa-fw fa-cog"></i>
             <span>Penambahan Barang</span>
         </a>
-    </li>
+    </li> --}}
 
     <li class="nav-item">
         <a class="nav-link collapsed" href="{{ route('admin.produk.index')}}"
@@ -90,7 +90,7 @@
 
             <!-- Nav Item - Produk -->
             <li class="nav-item">
-                <a class="nav-link collapsed" href="{{ route('admin.harga.index')}}"
+                <a class="nav-link collapsed" href="{{ route('admin.coupon.index')}}"
                     aria-expanded="true" aria-controls="collapseTwo">
                     <i class="fas fa-fw fa-cog"></i>
                     <span>Kupon</span>

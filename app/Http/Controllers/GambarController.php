@@ -16,7 +16,8 @@ class GambarController extends Controller
 
     public function create()
     {
-        $produk = Produk::all();
+        $produk = Produk::doesntHave('gambar')->get();
+
         return view('gambar.create', compact('produk'));
     }
 

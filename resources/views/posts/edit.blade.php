@@ -1,31 +1,71 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container mx-auto py-5">
-    <h1 class="text-3xl font-bold mb-4">Edit Post</h1>
 
-    @if($errors->any())
-        <div class="bg-red-200 text-red-800 p-2 rounded mb-4">
-            <ul>
-                @foreach($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
-    @endif
+<div class="container-fluid">
 
-    <form action="{{ route('admin.posts.update', $post) }}" method="POST" class="space-y-4 bg-white p-6 rounded shadow">
-        @csrf
-        @method('PUT')
-        <div>
-            <label class="block mb-1 font-semibold">Title</label>
-            <input type="text" name="title" class="border px-2 py-1 w-full" value="{{ old('title', $post->title) }}">
+    <!-- Page Heading -->
+    <h1 class="h3 mb-4 text-gray-800">Edit Blog Post</h1>
+
+    <div class="card shadow mb-4">
+
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">
+                Update Post
+            </h6>
         </div>
-        <div>
-            <label class="block mb-1 font-semibold">Content</label>
-            <textarea name="content" class="border px-2 py-1 w-full">{{ old('content', $post->content) }}</textarea>
+
+        <div class="card-body">
+
+            <form action="{{ route('admin.posts.update', $post) }}" method="POST">
+                @csrf
+                @method('PUT')
+
+                <!-- Title -->
+                <div class="form-group">
+                    <label>Post Title</label>
+
+                    <input type="text"
+                           name="title"
+                           class="form-control"
+                           value="{{ old('title', $post->title) }}">
+
+                    @error('title')
+                        <small class="text-danger">{{ $message }}</small>
+                    @enderror
+                </div>
+
+
+                <!-- Content -->
+                <div class="form-group">
+                    <label>Content</label>
+
+                    <textarea name="content"
+                              rows="6"
+                              class="form-control">{{ old('content', $post->content) }}</textarea>
+
+                    @error('content')
+                        <small class="text-danger">{{ $message }}</small>
+                    @enderror
+                </div>
+
+
+                <!-- Buttons -->
+                <button type="submit" class="btn btn-warning">
+                    <i class="fas fa-edit"></i> Update Post
+                </button>
+
+                <a href="{{ route('admin.posts.index') }}"
+                   class="btn btn-secondary">
+                    Back
+                </a>
+
+            </form>
+
         </div>
-        <button type="submit" class="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600">Update</button>
-    </form>
+
+    </div>
+
 </div>
+
 @endsection

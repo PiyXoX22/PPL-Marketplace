@@ -19,8 +19,8 @@ class Qty extends Model
         'qty',
     ];
 
-    public function barang()
+    public function produk()
     {
-        return $this->belongsTo(Produk::class, 'id_prod');
+        return $this->belongsTo(Produk::class, 'id_prod', 'id');
     }
 }

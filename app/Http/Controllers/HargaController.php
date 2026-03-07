@@ -16,7 +16,10 @@ class HargaController extends Controller
 
     public function create()
     {
-        return view('harga.create');
+        // hanya produk yang belum punya harga
+        $produk = \App\Models\Produk::doesntHave('harga')->get();
+
+        return view('harga.create', compact('produk'));
     }
 
     public function store(Request $request)

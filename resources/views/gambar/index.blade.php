@@ -14,7 +14,7 @@
   <table class="table table-bordered table-striped">
     <thead class="table-dark">
       <tr>
-        <th>ID Produk</th>
+        <th>Nama Produk</th>
         <th>Gambar</th>
         <th>Aksi</th>
       </tr>
@@ -22,7 +22,7 @@
     <tbody>
       @foreach($gambar as $g)
       <tr>
-        <td>{{ $loop->iteration }}</td>
+        <td>{{ $g->produk->nama_produk ?? '-' }}</td>
         <td>
           <img src="{{ asset($g->gambar) }}" alt="gambar produk" width="120">
         </td>
