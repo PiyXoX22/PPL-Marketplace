@@ -50,27 +50,28 @@ class AddressController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'full_name'     => 'required|string|max:100',
-            'phone'         => 'required|string|max:20',
-            'province'      => 'required|string|max:100',
-            'city'          => 'required|string|max:100',
-            'district'      => 'required|string|max:100',
-            'postal_code'   => 'required|string|max:10',
-            'address_line'  => 'required|string',
-            'additional_info' => 'nullable|string',
+            'full_name' => 'required|string|max:100',
+            'phone' => 'required|string|max:20',
+            'province' => 'required|string|max:100',
+            'city' => 'required|string|max:100',
+            'city_id' => 'required',   // penting
+            'district' => 'required|string|max:100',
+            'postal_code' => 'required|string|max:10',
+            'address_line' => 'required|string',
         ]);
 
         Address::create([
-            'user_id'       => Auth::id(),
-            'full_name'     => $request->full_name,
-            'phone'         => $request->phone,
-            'province'      => $request->province,
-            'city'          => $request->city,
-            'district'      => $request->district,
-            'postal_code'   => $request->postal_code,
-            'address_line'  => $request->address_line,
+            'user_id' => Auth::id(),
+            'full_name' => $request->full_name,
+            'phone' => $request->phone,
+            'province' => $request->province,
+            'city' => $request->city,
+            'city_id' => $request->city_id,   // ini penting
+            'district' => $request->district,
+            'postal_code' => $request->postal_code,
+            'address_line' => $request->address_line,
             'additional_info' => $request->additional_info ?? '',
-            'is_default'    => 0,
+            'is_default' => 0,
         ]);
 
         return redirect()->route('profile.address.index')->with('success', 'Alamat berhasil ditambahkan!');

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use App\Models\Trx;
@@ -23,10 +24,37 @@ class CheckoutController extends Controller
         // Single produk
         if ($id) {
             $produk = Produk::with(['harga','gambar'])->find($id);
+
             if ($produk) {
+
+                $subtotal = $produk->harga->harga ?? 0;
+                $discount = 0;
+                $total = $subtotal;
+
                 $addresses = $user->addresses;
-                $selectedAddress = $addresses->where('is_default',1)->first() ?? $addresses->first();
-                return view('checkout.index', compact('produk','addresses','selectedAddress'));
+
+                // ambil address_id dari dropdown
+                if (request('address_id')) {
+
+                    $selectedAddress = $addresses
+                        ->where('id', request('address_id'))
+                        ->first();
+
+                } else {
+
+                    $selectedAddress = $addresses->where('is_default',1)->first()
+                        ?? $addresses->first();
+
+                }
+
+                return view('checkout.index', compact(
+                    'produk',
+                    'subtotal',
+                    'discount',
+                    'total',
+                    'addresses',
+                    'selectedAddress'
+                ));
             }
         }
 
@@ -76,46 +104,104 @@ if (request('address_id')) {
     // ===============================
     public function cekOngkir(Request $request)
     {
-        $request->validate(['courier'=>'required|string']);
+        $request->validate([
+            'courier' => 'required',
+            'address_id' => 'required'
+        ]);
 
-        $cartItems = Cart::with('product')
-            ->where('user_id',Auth::id())
-            ->get();
+        $address = Address::where('id', $request->address_id)
+            ->where('user_id', Auth::id())
+            ->first();
 
-        $totalGram = $cartItems->sum(fn($item) =>
-            ((int)preg_replace('/[^0-9]/','',$item->product->berat ?? '0')) * $item->quantity
+        if(!$address){
+            return response()->json([
+                'success'=>false,
+                'message'=>'Alamat tidak ditemukan'
+            ]);
+        }
+
+        $origin = 419;
+        $destination = $address->city_id;
+
+        /*
+        ==========================
+        CEK BERAT
+        ==========================
+        */
+
+        if($request->has('weight')){
+
+            // checkout cart
+            $weight = (int) $request->weight;
+
+        }elseif($request->has('product_id')){
+
+            // checkout produk
+            $produk = Produk::findOrFail($request->product_id);
+
+            $weight = (int) filter_var($produk->berat, FILTER_SANITIZE_NUMBER_INT);
+
+        }else{
+
+            return response()->json([
+                'success'=>false,
+                'message'=>'Berat produk tidak ditemukan'
+            ]);
+
+        }
+
+        /*
+        ==========================
+        RAJAONGKIR API
+        ==========================
+        */
+
+        $response = Http::asForm()->withHeaders([
+            'Accept' => 'application/json',
+            'key' => env('RAJAONGKIR_KEY')
+        ])->post(
+            'https://rajaongkir.komerce.id/api/v1/calculate/domestic-cost',
+            [
+                'origin' => $origin,
+                'destination' => $destination,
+                'weight' => $weight,
+                'courier' => $request->courier,
+                'price' => 'lowest'
+            ]
         );
 
-        $kg = max(1, ceil($totalGram / 1000));
-
-        $ongkirTable = [
-            'jne' => 10000,
-            'pos' => 8000,
-            'jnt' => 11000,
-            'sicepat' => 9000,
-            'gosend' => 15000
-        ];
-
-        if (!isset($ongkirTable[$request->courier])) {
-            return response()->json(['success'=>false,'message'=>'Kurir tidak valid']);
+        if(!$response->successful()){
+            return response()->json([
+                'success'=>false,
+                'message'=>'API RajaOngkir gagal'
+            ]);
         }
+
+        $data = $response->json();
+
+        if(!isset($data['data'][0]['cost'])){
+            return response()->json([
+                'success'=>false,
+                'message'=>'Ongkir tidak tersedia'
+            ]);
+        }
+
+        $ongkir = $data['data'][0]['cost'];
 
         return response()->json([
             'success'=>true,
             'data'=>[
-                'courier'=>strtoupper($request->courier),
-                'kg'=>$kg,
-                'total_ongkir'=>$ongkirTable[$request->courier] * $kg
+                'total_ongkir'=>$ongkir
             ]
         ]);
     }
-
     // ===============================
     // PROSES BAYAR (SIMPAN TRX)
     // ===============================
     public function pay(Request $request)
     {
         $request->validate([
+            'address_id'     => 'required|exists:login2_addresses,id',
             'courier'        => 'required',
             'ongkir'         => 'required|numeric',
             'subtotal'       => 'required|numeric',
@@ -125,16 +211,19 @@ if (request('address_id')) {
         ]);
 
         DB::beginTransaction();
+
         try {
 
             $trxId = 'TRX'.date('ymdHis').rand(10000,99999);
 
             $trx = Trx::create([
                 'id'             => $trxId,
-                'user_id'        => Auth::id(), // ✅ SIMPAN USER
+                'user_id'        => Auth::id(),
+                'address_id'     => $request->address_id,
                 'tanggal'        => now(),
                 'total'          => $request->subtotal,
                 'discount'       => $request->discount ?? 0,
+                'ongkir'         => $request->ongkir,
                 'paid'           => 0,
                 'payment_method' => $request->payment_method,
                 'grand_total'    => $request->grand_total,
@@ -146,6 +235,7 @@ if (request('address_id')) {
                 ->get();
 
             foreach ($cartItems as $item) {
+
                 TrxDetail::create([
                     'trx_id'       => $trx->id,
                     'id_barang'    => $item->product_id,
@@ -153,16 +243,21 @@ if (request('address_id')) {
                     'harga_satuan' => $item->product->harga->harga ?? 0,
                     'subtotal'     => ($item->product->harga->harga ?? 0) * $item->quantity
                 ]);
+
             }
 
             Cart::where('user_id', Auth::id())->delete();
 
             DB::commit();
+
             return redirect()->route('checkout.viewPay', $trx->id);
 
         } catch (\Exception $e) {
+
             DB::rollBack();
+
             return back()->with('error','Terjadi kesalahan: '.$e->getMessage());
+
         }
     }
 

@@ -21,6 +21,7 @@ class Address extends Model
         'phone',
         'province',
         'city',
+        'city_id', // WAJIB DITAMBAH
         'district',
         'postal_code',
         'address_line',

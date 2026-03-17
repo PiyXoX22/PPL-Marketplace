@@ -101,7 +101,7 @@ class RajaOngkirController extends Controller
 
         ])->post('https://rajaongkir.komerce.id/api/v1/calculate/domestic-cost', [
                 'origin'      => 3855, // ID kecamatan Diwek (ganti sesuai kebutuhan)
-                'destination' => $request->input('district_id'), // ID kecamatan tujuan
+                'destination' => $request->input('city_id'), // ID kecamatan tujuan
                 'weight'      => $request->input('weight'), // Berat dalam gram
                 'courier'     => $request->input('courier'), // Kode kurir (jne, tiki, pos)
         ]);

@@ -2,463 +2,430 @@
 <x-headersite/>
 
 <script>
-    document.getElementById('menu-toggle').addEventListener('click', function() {
-        document.getElementById('mobile-menu').classList.toggle('hidden');
-    });
+document.getElementById('menu-toggle')?.addEventListener('click', function () {
+    document.getElementById('mobile-menu')?.classList.toggle('hidden');
+});
 </script>
 
-{{-- Hero Banner Slider --}}
-<section style="padding: 40px 0;">
-
-    <style>
-    .banner-slider {
-        position: relative;
-        width: 100%;
-        max-width: 1200px;
-        margin: auto;
-        overflow: hidden;
-        border-radius: 18px;
-    }
-    .banner-track {
-        display: flex;
-        transition: transform 0.5s ease-in-out;
-    }
-    .banner-slide {
-    min-width: 100%;
-    height: 380px; /* BESAR & PROPORISONAL */
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    padding: 50px;
-    position: relative;
-    }
-
-    .banner-left h2 {
-        font-size: 32px;
-        font-weight: 800;
-    }
-    .banner-left p {
-        font-size: 22px;
-        font-weight: 600;
-        line-height: 1.3;
-    }
-    .banner-left span {
-        font-size: 42px;
-        font-weight: 900;
-    }
-    .banner-right img {
-        width: 260px;
-        height: auto;
-    }
-
-    /* DOT */
-    .banner-nav {
-        position: absolute;
-        bottom: 15px;
-        left: 50%;
-        transform: translateX(-50%);
-        display: flex;
-        gap: 8px;
-    }
-    .dot {
-        width: 12px;
-        height: 12px;
-        background: #ccc;
-        border-radius: 50%;
-        cursor: pointer;
-        transition: 0.3s;
-    }
-    .dot.active {
-        background: #1abc60;
-    }
-
-    /* PANAH */
-    .arrow {
-        position: absolute;
-        top: 50%;
-        transform: translateY(-50%);
-        padding: 12px 16px;
-        font-size: 22px;
-        cursor: pointer;
-        background: rgba(0,0,0,0.3);
-        color: white;
-        border-radius: 50%;
-        user-select: none;
-    }
-    .arrow:hover {
-        background: rgba(0,0,0,0.5);
-    }
-    .arrow-left { left: 15px; }
-    .arrow-right { right: 15px; }
-
-   /* ===== BACKGROUND SLIDE 1 ===== */
-.banner-bg-1 {
-    position: relative;
-    background-image: url('{{ asset("uploads/buku.jpg") }}');
-    background-size: cover;
-    background-position: center;
-    color: white;
-}
-
-/* ===== BACKGROUND SLIDE 2 ===== */
-.banner-bg-2 {
-    position: relative;
-    background-image: url('{{ asset("uploads/hp.jpg") }}');
-    background-size: cover;
-    background-position: center;
-    color: white;
-}
-
-/* ===== BACKGROUND SLIDE 3 ===== */
-.banner-bg-3 {
-    position: relative;
-    background-image: url('{{ asset("uploads/fashion.jpg") }}');
-    background-size: cover;
-    background-position: center;
-    color: white;
-}
-
-/* Overlay untuk semua background slide */
-.banner-overlay {
-    position: absolute;
-    inset: 0;
-    background: rgba(255,255,255,0.1); /* mencerahkan */
-    z-index: 1;
-}
-
-.banner-overlay {
-    background: rgba(0,0,0,0.08);
-}
-
-.banner-left h2,
-.banner-left p,
-.banner-left span {
-    text-shadow: 0 2px 6px rgba(0,0,0,0.55);
-}
-
-
-/* Teks putih pada slide background */
-.banner-bg-1 .banner-left h2,
-.banner-bg-1 .banner-left p,
-.banner-bg-1 .banner-left span,
-.banner-bg-2 .banner-left h2,
-.banner-bg-2 .banner-left p,
-.banner-bg-2 .banner-left span,
-.banner-bg-3 .banner-left h2,
-.banner-bg-3 .banner-left p,
-.banner-bg-3 .banner-left span {
-    color: white !important;
-}
-
-</style>
 <style>
-    .kategori-scroll {
-        display: flex;
-        gap: 22px;
-        overflow-x: auto;
-        padding: 10px 4px;
-        margin-bottom: 25px;
-        scrollbar-width: none;
-    }
 
-    .kategori-scroll::-webkit-scrollbar {
-        display: none;
-    }
+/* GLOBAL */
+body{
+background:linear-gradient(180deg,#f8fafc,#eef2ff);
+transition:.3s;
+}
 
-    .kategori-item {
-        text-align: center;
-        flex-shrink: 0;
-        cursor: pointer;
-        width: 90px;
-        text-decoration: none;
-        color: #333;
-    }
+.dark body{
+background:#0f172a;
+color:white;
+}
 
-    .kategori-icon {
-        width: 70px;
-        height: 70px;
-        border-radius: 50%;
-        background: #e5e7eb;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        margin: 0 auto 8px;
-        overflow: hidden;
-        border: 2px solid #ddd;
-        transition: 0.2s;
-    }
+/* BANNER */
 
-    .kategori-item:hover .kategori-icon {
-        border-color: #1a73e8;
-        transform: scale(1.05);
-    }
+.banner-slider{
+position:relative;
+max-width:1200px;
+margin:auto;
+overflow:hidden;
+border-radius:20px;
+box-shadow:0 10px 40px rgba(0,0,0,.15);
+}
 
-    .kategori-title {
-        font-size: 14px;
-        font-weight: 600;
-        margin-top: 4px;
-    }
+.banner-track{
+display:flex;
+transition:transform .6s ease;
+}
+
+.banner-slide{
+min-width:100%;
+height:420px;
+display:flex;
+align-items:center;
+padding:60px;
+position:relative;
+color:white;
+background-size:cover;
+background-position:center;
+}
+
+.banner-slide::after{
+content:'';
+position:absolute;
+inset:0;
+background:linear-gradient(90deg,rgba(0,0,0,.6),rgba(0,0,0,.15));
+}
+
+.banner-left{
+position:relative;
+z-index:2;
+max-width:480px;
+animation:fadeUp .8s ease;
+}
+
+.banner-left h2{
+font-size:38px;
+font-weight:800;
+margin-bottom:10px;
+}
+
+.banner-left p{
+font-size:18px;
+opacity:.9;
+}
+
+/* DOT */
+
+.banner-nav{
+position:absolute;
+bottom:20px;
+left:50%;
+transform:translateX(-50%);
+display:flex;
+gap:10px;
+z-index:5;
+}
+
+.dot{
+width:12px;
+height:12px;
+border-radius:50%;
+background:#ccc;
+cursor:pointer;
+transition:.3s;
+}
+
+.dot.active{
+background:#22c55e;
+}
+
+/* ARROW */
+
+.arrow{
+position:absolute;
+top:50%;
+transform:translateY(-50%);
+background:rgba(0,0,0,.4);
+color:white;
+font-size:20px;
+padding:12px;
+border-radius:50%;
+cursor:pointer;
+z-index:5;
+}
+
+.arrow-left{ left:15px }
+.arrow-right{ right:15px }
+
+/* SEARCH */
+
+.search-box{
+background:white;
+border-radius:50px;
+overflow:hidden;
+box-shadow:0 10px 30px rgba(0,0,0,.1);
+}
+
+.dark .search-box{
+background:#1e293b;
+}
+
+/* KATEGORI */
+
+.kategori-scroll{
+display:flex;
+gap:22px;
+overflow-x:auto;
+padding:10px 4px;
+margin-bottom:30px;
+scrollbar-width:none;
+}
+
+.kategori-scroll::-webkit-scrollbar{
+display:none;
+}
+
+.kategori-item{
+text-align:center;
+flex-shrink:0;
+width:90px;
+cursor:pointer;
+text-decoration:none;
+}
+
+.kategori-icon{
+width:70px;
+height:70px;
+border-radius:50%;
+display:flex;
+justify-content:center;
+align-items:center;
+margin:auto;
+overflow:hidden;
+background:linear-gradient(145deg,#f1f5f9,#e2e8f0);
+transition:.3s;
+box-shadow:0 6px 12px rgba(0,0,0,.1);
+}
+
+.dark .kategori-icon{
+background:#1f2937;
+}
+
+.kategori-item:hover .kategori-icon{
+transform:translateY(-6px) scale(1.05);
+box-shadow:0 10px 20px rgba(0,0,0,.25);
+}
+
+.kategori-title{
+font-size:14px;
+font-weight:600;
+margin-top:6px;
+}
+
+/* PRODUK CARD */
+
+.product-card{
+background:white;
+border-radius:16px;
+overflow:hidden;
+transition:.35s;
+box-shadow:0 6px 16px rgba(0,0,0,.08);
+}
+
+.dark .product-card{
+background:#1e293b;
+}
+
+.product-card:hover{
+transform:translateY(-6px);
+box-shadow:0 20px 30px rgba(0,0,0,.25);
+}
+
+.product-img{
+height:240px;
+object-fit:cover;
+width:100%;
+transition:.5s;
+}
+
+.product-card:hover .product-img{
+transform:scale(1.05);
+}
+
+.product-btn{
+margin-top:12px;
+width:100%;
+padding:10px;
+border-radius:10px;
+background:linear-gradient(90deg,#3b82f6,#6366f1);
+color:white;
+transition:.3s;
+}
+
+.product-btn:hover{
+background:linear-gradient(90deg,#6366f1,#3b82f6);
+}
+
+/* ANIMATION */
+
+@keyframes fadeUp{
+from{
+opacity:0;
+transform:translateY(30px);
+}
+to{
+opacity:1;
+transform:translateY(0);
+}
+}
+
 </style>
 
 
-    <div class="banner-slider">
+{{-- HERO BANNER --}}
+<section style="padding:40px 0">
 
-        <!-- Panah -->
-        <div class="arrow arrow-left" onclick="prevBanner()">&#10094;</div>
-        <div class="arrow arrow-right" onclick="nextBanner()">&#10095;</div>
+<div class="banner-slider">
 
-        <div id="bannerTrack" class="banner-track">
+<div class="arrow arrow-left" onclick="prevBanner()">❮</div>
+<div class="arrow arrow-right" onclick="nextBanner()">❯</div>
 
-            @foreach($banners as $banner)
+<div id="bannerTrack" class="banner-track">
 
-            <div class="banner-slide"
-                 style="
-                    background-image:url('{{ asset($banner->gambar) }}');
-                    background-size:cover;
-                    background-position:center;
-                    color:white;
-                 ">
+@foreach($banners as $banner)
 
-                <div class="banner-overlay"></div>
+<div class="banner-slide"
+style="background-image:url('{{ asset($banner->gambar) }}')">
 
-                <div class="banner-left" style="position:relative;z-index:2;">
-                    <h2>{{ $banner->judul }}</h2>
-                    <p>{{ $banner->subjudul }}</p>
-                </div>
+<div class="banner-left">
+<h2>{{ $banner->judul }}</h2>
+<p>{{ $banner->subjudul }}</p>
+</div>
 
-            </div>
+</div>
 
-            @endforeach
+@endforeach
 
-            </div>
+</div>
 
-        <!-- DOT -->
-        <div class="banner-nav">
-            <div class="banner-nav">
+<div class="banner-nav">
 
-                @foreach($banners as $key => $banner)
+@foreach($banners as $key=>$banner)
 
-                <div class="dot {{ $key == 0 ? 'active' : '' }}"
-                     onclick="goToBanner({{ $key }})">
-                </div>
+<div class="dot {{ $key==0 ? 'active':'' }}"
+onclick="goToBanner({{ $key }})"></div>
 
-                @endforeach
+@endforeach
 
-                </div>
-        </div>
+</div>
 
-    </div>
+</div>
 
 </section>
 
-<script>
-    let bIndex = 0;
-    const track = document.getElementById("bannerTrack");
-    const total = track.children.length;
-    const dots = document.querySelectorAll(".dot");
-    let autoSlide;
 
-    function updateBanner() {
-        track.style.transform = "translateX(" + (-bIndex * 100) + "%)";
-        dots.forEach((d, i) => d.classList.toggle("active", i === bIndex));
-    }
-
-    function nextBanner() {
-        bIndex = (bIndex + 1) % total;
-        updateBanner();
-        resetAutoSlide();
-    }
-
-    function prevBanner() {
-        bIndex = (bIndex - 1 + total) % total;
-        updateBanner();
-        resetAutoSlide();
-    }
-
-    function goToBanner(i) {
-        bIndex = i;
-        updateBanner();
-        resetAutoSlide();
-    }
-
-    function resetAutoSlide() {
-        clearInterval(autoSlide);
-        autoSlide = setInterval(nextBanner, 4000);
-    }
-
-    autoSlide = setInterval(nextBanner, 4000);
-</script>
-
-
-<script>
-    let bIndex = 0;
-    const track = document.getElementById("bannerTrack");
-    const totalBanner = track.children.length;
-    const dots = document.querySelectorAll(".dot");
-
-    function updateBanner() {
-        track.style.transform = "translateX(" + (-bIndex * 100) + "%)";
-        dots.forEach((d, i) => d.classList.toggle("active", i === bIndex));
-    }
-
-    function nextBanner() {
-        bIndex = (bIndex + 1) % totalBanner;
-        updateBanner();
-    }
-
-    setInterval(nextBanner, 4000);
-</script>
-
-
-<script>
-    let bIndex = 0;
-    const track = document.getElementById("bannerTrack");
-    const total = track.children.length;
-    const dots = document.querySelectorAll(".dot");
-    let autoSlide;
-
-    function updateBanner() {
-        track.style.transform = "translateX(" + (-bIndex * 100) + "%)";
-        dots.forEach((d, i) => d.classList.toggle("active", i === bIndex));
-    }
-
-    function nextBanner() {
-        bIndex = (bIndex + 1) % total;
-        updateBanner();
-        resetAutoSlide();
-    }
-
-    function prevBanner() {
-        bIndex = (bIndex - 1 + total) % total;
-        updateBanner();
-        resetAutoSlide();
-    }
-
-    function goToBanner(i) {
-        bIndex = i;
-        updateBanner();
-        resetAutoSlide();
-    }
-
-    function resetAutoSlide() {
-        clearInterval(autoSlide);
-        autoSlide = setInterval(nextBanner, 4000);
-    }
-
-    autoSlide = setInterval(nextBanner, 4000);
-</script>
-
-<script>
-    let bIndex = 0;
-    const track = document.getElementById("bannerTrack");
-    const totalBanner = track.children.length;
-    const dots = document.querySelectorAll(".dot");
-
-    function updateBanner() {
-        track.style.transform = "translateX(" + (-bIndex * 100) + "%)";
-        dots.forEach((d, i) => d.classList.toggle("active", i === bIndex));
-    }
-
-    function nextBanner() {
-        bIndex = (bIndex + 1) % totalBanner;
-        updateBanner();
-    }
-
-    setInterval(nextBanner, 4000);
-</script>
-
-
-{{-- Search Produk --}}
+{{-- SEARCH --}}
 <div class="container mx-auto px-4 mt-8">
-    <form action="{{ route('filter') }}" method="GET" class="flex items-center max-w-md mx-auto">
-        <input type="text" name="search" placeholder="Cari produk..." class="w-full p-2 border rounded-l-md focus:ring-2 focus:ring-blue-500">
-        <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-r-md hover:bg-blue-700">Cari</button>
-    </form>
+
+<form action="{{ route('filter') }}" method="GET"
+class="flex items-center max-w-xl mx-auto search-box">
+
+<input
+type="text"
+name="search"
+placeholder="Cari produk..."
+class="flex-1 px-4 py-3 bg-transparent outline-none dark:text-white">
+
+<button
+class="px-6 py-3 text-white"
+style="background:linear-gradient(90deg,#3b82f6,#6366f1)">
+Cari
+</button>
+
+</form>
+
 </div>
+
+
+{{-- KATEGORI --}}
 <div class="kategori-scroll">
 
-    @foreach ($kategoriList as $k)
-    <a href="{{ route('filter', ['kategori' => $k->kategori]) }}" class="kategori-item">
+@foreach ($kategoriList as $k)
 
-        <!-- ICON (ambil gambar kategori atau default bulat abu2) -->
-        <div class="kategori-icon">
-            @if($k->gambar)
-                <img src="{{ asset($k->gambar) }}" style="width:100%; height:100%; object-fit:cover;">
-            @else
-                <span style="font-size: 30px; color:#666;">📦</span>
-            @endif
-        </div>
+<a href="{{ route('filter',['kategori'=>$k->kategori]) }}"
+class="kategori-item">
 
-        <!-- NAMA KATEGORI -->
-        <div class="kategori-title">{{ $k->kategori }}</div>
+<div class="kategori-icon">
 
-    </a>
-    @endforeach
+@if($k->gambar)
+<img src="{{ asset($k->gambar) }}"
+style="width:100%;height:100%;object-fit:cover">
+@else
+<span style="font-size:28px">📦</span>
+@endif
 
 </div>
 
-{{-- Daftar Produk --}}
-<main class="container mx-auto px-4 py-12" id="produk">
-    <h3 class="text-2xl font-bold mb-6">Produk Terbaru</h3>
+<div class="kategori-title">
+{{ $k->kategori }}
+</div>
 
-    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-0">
+</a>
 
-        @forelse ($produk as $item)
-        <div class="bg-white shadow-md shadow-gray-400 rounded-lg overflow-hidden
-            hover:shadow-xl hover:shadow-gray-500 transition
-            mb-6 mx-auto w-[300px]">
+@endforeach
 
-            {{-- GAMBAR PRODUK --}}
-            <img src="{{ $item->gambar ? asset($item->gambar->gambar) : 'https://via.placeholder.com/300x200' }}"
-     class="w-full h-60 object-cover">
+</div>
 
 
-            <div class="p-4">
-                {{-- NAMA PRODUK --}}
-                <h4 class="font-semibold text-lg">{{ $item->nama_produk }}</h4>
+{{-- PRODUK --}}
+<main class="container mx-auto px-4 py-12">
 
-                {{-- HARGA PRODUK --}}
-                <p class="text-gray-600">
-                    Rp {{ number_format($item->harga->harga ?? 0, 0, ',', '.') }}
-                </p>
+<h3 class="text-2xl font-bold mb-8">
+Produk Terbaru
+</h3>
 
-                {{-- BUTTON BELI --}}
-                <a href="{{ route('produk.show', $item->id) }}">
-                    <button class="mt-3 w-full py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
-                        Lihat Barang
-                    </button>
-                </a>
+<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
 
-            </div>
+@forelse ($produk as $item)
 
-        </div>
-        @empty
-            <p class="text-gray-500">Tidak ada produk tersedia.</p>
-        @endforelse
+<div class="product-card">
 
-    </div>
+<img
+src="{{ $item->gambar ? asset($item->gambar->gambar) : 'https://via.placeholder.com/300x200' }}"
+class="product-img">
+
+<div class="p-4">
+
+<h4 class="font-semibold text-lg">
+{{ $item->nama_produk }}
+</h4>
+
+<p class="text-gray-500 dark:text-gray-400 mt-1">
+Rp {{ number_format($item->harga->harga ?? 0,0,',','.') }}
+</p>
+
+<a href="{{ route('produk.show',$item->id) }}">
+
+<button class="product-btn">
+Lihat Barang
+</button>
+
+</a>
+
+</div>
+
+</div>
+
+@empty
+
+<p class="text-gray-500">
+Tidak ada produk tersedia
+</p>
+
+@endforelse
+
+</div>
+
 </main>
-{{-- Floating chat nya --}}
-<x-chat />
 
 
-{{-- Footer --}}
-<x-footersite />
+<x-chat/>
+<x-footersite/>
 
 
-{{-- Slider Script --}}
 <script>
-    let index = 0;
-    const slider = document.getElementById('slider');
-    const slides = slider.children;
-    function showSlide(i) {
-        index = (i + slides.length) % slides.length;
-        slider.style.transform = `translateX(${-index * 100}%)`;
-    }
-    function nextSlide() { showSlide(index + 1); }
-    function prevSlide() { showSlide(index - 1); }
-    setInterval(nextSlide, 4000);
-</script>
 
-</body>
-</html>
+let bIndex = 0
+
+const track = document.getElementById("bannerTrack")
+const dots = document.querySelectorAll(".dot")
+const total = track.children.length
+
+function updateBanner(){
+
+track.style.transform =
+`translateX(-${bIndex*100}%)`
+
+dots.forEach((d,i)=>
+d.classList.toggle("active",i===bIndex)
+)
+
+}
+
+function nextBanner(){
+bIndex = (bIndex+1)%total
+updateBanner()
+}
+
+function prevBanner(){
+bIndex = (bIndex-1+total)%total
+updateBanner()
+}
+
+function goToBanner(i){
+bIndex=i
+updateBanner()
+}
+
+setInterval(nextBanner,4000)
+
+</script>
