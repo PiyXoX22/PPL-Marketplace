@@ -12,34 +12,50 @@
                 @csrf
 
                 <div class="form-group">
-                <label>Nama Produk</label>
-                <input type="text" name="nama_produk" class="form-control" value="{{ old('nama_produk') }}" required>
+                    <label>Nama Produk</label>
+                    <input type="text" name="nama_produk" class="form-control" value="{{ old('nama_produk') }}" required>
                 </div>
 
                 <div class="form-group">
-                <label>Deskripsi</label>
-                <textarea name="deskripsi" class="form-control" required>{{ old('deskripsi') }}</textarea>
+                    <label>Deskripsi</label>
+                    <textarea name="deskripsi" class="form-control" required>{{ old('deskripsi') }}</textarea>
                 </div>
 
                 <div class="form-group">
-                <label>Kategori</label>
-                <select name="id_kategori" class="form-control">
-                <option value="">-- Pilih Kategori --</option>
-                @foreach($kategori as $k)
-                <option value="{{ $k->id }}">{{ $k->kategori }}</option>
-                @endforeach
-                </select>
+                    <label>Kategori</label>
+                    <select name="id_kategori" class="form-control">
+                        <option value="">-- Pilih Kategori --</option>
+                        @foreach($kategori as $k)
+                            <option value="{{ $k->id }}">{{ $k->kategori }}</option>
+                        @endforeach
+                    </select>
                 </div>
 
                 <div class="form-group">
-                <label>Harga Produk</label>
-                <input type="number" name="harga" class="form-control" required>
+                    <label>Harga Produk</label>
+                    <input type="number" name="harga" class="form-control" required>
+                </div>
+
+                <!-- BERAT -->
+                <div class="form-group">
+                    <label>Berat Produk</label>
+
+                    <div class="input-group">
+                        <input type="number" name="berat" class="form-control" placeholder="Masukkan berat produk" required>
+                        <div class="input-group-append">
+                            <span class="input-group-text">gram</span>
+                        </div>
+                    </div>
+
+                    <small class="text-muted">
+                        Contoh: 500 gram
+                    </small>
                 </div>
 
                 <button type="submit" class="btn btn-primary">Simpan</button>
                 <a href="{{ route('admin.produk.index') }}" class="btn btn-secondary">Kembali</a>
 
-                </form>
+            </form>
 
         </div>
     </div>

@@ -108,27 +108,45 @@ Deskripsi
 </div>
 
 
-{{-- BUTTON --}}
+@php
+    $stok = $produk->stok->qty ?? 0;
+@endphp
+
 <div class="mt-8 space-y-3 w-60">
 
-<a href="{{ route('checkout.show', $produk->id) }}"
-class="w-full py-2 bg-blue-600 text-white rounded hover:bg-blue-700 block text-center">
-Beli Sekarang
-</a>
+@if($stok > 0)
 
-<form action="{{ route('cart.add', $produk->id) }}" method="POST">
-@csrf
+    {{-- BELI SEKARANG --}}
+    <a href="{{ route('checkout.show', $produk->id) }}"
+    class="w-full py-2 bg-blue-600 text-white rounded hover:bg-blue-700 block text-center">
+    Beli Sekarang
+    </a>
 
-<button
-type="submit"
-class="w-full py-2 bg-gray-300 text-gray-800 dark:bg-gray-700 dark:text-white rounded hover:bg-gray-400 dark:hover:bg-gray-600">
-Tambah ke Keranjang
-</button>
+    {{-- TAMBAH KE KERANJANG --}}
+    <form action="{{ route('cart.add', $produk->id) }}" method="POST">
+    @csrf
 
-</form>
+    <button
+    type="submit"
+    class="w-full py-2 bg-gray-300 text-gray-800 dark:bg-gray-700 dark:text-white rounded hover:bg-gray-400 dark:hover:bg-gray-600">
+    Tambah ke Keranjang
+    </button>
+
+    </form>
+
+@else
+
+    {{-- STOK HABIS --}}
+    <button class="w-full py-2 bg-gray-400 text-white rounded cursor-not-allowed" disabled>
+        Stok Habis
+    </button>
+
+@endif
 
 </div>
-
+<p class="mt-2 text-sm">
+    Stok: {{ $stok }}
+</p>
 </div>
 </div>
 

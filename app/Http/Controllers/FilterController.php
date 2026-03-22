@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cookie;
 use App\Models\Produk;
 use App\Models\Kategori;
+use App\Models\Harga;
 
 class FilterController extends Controller
 {
@@ -18,7 +19,7 @@ class FilterController extends Controller
         $query = Produk::with(['kategori', 'harga', 'gambar', 'stok']);
 
         // ================================
-        // FILTER: Kategori
+        // FILTER: KATEGORI
         // ================================
         if ($request->filled('kategori')) {
             $query->whereHas('kategori', function($q) use ($request) {
@@ -27,22 +28,32 @@ class FilterController extends Controller
         }
 
         // ================================
-        // FILTER: Search (nama, deskripsi, kategori)
+        // FILTER: HARGA
+        // ================================
+        if ($request->filled('harga')) {
+            [$min, $max] = explode('-', $request->harga);
+
+            $query->whereHas('harga', function($q) use ($min, $max) {
+                $q->whereBetween('harga', [$min, $max]);
+            });
+        }
+
+        // ================================
+        // FILTER: SEARCH + HISTORY
         // ================================
         $history = [];
+
         if ($request->filled('search')) {
             $search = $request->search;
 
-            // Simpan riwayat pencarian via cookie
             $history = json_decode($request->cookie('search_history', '[]'), true);
 
-            array_unshift($history, $search);        // keyword terbaru di depan
-            $history = array_unique($history);       // hapus duplikat
-            $history = array_slice($history, 0, 10); // maksimal 10 keyword terakhir
+            array_unshift($history, $search);
+            $history = array_unique($history);
+            $history = array_slice($history, 0, 10);
 
-            Cookie::queue('search_history', json_encode($history), 60*24*30); // simpan 30 hari
+            Cookie::queue('search_history', json_encode($history), 60*24*30);
 
-            // Query search
             $query->where(function($q) use ($search) {
                 $q->where('nama_produk', 'like', "%{$search}%")
                   ->orWhere('deskripsi', 'like', "%{$search}%")
@@ -50,12 +61,40 @@ class FilterController extends Controller
                       $qc->where('kategori', 'like', "%{$search}%");
                   });
             });
+
         } else {
-            // Ambil riwayat jika tidak search
             $history = json_decode($request->cookie('search_history', '[]'), true);
         }
 
-        // Ambil hasil akhir
+        // ================================
+        // SORTING
+        // ================================
+
+if ($request->sort == 'termurah') {
+    $query->orderBy(
+        Harga::select('harga')
+            ->whereColumn('harga.id_prod', 'produk.id')
+            ->limit(1),
+        'asc'
+    );
+}
+
+elseif ($request->sort == 'termahal') {
+    $query->orderBy(
+        Harga::select('harga')
+            ->whereColumn('harga.id_prod', 'produk.id')
+            ->limit(1),
+        'desc'
+    );
+}
+
+elseif ($request->sort == 'terbaru') {
+    $query->orderBy('id', 'desc');
+}
+
+        // ================================
+        // RESULT
+        // ================================
         $produk = $query->get();
 
         return view('site.filter', compact('produk', 'kategoriList', 'history'));

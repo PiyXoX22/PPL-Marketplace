@@ -11,6 +11,7 @@ use App\Models\TrxDetail;
 use App\Models\Cart;
 use App\Models\Produk;
 use App\Models\Address;
+use App\Models\Qty;
 
 class CheckoutController extends Controller
 {
@@ -230,23 +231,67 @@ if (request('address_id')) {
                 'status'         => 'pending'
             ]);
 
-            $cartItems = Cart::with('product.harga')
-                ->where('user_id', Auth::id())
-                ->get();
+            // =======================
+            // SINGLE PRODUK
+            // =======================
+            if ($request->has('product_id')) {
 
-            foreach ($cartItems as $item) {
+                $produk = Produk::with('harga')->findOrFail($request->product_id);
+
+                $qty = Qty::where('id_prod', $produk->id)
+                    ->lockForUpdate()
+                    ->first();
+
+                if (!$qty || $qty->qty < 1) {
+                    DB::rollBack();
+                    return back()->with('error', 'Stok tidak cukup');
+                }
 
                 TrxDetail::create([
                     'trx_id'       => $trx->id,
-                    'id_barang'    => $item->product_id,
-                    'qty'          => $item->quantity,
-                    'harga_satuan' => $item->product->harga->harga ?? 0,
-                    'subtotal'     => ($item->product->harga->harga ?? 0) * $item->quantity
+                    'id_barang'    => $produk->id,
+                    'qty'          => 1,
+                    'harga_satuan' => $produk->harga->harga ?? 0,
+                    'subtotal'     => $produk->harga->harga ?? 0
                 ]);
 
-            }
+                $qty->decrement('qty', 1);
 
-            Cart::where('user_id', Auth::id())->delete();
+            }
+            // =======================
+            // CART
+            // =======================
+            else {
+
+                $cartItems = Cart::with('product.harga')
+                    ->where('user_id', Auth::id())
+                    ->get();
+
+                foreach ($cartItems as $item) {
+
+                    $qty = Qty::where('id_prod', $item->product_id)
+                        ->lockForUpdate()
+                        ->first();
+
+                    if (!$qty || $qty->qty < $item->quantity) {
+                        DB::rollBack();
+                        return back()->with('error', 'Stok tidak cukup untuk produk: ' . $item->product->nama_produk);
+                    }
+
+                    TrxDetail::create([
+                        'trx_id'       => $trx->id,
+                        'id_barang'    => $item->product_id,
+                        'qty'          => $item->quantity,
+                        'harga_satuan' => $item->product->harga->harga ?? 0,
+                        'subtotal'     => ($item->product->harga->harga ?? 0) * $item->quantity
+                    ]);
+
+                    $qty->decrement('qty', $item->quantity);
+                }
+
+                // hapus cart hanya kalau dari cart
+                Cart::where('user_id', Auth::id())->delete();
+            }
 
             DB::commit();
 
@@ -257,7 +302,6 @@ if (request('address_id')) {
             DB::rollBack();
 
             return back()->with('error','Terjadi kesalahan: '.$e->getMessage());
-
         }
     }
 

@@ -6,21 +6,42 @@ use Illuminate\Http\Request;
 use App\Models\Cart;
 use App\Models\Produk;
 use App\Models\Coupon;
+use App\Models\Qty;
 use Illuminate\Support\Facades\Auth;
 
 class CartController extends Controller
 {
     public function add(Produk $product)
-    {
-        $cart = Cart::firstOrCreate(
-            ['user_id' => Auth::id(), 'product_id' => $product->id],
-            ['quantity' => 0]
-        );
+{
+    // ========================
+    // 🔒 CEK STOK
+    // ========================
+    $qty = Qty::where('id_prod', $product->id)->first();
 
-        $cart->increment('quantity');
-
-        return back()->with('success', 'Produk berhasil ditambahkan ke keranjang!');
+    if (!$qty || $qty->qty < 1) {
+        return back()->with('error', 'Stok produk habis');
     }
+
+    // ========================
+    // 🔍 CEK CART
+    // ========================
+    $cart = Cart::firstOrCreate(
+        ['user_id' => Auth::id(), 'product_id' => $product->id],
+        ['quantity' => 0]
+    );
+
+    // ❌ kalau melebihi stok
+    if ($cart->quantity + 1 > $qty->qty) {
+        return back()->with('error', 'Stok tidak mencukupi');
+    }
+
+    // ========================
+    // ✅ TAMBAH QTY
+    // ========================
+    $cart->increment('quantity');
+
+    return back()->with('success', 'Produk berhasil ditambahkan ke keranjang!');
+}
 
     public function index()
     {

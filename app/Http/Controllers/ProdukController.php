@@ -49,25 +49,26 @@ class ProdukController extends Controller
             'nama_produk' => 'required|string|max:150',
             'deskripsi'   => 'required|string',
             'harga'       => 'required|numeric',
+            'berat'       => 'required|numeric',
             'id_kategori' => 'required|exists:kategori,id'
         ]);
 
-        // Buat produk
+        // Simpan produk
         $produk = Produk::create([
             'nama_produk' => $request->nama_produk,
             'deskripsi'   => $request->deskripsi,
-            'id_kategori' => $request->id_kategori
+            'id_kategori' => $request->id_kategori,
+            'berat'       => $request->berat . ' gram'
         ]);
 
-        // Simpan harga berdasarkan id produk
+        // Simpan harga
         Harga::create([
             'id_prod' => $produk->id,
             'harga'   => $request->harga,
         ]);
 
         return redirect()->route('admin.produk.index')
-
-                         ->with('success', 'Produk berhasil ditambahkan!');
+            ->with('success', 'Produk berhasil ditambahkan!');
     }
 
     // ============================================================
@@ -88,19 +89,20 @@ class ProdukController extends Controller
     {
         $request->validate([
             'nama_produk' => 'required|string|max:150',
-            'deskripsi'   => 'required|string'
+            'deskripsi'   => 'required|string',
+            'berat'       => 'required|numeric'
         ]);
 
         $produk = Produk::findOrFail($id);
 
         $produk->update([
             'nama_produk' => $request->nama_produk,
-            'deskripsi'   => $request->deskripsi
+            'deskripsi'   => $request->deskripsi,
+            'berat'       => $request->berat . ' gram'
         ]);
 
         return redirect()->route('admin.produk.index')
-
-                         ->with('success', 'Produk berhasil diperbarui!');
+            ->with('success', 'Produk berhasil diperbarui!');
     }
 
     // ============================================================
@@ -158,7 +160,8 @@ class ProdukController extends Controller
             'id_kategori' => 'required|exists:kategori,id',
             'harga' => 'required|numeric',
             'stok' => 'required|numeric',
-            'gambar.*' => 'image|mimes:jpg,png,jpeg'
+            'gambar.*' => 'image|mimes:jpg,png,jpeg',
+            'berat' => 'required|numeric'
         ]);
 
          // 1. SIMPAN PRODUK
@@ -166,6 +169,7 @@ class ProdukController extends Controller
             'nama_produk' => $request->nama,
             'deskripsi' => $request->deskripsi,
             'id_kategori' => $request->id_kategori,
+            'berat' => $request->berat . ' gram'
         ]);
 
          // 2. SIMPAN HARGA

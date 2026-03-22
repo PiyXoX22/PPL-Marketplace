@@ -38,17 +38,41 @@
                     <label>Kategori</label>
 
                     <select name="id_kategori" class="form-control">
-
                         @foreach($kategori as $k)
                             <option value="{{ $k->id }}"
                                 {{ $produk->id_kategori == $k->id ? 'selected' : '' }}>
                                 {{ $k->kategori }}
                             </option>
                         @endforeach
-
                     </select>
 
                     @error('id_kategori')
+                        <small class="text-danger">{{ $message }}</small>
+                    @enderror
+                </div>
+
+                <!-- BERAT -->
+                <div class="form-group">
+                    <label>Berat Produk</label>
+
+                    <div class="input-group">
+                        <input type="number"
+                               name="berat"
+                               class="form-control"
+                               value="{{ intval($produk->berat) }}"
+                               placeholder="Masukkan berat produk"
+                               required>
+
+                        <div class="input-group-append">
+                            <span class="input-group-text">gram</span>
+                        </div>
+                    </div>
+
+                    <small class="text-muted">
+                        Contoh: 500 gram
+                    </small>
+
+                    @error('berat')
                         <small class="text-danger">{{ $message }}</small>
                     @enderror
                 </div>

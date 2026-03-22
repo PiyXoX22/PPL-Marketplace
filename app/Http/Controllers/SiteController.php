@@ -15,7 +15,7 @@ class SiteController extends Controller
         $kategoriList = Kategori::all()->unique('kategori')->values();
 
         // Ambil produk dari database
-        $produk = Produk::with(['harga','gambar'])->paginate(20);
+        $produk = Produk::with(['harga','gambar'])->paginate(80);
 
         // Ambil banner dari database
         $banners = DB::table('banner')

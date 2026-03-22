@@ -163,7 +163,7 @@ Hitung Ongkir
 <form action="{{ route('checkout.pay') }}" method="POST">
 
 @csrf
-
+<input type="hidden" name="product_id" value="{{ $produk->id }}">
 <input type="hidden" name="address_id" id="input-address-id" value="{{ $currentAddress->id ?? '' }}">
 
 <input type="hidden" name="courier" id="input-courier">

@@ -1,299 +1,328 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Filter Produk - E-Blox Store</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Filter Produk - E-Blox Store</title>
 
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background: #f3f4f6;
-            margin: 0;
-            padding: 0;
-        }
+<style>
 
-        /* NAVBAR */
-        .navbar {
-            background: white;
-            padding: 14px 24px;
-            box-shadow: 0 1px 6px rgba(0,0,0,0.1);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 20px;
-            position: sticky;
-            top: 0;
-            z-index: 50;
-        }
-
-        .navbar-title {
-            font-size: 22px;
-            font-weight: bold;
-            color: #1a73e8;
-            margin-right: 20px;
-        }
-
-        /* SEARCH AREA */
-        .search-wrapper {
-            width: 40%;
-            position: relative;
-        }
-
-        .search-input {
-            width: 100%;
-            padding: 12px 16px;
-            border: 1px solid #d1d5db;
-            border-radius: 8px;
-            font-size: 15px;
-            transition: 0.2s;
-        }
-
-        .search-input:focus {
-            outline: none;
-            border-color: #1a73e8;
-            box-shadow: 0 0 0 2px rgba(26, 115, 232, 0.2);
-        }
-
-        /* HISTORY BOX */
-        #historyBox {
-            position: absolute;
-            top: 48px;
-            left: 0;
-            width: 100%;
-            background: white;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            overflow: hidden;
-            display: none;
-            max-height: 220px;
-            overflow-y: auto;
-            z-index: 100;
-        }
-
-        #historyBox li {
-            padding: 10px 16px;
-            cursor: pointer;
-            border-bottom: 1px solid #f0f0f0;
-            transition: 0.2s;
-        }
-        #historyBox li:hover {
-            background: #f5f5f5;
-        }
-
-        /* MAIN LAYOUT */
-        .utama-container {
-            display: flex;
-            padding: 20px;
-            gap: 22px;
-        }
-
-        /* SIDEBAR */
-        .sidebar {
-    width: 260px;
-    background: white;
-    padding: 20px;
-    border-radius: 10px;
-    height: fit-content;
-    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
-
-    position: sticky;   /* tetap menempel */
-    top: 90px;          /* jarak dari atas navbar */
-    max-height: calc(100vh - 110px); /* tinggi maksimal sesuai layar */
-    overflow-y: auto;   /* aktifkan scroll di dalam sidebar */
+/* ================= GLOBAL ================= */
+body {
+    font-family: Arial, sans-serif;
+    background: #f3f4f6;
+    margin: 0;
+    padding: 0;
+    padding-top: 80px;
 }
 
-        .sidebar h3 {
-            margin-top: 0;
-            color: #1a73e8;
-        }
+/* ================= CONTAINER ================= */
+.utama-container {
+    max-width: 1200px;
+    margin: auto;
+    display: flex;
+    gap: 24px;
+    padding: 20px;
+}
 
-        select {
-            width: 100%;
-            padding: 10px;
-            border-radius: 8px;
-            border: 1px solid #d1d5db;
-            font-size: 15px;
-        }
+/* ================= SIDEBAR ================= */
+.sidebar {
+    width: 260px;
+    min-width: 240px;
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    position: sticky;
+    top: 100px;
+}
 
-        /* PRODUCTS */
-        .product-container {
-            flex: 1;
-        }
+.sidebar h3 {
+    margin-top: 0;
+    color: #1a73e8;
+}
 
-        .product-container h2 {
-            margin-top: 0;
-            color: #333;
-        }
+/* 🔥 DROPDOWN KEREN */
+.select-box {
+    position: relative;
+    margin-top: 6px;
+}
 
-        .product-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
-            gap: 18px;
-        }
+.select-box select {
+    width: 100%;
+    padding: 10px 12px;
+    border-radius: 10px;
+    border: 1px solid #ddd;
+    appearance: none;
+    background: #f9fafb;
+    cursor: pointer;
+    font-size: 14px;
+}
 
-        .card {
-            background: white;
-            border-radius: 10px;
-            overflow: hidden;
-            border: 1px solid #e5e7eb;
-            transition: 0.2s;
-            box-shadow: 0 1px 4px rgba(0,0,0,0.05);
-        }
+.select-box::after {
+    content: "▼";
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 12px;
+    color: #666;
+}
 
-        .card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 5px 14px rgba(0,0,0,0.12);
-        }
+/* ================= PRODUK ================= */
+.product-container {
+    flex: 1;
+}
 
-        .card img {
-            width: 100%;
-            height: 170px;
-            object-fit: cover;
-            background: #f0f0f0;
-        }
+.product-container h2 {
+    margin-bottom: 4px;
+}
 
-        .card-body {
-            padding: 12px;
-        }
+.product-container p {
+    color: #666;
+    margin-bottom: 20px;
+}
 
-        .title {
-            font-size: 15px;
-            font-weight: bold;
-            margin-bottom: 6px;
-            color: #333;
-        }
+/* GRID */
+.product-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 20px;
+}
 
-        .price {
-            color: #1a73e8;
-            font-weight: bold;
-            margin-bottom: 10px;
-        }
+/* CARD */
+.card {
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid #eee;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+    transition: 0.25s;
+    position: relative;
+}
 
-        /* BUTTON */
-        .btn-view {
-            width: 100%;
-            padding: 10px;
-            background: #1a73e8;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: 0.2s;
-        }
+.card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.12);
+}
 
-        .btn-view:hover {
-            background: #1558b0;
-        }
+.card img {
+    width: 100%;
+    height: 170px;
+    object-fit: cover;
+}
 
-        /* RESPONSIVE */
-        @media (max-width: 768px) {
-            .utama-container {
-                flex-direction: column;
-            }
-            .sidebar {
-                width: 100%;
-            }
-            .search-wrapper {
-                width: 70%;
-            }
-        }
-    </style>
+.card-body {
+    padding: 12px;
+}
+
+.title {
+    font-size: 15px;
+    font-weight: bold;
+}
+
+/* PRICE ROW */
+.price-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 6px;
+}
+
+.price {
+    color: #1a73e8;
+    font-weight: bold;
+}
+
+/* STOK */
+.stok-aman { color: green; font-size: 13px; }
+.stok-warning { color: orange; font-weight: bold; font-size: 13px; }
+.stok-habis { color: red; font-weight: bold; font-size: 13px; }
+
+/* BUTTON */
+.btn-view {
+    width: 100%;
+    padding: 10px;
+    margin-top: 10px;
+    background: #1a73e8;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.btn-view:hover {
+    background: #155acb;
+}
+
+.btn-disabled {
+    background: gray;
+    cursor: not-allowed;
+}
+
+/* STATUS */
+.card-disabled {
+    opacity: 0.6;
+}
+
+.sold-out {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background: rgba(0,0,0,0.6);
+    color: white;
+    padding: 4px 8px;
+    font-size: 12px;
+    border-radius: 6px;
+}
+
+/* ================= RESPONSIVE ================= */
+
+/* Tablet */
+@media (max-width: 1024px) {
+    .utama-container {
+        max-width: 95%;
+    }
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+
+    .utama-container {
+        flex-direction: column;
+    }
+
+    .sidebar {
+        width: 100%;
+        position: static;
+    }
+
+    .product-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* HP */
+@media (max-width: 480px) {
+    .product-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+</style>
 </head>
 
 <body>
 
-    <!-- NAVBAR -->
-    <div class="navbar">
-        <strong class="navbar-title">E-Blox Store</strong>
+<x-headersite/>
 
-        <div class="search-wrapper">
-            <form method="GET" action="{{ route('filter') }}">
-                <input type="text" name="search" id="searchInput"
-                    class="search-input"
-                    placeholder="Cari produk..."
-                    value="{{ request('search') }}"
-                    autocomplete="off">
-            </form>
-
-            @if(!empty($history))
-                <ul id="historyBox">
-                    @foreach($history as $item)
-                    <li>
-                        <a href="{{ route('filter', ['search' => $item]) }}"
-                           style="text-decoration:none; color:#333; display:block;">
-                           {{ $item }}
-                        </a>
-                    </li>
-                    @endforeach
-                </ul>
-            @endif
-        </div>
-    </div>
-
-<script>
-    const input = document.getElementById("searchInput");
-    const historyBox = document.getElementById("historyBox");
-
-    if (input && historyBox) {
-        input.addEventListener("input", () => {
-            historyBox.style.display = input.value.trim().length > 0 ? "block" : "none";
-        });
-
-        document.addEventListener("click", (e) => {
-            if (!historyBox.contains(e.target) && e.target !== input) {
-                historyBox.style.display = "none";
-            }
-        });
-    }
-</script>
-
-<!-- MAIN -->
 <div class="utama-container">
 
-    <!-- SIDEBAR -->
-    <div class="sidebar">
-        <h3>Filter</h3>
+<!-- SIDEBAR -->
+<div class="sidebar">
+    <h3>Filter</h3>
 
-        <div class="filter-item">
-            <strong>Kategori</strong>
-            <form method="GET">
-                <select name="kategori" onchange="this.form.submit()">
-                    <option value="">-- Semua Kategori --</option>
-                    @foreach ($kategoriList as $k)
-                        <option value="{{ $k->kategori }}"
-                            {{ request('kategori') == $k->kategori ? 'selected' : '' }}>
-                            {{ $k->kategori }}
-                        </option>
-                    @endforeach
-                </select>
-            </form>
+    <form method="GET" action="{{ route('filter') }}">
+        <input type="hidden" name="search" value="{{ request('search') }}">
+
+        <strong>Kategori</strong>
+        <div class="select-box">
+            <select name="kategori">
+                <option value="">Semua Kategori</option>
+                @foreach ($kategoriList as $k)
+                <option value="{{ $k->kategori }}"
+                {{ request('kategori') == $k->kategori ? 'selected' : '' }}>
+                {{ $k->kategori }}
+                </option>
+                @endforeach
+            </select>
         </div>
-    </div>
 
-    <!-- PRODUCTS -->
-    <div class="product-container">
-        <h2>Daftar Produk</h2>
-        <p>Menampilkan {{ count($produk) }} produk</p>
+        <br>
 
-        <div class="product-grid">
-            @foreach ($produk as $p)
-                <div class="card">
-                    <img src="{{ $p->gambar ? asset($p->gambar->gambar) : 'https://via.placeholder.com/300x200' }}">
-                    <div class="card-body">
-                        <div class="title">{{ $p->nama_produk }}</div>
-                        <div class="price">Rp {{ number_format($p->harga->harga ?? 0, 0, ',', '.') }}</div>
+        <strong>Harga</strong>
+        <div class="select-box">
+            <select name="harga">
+                <option value="">Semua Harga</option>
+                <option value="0-50000">0 - 50rb</option>
+                <option value="50000-100000">50rb - 100rb</option>
+                <option value="100000-500000">100rb - 500rb</option>
+                <option value="500000-999999999">> 500rb</option>
+            </select>
+        </div>
 
-                        <a href="{{ route('produk.show', $p->id) }}">
-                            <button class="btn-view">Lihat Barang</button>
-                        </a>
+        <br>
+
+        <strong>Urutkan</strong>
+        <div class="select-box">
+            <select name="sort">
+                <option value="">Default</option>
+                <option value="termurah">Termurah</option>
+                <option value="termahal">Termahal</option>
+                <option value="terbaru">Terbaru</option>
+            </select>
+        </div>
+
+        <br>
+
+        <button type="submit" class="btn-view">Terapkan Filter</button>
+    </form>
+</div>
+
+<!-- PRODUK -->
+<div class="product-container">
+    <h2>Daftar Produk</h2>
+    <p>Menampilkan {{ count($produk) }} produk</p>
+
+    <div class="product-grid">
+        @foreach ($produk as $p)
+
+        @php $stok = $p->stok->qty ?? 0; @endphp
+
+        <div class="card {{ $stok == 0 ? 'card-disabled' : '' }}">
+
+            <img src="{{ $p->gambar ? asset($p->gambar->gambar) : 'https://via.placeholder.com/300x200' }}">
+
+            @if($stok == 0)
+                <div class="sold-out">SOLD OUT</div>
+            @endif
+
+            <div class="card-body">
+
+                <div class="title">{{ $p->nama_produk }}</div>
+
+                <div class="price-row">
+                    <div class="price">
+                        Rp {{ number_format($p->harga->harga ?? 0, 0, ',', '.') }}
                     </div>
+
+                    @if($stok > 0 && $stok <= 5)
+                        <span class="stok-warning">Sisa {{ $stok }}</span>
+                    @elseif($stok > 5)
+                        <span class="stok-aman">Stok {{ $stok }}</span>
+                    @else
+                        <span class="stok-habis">Habis</span>
+                    @endif
                 </div>
-            @endforeach
+
+                @if($stok > 0)
+                    <a href="{{ route('produk.show', $p->id) }}">
+                        <button class="btn-view">Lihat Barang</button>
+                    </a>
+                @else
+                    <button class="btn-view btn-disabled">Stok Habis</button>
+                @endif
+
+            </div>
         </div>
+
+        @endforeach
     </div>
+</div>
 
 </div>
+<x-footersite/>
 </body>
 </html>

@@ -347,7 +347,12 @@ Produk Terbaru
 
 @forelse ($produk as $item)
 
-<div class="product-card">
+<div class="product-card relative
+    {{ ($item->stok->qty ?? 0) == 0 ? 'opacity-50 pointer-events-none' : '' }}">
+
+@php
+    $stok = $item->stok->qty ?? 0;
+@endphp
 
 <img
 src="{{ $item->gambar ? asset($item->gambar->gambar) : 'https://via.placeholder.com/300x200' }}"
@@ -359,17 +364,42 @@ class="product-img">
 {{ $item->nama_produk }}
 </h4>
 
-<p class="text-gray-500 dark:text-gray-400 mt-1">
+<!-- HARGA + STOK -->
+<div class="flex justify-between items-center mt-1">
+
+<p class="text-gray-500 dark:text-gray-400">
 Rp {{ number_format($item->harga->harga ?? 0,0,',','.') }}
 </p>
 
-<a href="{{ route('produk.show',$item->id) }}">
+<!-- STOK -->
+@if($stok > 0 && $stok <= 5)
+    <span class="text-yellow-500 text-sm font-semibold">
+        Sisa {{ $stok }}
+    </span>
+@elseif($stok > 5)
+    <span class="text-green-500 text-sm">
+        Stok {{ $stok }}
+    </span>
+@else
+    <span class="text-red-500 text-sm font-semibold">
+        Habis
+    </span>
+@endif
 
-<button class="product-btn">
-Lihat Barang
-</button>
+</div>
 
-</a>
+<!-- BUTTON -->
+@if($stok > 0)
+    <a href="{{ route('produk.show',$item->id) }}">
+        <button class="product-btn">
+            Lihat Barang
+        </button>
+    </a>
+@else
+    <button class="product-btn bg-gray-400 cursor-not-allowed">
+        Stok Habis
+    </button>
+@endif
 
 </div>
 

@@ -58,6 +58,7 @@
                             <th width="120">Kategori</th>
                             <th width="80">Qty</th>
                             <th width="120">Harga</th>
+                            <th width="100">Berat</th>
                             <th width="160">Aksi</th>
                         </tr>
                     </thead>
@@ -121,6 +122,12 @@
                         <td>
                             <span class="badge badge-success">
                             Rp {{ number_format($p->harga->harga ?? 0,0,',','.') }}
+                            </span>
+                        </td>
+
+                        <td>
+                            <span class="badge badge-primary">
+                                {{ $p->berat ?? '0 gram' }}
                             </span>
                         </td>
 
