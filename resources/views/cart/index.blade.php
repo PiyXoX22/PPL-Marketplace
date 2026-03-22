@@ -5,7 +5,7 @@
 body{
 font-family: Arial, sans-serif;
 background:linear-gradient(180deg,#f8fafc,#eef2ff);
-padding:20px;
+padding:0px;
 transition:.3s;
 }
 
@@ -21,6 +21,7 @@ display:grid;
 grid-template-columns:1fr 340px;
 gap:20px;
 align-items:start;
+
 }
 
 /* CARD */

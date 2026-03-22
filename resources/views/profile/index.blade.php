@@ -24,9 +24,9 @@ min-height:80vh;
 
 .sidebar{
 width:200px;
-background:#e6e6e6;
+background:#f1f5f9;
 padding:20px;
-border-radius:8px;
+border-radius:10px;
 }
 
 .dark .sidebar{
@@ -38,9 +38,9 @@ display:block;
 padding:10px;
 margin-bottom:6px;
 text-decoration:none;
-color:#000;
+color:#1e293b;
 font-weight:bold;
-border-radius:6px;
+border-radius:8px;
 transition:.2s;
 }
 
@@ -48,16 +48,19 @@ transition:.2s;
 color:#cbd5f5;
 }
 
+/* 🔥 HOVER JADI BIRU */
 .sidebar a:hover{
-background:#d4d4d4;
+background:#dbeafe;
+color:#1d4ed8;
 }
 
 .dark .sidebar a:hover{
 background:#334155;
 }
 
+/* 🔥 ACTIVE BIRU (GANTI HITAM) */
 .sidebar a.active{
-background:#000;
+background:#3b82f6;
 color:#fff;
 }
 
@@ -73,8 +76,8 @@ flex:1;
 background:white;
 padding:30px;
 margin-left:20px;
-border-radius:10px;
-box-shadow:0 10px 25px rgba(0,0,0,.1);
+border-radius:12px;
+box-shadow:0 10px 25px rgba(0,0,0,.08);
 }
 
 .dark .content{
@@ -92,6 +95,7 @@ label{
 display:block;
 font-weight:bold;
 margin-bottom:5px;
+color:#1e293b;
 }
 
 .dark label{
@@ -104,8 +108,16 @@ input[type="password"]{
 width:100%;
 padding:10px;
 border:1px solid #ccc;
-border-radius:6px;
+border-radius:8px;
 background:white;
+transition:.2s;
+}
+
+/* 🔥 FOCUS BIRU */
+input:focus{
+outline:none;
+border:1px solid #3b82f6;
+box-shadow:0 0 0 2px rgba(59,130,246,0.2);
 }
 
 .dark input{
@@ -125,20 +137,20 @@ gap:20px;
 flex:1;
 }
 
-/* BUTTON */
+/* BUTTON 🔥 GANTI HITAM JADI BIRU */
 
 .btn-submit{
 padding:10px 20px;
-background:#222;
+background:#3b82f6;
 color:#fff;
 border:none;
-border-radius:6px;
+border-radius:8px;
 cursor:pointer;
 transition:.2s;
 }
 
 .btn-submit:hover{
-background:#000;
+background:#2563eb;
 }
 
 .dark .btn-submit{
@@ -159,8 +171,8 @@ margin-bottom:20px;
 .avatar-img{
 width:120px;
 height:120px;
-background:#ccc;
-border-radius:8px;
+background:#e2e8f0;
+border-radius:10px;
 margin:0 auto;
 }
 

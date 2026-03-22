@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="csrf-token" content="{{ csrf_token() }}">
 <title>Checkout Produk</title>
-
 <style>
 body { background:#f3f5f7;margin:0;font-family:Arial;}
 .layout{max-width:1200px;margin:20px auto;display:grid;grid-template-columns:1fr 380px;gap:25px;}
@@ -19,14 +18,14 @@ body { background:#f3f5f7;margin:0;font-family:Arial;}
 .total-label{font-weight:bold;font-size:18px;margin-top:12px;color:#007bff;}
 .btn-pay{width:100%;background:#007bff;color:white;border:none;padding:14px;border-radius:8px;font-size:16px;cursor:pointer;margin-top:18px;font-weight:bold;}
 .btn-pay:hover{background:#0065d1;}
-select{width:100%;padding:10px;border-radius:7px;border:1px solid #ccc;margin-top:10px;font-size:14px;}
+.layout select{width:100%;padding:10px;border-radius:7px;border:1px solid #ccc;margin-top:10px;font-size:14px;}
 .payment-item{display:flex;justify-content:space-between;align-items:center;padding:14px 0;border-bottom:1px solid #efefef;font-size:14px;}
 .hidden{display:none;}
 </style>
 </head>
 
 <body>
-
+<x-headersite/>
 <div class="layout">
 
 <!-- LEFT -->

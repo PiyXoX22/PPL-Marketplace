@@ -13,7 +13,14 @@ body {
     background: #f3f4f6;
     margin: 0;
     padding: 0;
-    padding-top: 80px;
+    padding-top: 0px;
+    transition: .3s;
+}
+
+/* DARK MODE GLOBAL */
+.dark body {
+    background: #0f172a;
+    color: #e2e8f0;
 }
 
 /* ================= CONTAINER ================= */
@@ -33,8 +40,15 @@ body {
     padding: 20px;
     border-radius: 12px;
     box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-    position: sticky;
+    /* position: sticky; */
     top: 100px;
+    align-self: flex-start; /* 🔥 biar gak stretch */
+}
+
+/* 🔥 DARK SIDEBAR */
+.dark .sidebar {
+    background: #1e293b;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.5);
 }
 
 .sidebar h3 {
@@ -42,7 +56,7 @@ body {
     color: #1a73e8;
 }
 
-/* 🔥 DROPDOWN KEREN */
+/* ================= DROPDOWN ================= */
 .select-box {
     position: relative;
     margin-top: 6px;
@@ -57,6 +71,13 @@ body {
     background: #f9fafb;
     cursor: pointer;
     font-size: 14px;
+}
+
+/* 🔥 DARK DROPDOWN */
+.dark .select-box select {
+    background: #0f172a;
+    border: 1px solid #334155;
+    color: white;
 }
 
 .select-box::after {
@@ -78,19 +99,24 @@ body {
     margin-bottom: 4px;
 }
 
+/* 🔥 DARK TEXT */
+.dark .product-container p {
+    color: #94a3b8;
+}
+
 .product-container p {
     color: #666;
     margin-bottom: 20px;
 }
 
-/* GRID */
+/* ================= GRID ================= */
 .product-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
     gap: 20px;
 }
 
-/* CARD */
+/* ================= CARD ================= */
 .card {
     background: white;
     border-radius: 12px;
@@ -101,9 +127,21 @@ body {
     position: relative;
 }
 
+/* 🔥 DARK CARD */
+.dark .card {
+    background: #1e293b;
+    border: 1px solid #334155;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+}
+
 .card:hover {
     transform: translateY(-6px);
     box-shadow: 0 10px 20px rgba(0,0,0,0.12);
+}
+
+/* 🔥 DARK HOVER */
+.dark .card:hover {
+    box-shadow: 0 12px 25px rgba(0,0,0,0.8);
 }
 
 .card img {
@@ -116,12 +154,18 @@ body {
     padding: 12px;
 }
 
+/* TEXT */
 .title {
     font-size: 15px;
     font-weight: bold;
 }
 
-/* PRICE ROW */
+/* 🔥 DARK TEXT */
+.dark .title {
+    color: #e2e8f0;
+}
+
+/* ================= PRICE ================= */
 .price-row {
     display: flex;
     justify-content: space-between;
@@ -134,12 +178,12 @@ body {
     font-weight: bold;
 }
 
-/* STOK */
-.stok-aman { color: green; font-size: 13px; }
-.stok-warning { color: orange; font-weight: bold; font-size: 13px; }
-.stok-habis { color: red; font-weight: bold; font-size: 13px; }
+/* ================= STOK ================= */
+.stok-aman { color: #22c55e; font-size: 13px; }
+.stok-warning { color: #f59e0b; font-weight: bold; font-size: 13px; }
+.stok-habis { color: #ef4444; font-weight: bold; font-size: 13px; }
 
-/* BUTTON */
+/* ================= BUTTON ================= */
 .btn-view {
     width: 100%;
     padding: 10px;
@@ -162,11 +206,12 @@ body {
     cursor: not-allowed;
 }
 
-/* STATUS */
+/* ================= STATUS ================= */
 .card-disabled {
     opacity: 0.6;
 }
 
+/* 🔥 DARK SOLD OUT */
 .sold-out {
     position: absolute;
     top: 10px;
@@ -321,7 +366,7 @@ body {
         @endforeach
     </div>
 </div>
-
+<x-scroll/>
 </div>
 <x-footersite/>
 </body>

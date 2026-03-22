@@ -24,9 +24,9 @@ min-height:80vh;
 
 .sidebar{
 width:200px;
-background:#e6e6e6;
+background:#f1f5f9;
 padding:20px;
-border-radius:8px;
+border-radius:10px;
 }
 
 .dark .sidebar{
@@ -37,26 +37,30 @@ background:#1e293b;
 display:block;
 padding:10px;
 margin-bottom:6px;
-color:#000;
+color:#1e293b;
 font-weight:bold;
 text-decoration:none;
-border-radius:6px;
+border-radius:8px;
+transition:.2s;
 }
 
 .dark .sidebar a{
 color:#cbd5f5;
 }
 
+/* 🔥 HOVER BIRU */
 .sidebar a:hover{
-background:#d4d4d4;
+background:#dbeafe;
+color:#1d4ed8;
 }
 
 .dark .sidebar a:hover{
 background:#334155;
 }
 
+/* 🔥 ACTIVE BIRU */
 .sidebar a.active{
-background:#000;
+background:#3b82f6;
 color:#fff;
 }
 
@@ -72,8 +76,8 @@ flex:1;
 background:#fff;
 padding:30px;
 margin-left:20px;
-border-radius:10px;
-box-shadow:0 10px 25px rgba(0,0,0,.1);
+border-radius:12px;
+box-shadow:0 10px 25px rgba(0,0,0,.08);
 }
 
 .dark .content{
@@ -89,8 +93,17 @@ height:40px;
 margin-bottom:10px;
 padding:5px;
 border:1px solid #ccc;
-border-radius:6px;
+border-radius:8px;
 background:white;
+transition:.2s;
+}
+
+/* 🔥 FOCUS BIRU */
+input:focus,
+select:focus{
+outline:none;
+border:1px solid #3b82f6;
+box-shadow:0 0 0 2px rgba(59,130,246,0.2);
 }
 
 .dark input,
@@ -100,23 +113,24 @@ border:1px solid #334155;
 color:white;
 }
 
-/* BUTTON */
+/* BUTTON 🔥 GANTI HITAM */
 
 .btn-submit{
 padding:8px 16px;
-background:#222;
+background:#3b82f6;
 color:#fff;
 border:none;
-border-radius:6px;
+border-radius:8px;
 cursor:pointer;
+transition:.2s;
+}
+
+.btn-submit:hover{
+background:#2563eb;
 }
 
 .dark .btn-submit{
 background:#3b82f6;
-}
-
-.btn-submit:hover{
-opacity:.9;
 }
 
 /* TABLE */
@@ -125,11 +139,13 @@ opacity:.9;
 width:100%;
 border-collapse:collapse;
 margin-top:20px;
+border-radius:10px;
+overflow:hidden;
 }
 
 .table-address th,
 .table-address td{
-border:1px solid #ccc;
+border:1px solid #e5e7eb;
 padding:10px;
 }
 
@@ -138,12 +154,18 @@ padding:10px;
 border:1px solid #334155;
 }
 
+/* 🔥 HEADER TABLE SOFT */
 .table-address th{
-background:#f1f1f1;
+background:#eff6ff;
+color:#0f172a;
 }
 
 .dark .table-address th{
 background:#0f172a;
+}
+
+.table-address td{
+background:#fff;
 }
 
 .dark .table-address td{
@@ -154,14 +176,15 @@ background:#1e293b;
 
 .alert-success{
 padding:10px;
-background:#dcfce7;
-border-radius:6px;
+background:#dbeafe;
+color:#1d4ed8;
+border-radius:8px;
 margin-bottom:10px;
 }
 
 .dark .alert-success{
-background:#064e3b;
-color:#d1fae5;
+background:#1e3a8a;
+color:#dbeafe;
 }
 
 </style>

@@ -5,37 +5,101 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Pembayaran</title>
     <style>
-        body { font-family: Arial; background: #f2f2f2; padding: 40px; }
-        .box {
-            max-width: 450px;
-            margin: auto;
-            background: white;
-            padding: 25px;
-            border-radius: 10px;
-            text-align: center;
+        body {
+            font-family: Arial;
+            background: #f2f2f2;
+            margin: 0;
+            padding-top: 0px;
         }
-        .btn {
+
+        /* WRAPPER */
+        .payment-page {
+            padding: 40px 20px;
+        }
+
+        /* CARD */
+        .payment-page .box {
+            max-width: 600px;
+            margin: 80px auto;
+            background: white;
+            padding: 80px 50px; /* 🔥 tambah tinggi */
+            border-radius: 16px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+
+            min-height: 350px; /* 🔥 bikin ke bawah */
+            display: flex;
+            flex-direction: column;
+            justify-content: center; /* isi ke tengah */
+        }
+
+        /* BUTTON */
+        .payment-page .btn {
+            margin-top: 40px;
             width: 100%;
             padding: 14px;
             font-size: 18px;
             border: none;
-            border-radius: 8px;
+            border-radius: 10px;
             background: #03ac0e;
             color: #fff;
             cursor: pointer;
+            transition: 0.2s;
         }
-    </style>
+
+        .payment-page .btn:hover {
+            background: #029c0c;
+        }
+        /* ================= TEXT ================= */
+
+/* JUDUL */
+.payment-page h2 {
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 12px;
+    color: #111827;
+}
+
+/* LABEL */
+.payment-page p {
+    font-size: 15px;
+    color: #6b7280;
+    margin: 6px 0;
+}
+
+/* VALUE (biar beda dari label) */
+.payment-page p b {
+    color: #111827;
+    font-weight: 600;
+}
+
+/* TOTAL HARGA (🔥 highlight) */
+.payment-page p:last-of-type {
+    font-size: 18px;
+    font-weight: bold;
+    color: #16a34a;
+    margin-top: 10px;
+}
+        </style>
 </head>
 <body>
+    <x-headersite/>
 
-<div class="box">
-    <h2>Transaksi Berhasil Dibuat</h2>
-    <p><b>ID Transaksi:</b> {{ $trx->id }}</p>
-    <p><b>Total Pembayaran:</b> Rp{{ number_format($trx->grand_total,0,',','.') }}</p>
+    <div class="payment-page">
 
-<button id="pay-button" class="btn">Bayar Sekarang</button>
+        <div class="box">
+            <h2>Transaksi Berhasil Dibuat</h2>
+            <p><b>ID Transaksi:</b> {{ $trx->id }}</p>
+            <p><b>Total Pembayaran:</b> Rp{{ number_format($trx->grand_total,0,',','.') }}</p>
 
-<script src="https://app.sandbox.midtrans.com/snap/snap.js" 
+            <button id="pay-button" class="btn">Bayar Sekarang</button>
+        </div>
+
+    </div>
+
+    <x-footersite/>
+
+<script src="https://app.sandbox.midtrans.com/snap/snap.js"
         data-client-key="{{ config('services.midtrans.client_key') }}">
 </script>
 
@@ -43,7 +107,7 @@
 document.getElementById('pay-button').addEventListener('click', function (event) {
 
     event.preventDefault(); // ⛔ Mencegah reload / submit ulang
-    
+
     let btn = document.getElementById('pay-button');
     btn.disabled = true;
     btn.innerText = "Memproses...";
@@ -94,9 +158,5 @@ document.getElementById('pay-button').addEventListener('click', function (event)
 
 });
 </script>
-
-
-
-
 </body>
 </html>

@@ -20,13 +20,13 @@ padding:20px;
 min-height:80vh;
 }
 
-/* SIDEBAR */
+/* SIDEBAR 🔥 FIX */
 
 .sidebar{
 width:200px;
-background:#e6e6e6;
+background:#f1f5f9; /* soft biru */
 padding:20px;
-border-radius:8px;
+border-radius:10px;
 }
 
 .dark .sidebar{
@@ -38,25 +38,29 @@ display:block;
 padding:10px;
 margin-bottom:6px;
 text-decoration:none;
-color:#000;
+color:#1e293b;
 font-weight:bold;
-border-radius:6px;
+border-radius:8px;
+transition:.2s;
 }
 
 .dark .sidebar a{
 color:#cbd5f5;
 }
 
+/* 🔥 HOVER BIRU */
 .sidebar a:hover{
-background:#d4d4d4;
+background:#dbeafe;
+color:#1d4ed8;
 }
 
 .dark .sidebar a:hover{
 background:#334155;
 }
 
+/* 🔥 ACTIVE BIRU (GANTI HITAM) */
 .sidebar a.active{
-background:#000;
+background:#3b82f6;
 color:#fff;
 }
 
@@ -96,16 +100,22 @@ background:#0f172a;
 border:1px solid #334155;
 }
 
-/* BUTTON */
+/* BUTTON 🔥 SAMAKAN */
 
 .btn-detail{
 display:inline-block;
 margin-top:10px;
 padding:6px 12px;
+background:#3b82f6;
 color:#fff;
 text-decoration:none;
-border-radius:5px;
+border-radius:6px;
 font-size:13px;
+transition:.2s;
+}
+
+.btn-detail:hover{
+background:#2563eb;
 }
 
 /* TABLE */
@@ -128,16 +138,21 @@ text-align:left;
 border:1px solid #334155;
 }
 
+/* LIGHT MODE */
 .table-order th{
-background:#f1f1f1;
+    background:#eff6ff;
+    color:#000; /* 🔥 hitam */
 }
 
+/* DARK MODE */
 .dark .table-order th{
-background:#0f172a;
+    background:#0f172a;
+    color:#fff; /* 🔥 putih */
 }
 
 .dark .table-order td{
-background:#1e293b;
+    background:#1e293b;
+    color:#fff; /* 🔥 biar kebaca */
 }
 
 </style>
